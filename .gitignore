@@ -480,3 +480,32 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# =========================
+
+# Added for Docker + EF project (KollegieBar)
+
+# =========================
+
+# Environment variables (secrets)
+
+.env
+.env.*
+
+# Database files (just in case someone creates local db)
+
+*.db
+*.sqlite
+*.sqlite3
+
+# Node modules (if frontend is added later)
+
+node_modules/
+
+# Rider safety (already covered, but double safe)
+
+.idea/
+
+# Docker override files (local only)
+
+docker-compose.override.yml
