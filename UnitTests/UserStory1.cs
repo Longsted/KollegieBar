@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
 using BusinessLogicLayer;
-
-using System;
 
 namespace UnitTests
 {
@@ -21,41 +16,62 @@ namespace UnitTests
             Console.WriteLine($"Test 2 - Stock unchanged when bartender is not logged in: {test2}");
         }
 
-        // Checker at varen formindskes når et product "Købes"
+        // Tester at lagerbeholdningen reduceres med 1 når bartenderen er logget ind og registrerer et salg
         static bool Test_RegisterSale_ReducesStock_WhenBartenderIsLoggedIn()
         {
             var bartender = new User { IsLoggedIn = true };
-            var product = new Product { Name = "Beer", Stock = 10 };
-            var inventoryService = new InventoryService();
+            var product = new Product
+            {
+                Name = "Beer",
+                Stock = 10,
+                Type = ProductType.Beer,
+                Price = 25.0m
+            };
 
+            var inventoryService = new InventoryService();
             inventoryService.RegisterSale(bartender, product);
 
             return product.Stock == 9;
         }
 
-        // Checker om varen ikke formindskes når et product "Købes"
+        // Tester at lagerbeholdningen IKKE reduceres når bartenderen IKKE er logget ind
         static bool Test_RegisterSale_DoesNotReduceStock_WhenBartenderIsNotLoggedIn()
         {
             var bartender = new User { IsLoggedIn = false };
-            var product = new Product { Name = "Beer", Stock = 10 };
-            var inventoryService = new InventoryService();
+            var product = new Product
+            {
+                Name = "Beer",
+                Stock = 10,
+                Type = ProductType.Beer,
+                Price = 25.0m
+            };
 
+            var inventoryService = new InventoryService();
             inventoryService.RegisterSale(bartender, product);
 
             return product.Stock == 10;
         }
     }
 
-    // Klasser til at testen skal kunne fungerr.
     internal class User
     {
         public bool IsLoggedIn { get; set; }
+    }
+
+    internal enum ProductType
+    {
+        Beer,
+        Cider,
+        Soda,
+        Spirit
     }
 
     internal class Product
     {
         public string Name { get; set; }
         public int Stock { get; set; }
+        public ProductType Type { get; set; }
+        public decimal Price { get; set; }
     }
 
     internal class InventoryService
