@@ -11,7 +11,7 @@ using var context = new AppDbContext(options);
 DatabaseInitializer.InitializeDatabase(context);
 
 // Tilføj bruger
-context.Users.Add(new User { Name = "Test" });
+context.Users.Add(new User { UserName = "Test" });
 context.SaveChanges();
 
 // Hent og print
@@ -19,5 +19,5 @@ var users = context.Users.ToList();
 
 foreach (var user in users)
 {
-    Console.WriteLine(user.Name);
+    Console.WriteLine(user.UserName);
 }
