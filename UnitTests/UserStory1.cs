@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 
 namespace UnitTests
 {
@@ -43,3 +43,4 @@ namespace UnitTests
         }
     }
 }
+
