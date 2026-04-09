@@ -1,6 +1,6 @@
 ﻿using Data.Context;
+using DataTransferObject.Model;
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
     .UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=1234;Database=appdb")
