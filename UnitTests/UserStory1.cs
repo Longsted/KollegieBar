@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace UnitTests;
 
-namespace UnitTests
+internal class UserStory1
 {
-    internal class UserStory1
-    {
-
-    }
 }
