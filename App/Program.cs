@@ -1,16 +1,23 @@
 ﻿using Data.Context;
-using Domain.Entities;
+using DataTransferObject.Model;
+using Microsoft.EntityFrameworkCore;
 
-using var context = new AppDbContextFactory().CreateDbContext(null);
+var options = new DbContextOptionsBuilder<AppDbContext>()
+    .UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=1234;Database=appdb")
+    .Options;
 
-// INSERT
-context.Users.Add(new User { Name = "Choomba" });
+using var context = new AppDbContext(options);
+
+DatabaseInitializer.InitializeDatabase(context);
+
+// Tilføj bruger
+context.Users.Add(new User { UserName = "Test" });
 context.SaveChanges();
 
-// READ
+// Hent og print
 var users = context.Users.ToList();
 
 foreach (var user in users)
 {
-    Console.WriteLine(user.Name);
+    Console.WriteLine(user.UserName);
 }
