@@ -1,45 +1,44 @@
 using Xunit;
+using System.Collections.Generic;
 
 namespace UnitTests
 {
-    public class UserStory1Tests
+    public class UserStory2Tests
     {
-        // Tester at lagerbeholdningen reduceres med 1 når bartenderen registrerer et salg
+        // Tester at statistik over salget sendes når bestyrelsesmedlemmet har korrekt rolle
         [Fact]
-        public void RegisterSale_ReducesStock_WhenUserRoleIsBartender()
+        public void GetSalesStatistics_ReturnsData_WhenUserRoleIsBoardMember()
         {
-            var bartender = new User { Role = UserRole.Bartender };
-            var product = new Product
+            var boardMember = new User { Role = UserRole.BoardMember };
+
+            var salesData = new List<Product>
             {
-                Name = "Beer",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 25.0m
+                new Product { Name = "Beer", Stock = 10, Type = DrinkType.Beer, Price = 25.0m },
+                new Product { Name = "Cider", Stock = 5, Type = DrinkType.Cider, Price = 30.0m }
             };
 
-            var inventoryService = new InventoryService();
-            inventoryService.RegisterSale(product);
+            var statisticsService = new StatisticsService(salesData);
+            var result = statisticsService.GetSalesStatistics();
 
-            Assert.Equal(9, product.Stock);
+            Assert.NotEmpty(result);
         }
 
-        // Tester at lagerbeholdningen IKKE reduceres når rollen er null (ikke logget ind)
+        // Tester at statistik IKKE sendes når rollen er null (ikke logget ind)
         [Fact]
-        public void RegisterSale_DoesNotReduceStock_WhenUserRoleIsNull()
+        public void GetSalesStatistics_ReturnsEmpty_WhenUserRoleIsNull()
         {
             var noRoleUser = new User { Role = null };
-            var product = new Product
+
+            var salesData = new List<Product>
             {
-                Name = "Beer",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 25.0m
+                new Product { Name = "Beer", Stock = 10, Type = DrinkType.Beer, Price = 25.0m },
+                new Product { Name = "Cider", Stock = 5, Type = DrinkType.Cider, Price = 30.0m }
             };
 
-            var inventoryService = new InventoryService();
-            inventoryService.RegisterSale(product);
+            var statisticsService = new StatisticsService(salesData);
+            var result = statisticsService.GetSalesStatistics();
 
-            Assert.Equal(10, product.Stock);
+            Assert.Empty(result);
         }
     }
 }
