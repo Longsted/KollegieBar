@@ -96,4 +96,15 @@
             return true;
         }
     }
+
+    public class ProductDeletionService
+    {
+        public bool DeleteProduct(User user, List<Product> products, Product productToDelete)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            return products.Remove(productToDelete);
+        }
+    }
 }
