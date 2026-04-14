@@ -4,16 +4,18 @@
     {
         public int Id { get; set; }
         public string UserName { get; set; }
-        
-        
+        public string Password { get; set; }
+        public UserRoles Role { get; set; }
+
+        public User(string username, string password, UserRoles role)
+        {
+            UserName = username;
+            Password = password;
+            Role = role;
+        }
+
         public User()
         {
-        }
-        
-        public User(int id, string userName)
-        {
-            Id = id;
-            UserName = userName;
         }
     }
 }
