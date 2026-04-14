@@ -153,4 +153,28 @@
             return true;
         }
     }
+
+    public class StockLimitService
+    {
+        public int MaxStock { get; private set; }
+
+        public StockLimitService(int initialMaxStock)
+        {
+            MaxStock = initialMaxStock;
+        }
+
+        public bool UpdateMaxStock(User user, Product product, int newMaxStock)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            MaxStock = newMaxStock;
+
+            // Adjust product stock if above new max
+            if (product.Stock > MaxStock)
+                product.Stock = MaxStock;
+
+            return true;
+        }
+    }
 }
