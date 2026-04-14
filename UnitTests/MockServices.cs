@@ -120,4 +120,37 @@
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
     }
+
+    public class DrinkCustomizationService
+    {
+        public bool CustomizeDrink(User user, Product product, decimal newPrice, DrinkType newType)
+        {
+            if (user?.Role != UserRole.Bartender)
+                return false;
+
+            product.Price = newPrice;
+            product.Type = newType;
+
+            return true;
+        }
+    }
+
+    public class WasteRegistrationService
+    {
+        public bool RegisterWaste(User user, Product product, int amountLost)
+        {
+            if (user?.Role != UserRole.Bartender)
+                return false;
+
+            if (amountLost <= 0)
+                return false;
+
+            product.Stock -= amountLost;
+
+            if (product.Stock < 0)
+                product.Stock = 0;
+
+            return true;
+        }
+    }
 }
