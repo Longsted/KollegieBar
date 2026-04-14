@@ -29,4 +29,16 @@
             return _salesData;
         }
     }
+
+    public class IncomingStockService
+    {
+        public bool RegisterIncomingStock(User user, Product product, int newAmount)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            product.Stock = newAmount;
+            return true;
+        }
+    }
 }
