@@ -1,25 +1,30 @@
-
 using Data.Context;
 using Data.Mappers;
-using DataTransferObject.Model;
 
 namespace Data.Repositories;
 
 public class UserRepository
 {
-    public static DataTransferObject.Model.User GetUser(int id)
+    public static DataTransferObject.Model.User? GetUser(int id)
     {
         using (UserContext context = new UserContext())
         {
-            return UserMapper.Map(context.Users.Find(id));
+            var user = context.Users.Find(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+            
+            return UserMapper.Map(user);
         }
     }
 
-    public static List<User> GetUsers()
+    public static List<DataTransferObject.Model.User> GetUsers()
     {
         using (UserContext context = new UserContext())
         {
-            return context.Users.Select(UserMapper.Map).ToList();
+            return context.Users.Select(u => UserMapper.Map(u)).ToList();
         }
     }
 
@@ -67,6 +72,8 @@ public class UserRepository
             if (existingUser != null)
             {
                 existingUser.UserName = user.UserName;
+                existingUser.Password = user.Password;
+                existingUser.Role = (Data.Model.UserRole)user.Role;
                 
                 context.SaveChanges();
             }

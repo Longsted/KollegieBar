@@ -23,6 +23,8 @@ public class UserBusinessLogicLayer
 
     public void AddUser(User user)
     {
+        if (user == null) throw new NullReferenceException();
+        
         Data.Repositories.UserRepository.AddUser(user);
     }
 
@@ -38,6 +40,9 @@ public class UserBusinessLogicLayer
     
     public void UpdateUser(User user)
     {
+        if (user == null) throw new NullReferenceException();
+        if (user.Id <= 0) throw new IndexOutOfRangeException();
+        
         Data.Repositories.UserRepository.UpdateUser(user);
     }
 
