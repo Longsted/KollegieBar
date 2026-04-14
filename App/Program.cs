@@ -1,5 +1,5 @@
 ﻿using Data.Context;
-using DataTransferObject.Model;
+using Data.Model;
 using Microsoft.EntityFrameworkCore;
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
