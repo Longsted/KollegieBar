@@ -1,7 +1,7 @@
 ﻿using DataTransferObject.Model;
 using Microsoft.EntityFrameworkCore;
 using User = Data.Model.User;
-½
+
 
 namespace Data.Context;
 
@@ -17,7 +17,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // 🔥 Registrer dine konkrete typer
+        // Registrer dine konkrete typer
         modelBuilder.Entity<Data.Model.LiquidWithAlcohol>();
         modelBuilder.Entity<Data.Model.LiquidWithoutAlcohol>();
         modelBuilder.Entity<Data.Model.Snack>();
