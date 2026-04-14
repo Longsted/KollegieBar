@@ -1,76 +1,75 @@
-
 using Data.Context;
 using Data.Mappers;
-using DataTransferObject.Model;
 
+//tet
 namespace Data.Repositories;
 
 public class UserRepository
 {
-    public static DataTransferObject.Model.User GetUser(int id)
+    private readonly AppDbContext _context;
+
+    public UserRepository(AppDbContext context)
     {
-        using (UserContext context = new UserContext())
+        _context = context;
+    }
+
+    public DataTransferObject.Model.User? GetUser(int id)
+    {
+        var user = _context.Users.Find(id);
+
+        if (user == null)
         {
-            return UserMapper.Map(context.Users.Find(id));
+            return null;
+        }
+
+        return UserMapper.Map(user);
+    }
+
+    public List<DataTransferObject.Model.User> GetUsers()
+    {
+        return _context.Users
+            .Select(u => UserMapper.Map(u))
+            .ToList();
+    }
+
+    public void AddUser(DataTransferObject.Model.User user)
+    {
+        _context.Users.Add(UserMapper.Map(user));
+        _context.SaveChanges();
+    }
+
+    public void DeleteUser(int id)
+    {
+        var user = _context.Users.Find(id);
+
+        if (user != null)
+        {
+            _context.Users.Remove(user);
+            _context.SaveChanges();
         }
     }
 
-    public static List<User> GetUsers()
+    public DataTransferObject.Model.User CreateUser(DataTransferObject.Model.User user)
     {
-        using (UserContext context = new UserContext())
-        {
-            return context.Users.Select(UserMapper.Map).ToList();
-        }
+        var entityUser = UserMapper.Map(user);
+
+        _context.Users.Add(entityUser);
+        _context.SaveChanges();
+
+        return UserMapper.Map(entityUser);
     }
 
-    public static void AddUser(DataTransferObject.Model.User user)
+    public void UpdateUser(DataTransferObject.Model.User user)
     {
-        using (UserContext context = new UserContext())
-        {
-            context.Users.Add(UserMapper.Map(user));
-            context.SaveChanges();
-        }
-    }
-    
-    public static void DeleteUser(int id)
-    {
-        using (UserContext context = new UserContext())
-        {
-            var user = context.Users.Find(id);
+        var existingUser = _context.Users.Find(user.Id);
 
-            if (user != null)
-            {
-                context.Users.Remove(user);
-                context.SaveChanges();
-            }
-        }
-    }
-
-    public static DataTransferObject.Model.User CreateUser(DataTransferObject.Model.User user)
-    {
-        using (UserContext context = new UserContext())
+        if (existingUser != null)
         {
-            var entityUser = UserMapper.Map(user);
-            
-            context.Users.Add(entityUser);
-            context.SaveChanges();
-            
-            return UserMapper.Map(entityUser);
-        }
-    }
+            existingUser.UserName = user.UserName;
+            existingUser.Password = user.Password;
+            existingUser.Role = (Data.Model.UserRole)user.Role;
 
-    public static void UpdateUser(DataTransferObject.Model.User user)
-    {
-        using (UserContext context = new UserContext())
-        {
-            var existingUser = context.Users.Find(user.Id);
-            if (existingUser != null)
-            {
-                existingUser.UserName = user.UserName;
-                
-                context.SaveChanges();
-            }
+            _context.SaveChanges();
         }
     }
-    
 }
