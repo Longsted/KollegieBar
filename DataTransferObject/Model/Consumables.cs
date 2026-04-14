@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities;
+﻿namespace DataTransferObject.Model;
 
 public class Consumables : Product
 {

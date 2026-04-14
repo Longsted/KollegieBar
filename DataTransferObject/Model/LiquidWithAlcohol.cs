@@ -1,4 +1,5 @@
-﻿namespace Domain.Entities;
+﻿namespace DataTransferObject.Model;
+
 
 public class LiquidWithAlcohol : LiquidProduct
 {
