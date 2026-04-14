@@ -177,4 +177,30 @@
             return true;
         }
     }
+
+    public class PantService
+    {
+        public decimal TotalPantIncome { get; private set; }
+
+        public bool RegisterPant(User user, decimal pantAmount)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            if (pantAmount <= 0)
+                return false;
+
+            TotalPantIncome += pantAmount;
+            return true;
+        }
+
+        public bool ResetPant(User user)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            TotalPantIncome = 0;
+            return true;
+        }
+    }
 }
