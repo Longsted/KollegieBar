@@ -69,6 +69,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <MauiXaml Update="BarOverview.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="DashBoard.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="Login\Login.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
