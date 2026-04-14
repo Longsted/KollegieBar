@@ -1,7 +1,7 @@
 ﻿using DataTransferObject.Model;
 using Data.Repositories;
 
-namespace BusinessLogic;
+namespace BusinessLogic.BusinessLogicLayer;
 
 public class UserBusinessLogicLayer
 {
@@ -71,4 +71,7 @@ public class UserBusinessLogicLayer
 
         return _userRepository.CreateUser(user);
     }
+    
+    
+    
 }
