@@ -83,7 +83,8 @@
 
     public class ProductEditingService
     {
-        public bool EditProduct(User user, Product product, string newName, int newStock, DrinkType newType, decimal newPrice)
+        public bool EditProduct(User user, Product product, string newName, int newStock, DrinkType newType,
+            decimal newPrice)
         {
             if (user?.Role != UserRole.BoardMember)
                 return false;
@@ -226,3 +227,5 @@
             return null;
 
         }
+    }
+}

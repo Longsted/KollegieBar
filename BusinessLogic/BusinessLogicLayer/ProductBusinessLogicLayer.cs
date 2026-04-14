@@ -1,27 +1,34 @@
-﻿using DataTransferObject.Model;
+﻿using Data.Repositories;
+using DataTransferObject.Model;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
 public class ProductBusinessLogicLayer
 {
+    private readonly ProductRepository _repository;
+
+    public ProductBusinessLogicLayer(ProductRepository repository)
+    {
+        _repository = repository;
+    }
+
     public void CreateSnack(Snack snack)
     {
-        Data.Repositories.ProductRepository.CreateSnack(snack);
+        _repository.CreateSnack(snack);
     }
-    
+
     public void CreateLiquidWithAlcohol(LiquidWithAlcohol liquidWithAlcohol)
     {
-        Data.Repositories.ProductRepository.CreateSnack(liquidWithAlcohol);
+        _repository.CreateLiquidWithAlcohol(liquidWithAlcohol);
     }
-    
+
     public void CreateLiquidWithoutAlcohol(LiquidWithoutAlcohol liquidWithoutAlcohol)
     {
-        Data.Repositories.ProductRepository.CreateLiquidWithoutAlcohol(liquidWithoutAlcohol);
+        _repository.CreateLiquidWithoutAlcohol(liquidWithoutAlcohol);
     }
-    
+
     public void CreateConsumables(Consumables consumables)
     {
-        Data.Repositories.ProductRepository.CreateConsumables(consumables);
+        _repository.CreateConsumables(consumables);
     }
-    
 }
