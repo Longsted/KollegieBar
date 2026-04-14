@@ -2,45 +2,34 @@ using Xunit;
 
 namespace UnitTests
 {
-    public class UserStory1Tests
+    public class UserStory1
     {
-        // Tester at lagerbeholdningen reduceres med 1 når bartenderen registrerer et salg
+        // Tests that stock is reduced when logged in and sale is registered. 
         [Fact]
-        public void RegisterSale_ReducesStock_WhenUserRoleIsBartender()
+        public void RegisterSale_ReducesStock_WhenBartenderIsLoggedIn()
         {
-            var bartender = new User { Role = UserRole.Bartender };
-            var product = new Product
-            {
-                Name = "Beer",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 25.0m
-            };
+            var user = new User { Role = UserRole.Bartender };
+            var product = new Product { Name = "Beer", Stock = 10 };
 
-            var inventoryService = new InventoryService();
-            inventoryService.RegisterSale(product);
+            var service = new SaleService();
+            var result = service.RegisterSale(user, product);
 
+            Assert.True(result);
             Assert.Equal(9, product.Stock);
         }
 
-        // Tester at lagerbeholdningen IKKE reduceres når rollen er null (ikke logget ind)
+        // Tests that Stock should not reduce when not logged in and sale is registered.
         [Fact]
-        public void RegisterSale_DoesNotReduceStock_WhenUserRoleIsNull()
+        public void RegisterSale_DoesNotReduceStock_WhenUserIsNotLoggedIn()
         {
-            var noRoleUser = new User { Role = null };
-            var product = new Product
-            {
-                Name = "Beer",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 25.0m
-            };
+            var user = new User { Role = null };
+            var product = new Product { Name = "Beer", Stock = 10 };
 
-            var inventoryService = new InventoryService();
-            inventoryService.RegisterSale(product);
+            var service = new SaleService();
+            var result = service.RegisterSale(user, product);
 
+            Assert.False(result);
             Assert.Equal(10, product.Stock);
         }
     }
 }
-
