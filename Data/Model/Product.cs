@@ -1,4 +1,4 @@
-﻿namespace DataTransferObject.Model;
+﻿namespace Data.Model;
 
 public abstract class Product
 {
