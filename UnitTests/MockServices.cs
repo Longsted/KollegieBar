@@ -58,4 +58,26 @@
             };
         }
     }
+
+    public class LowInventoryService
+    {
+        private readonly List<Product> _products;
+        private readonly int _threshold;
+
+        public LowInventoryService(List<Product> products, int threshold)
+        {
+            _products = products;
+            _threshold = threshold;
+        }
+
+        public List<Product> GetLowInventory(User user)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return new List<Product>();
+
+            return _products
+                .Where(p => p.Stock <= _threshold)
+                .ToList();
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace UnitTests
 {
     public class UserStory2
     {
+        // Tests that statistics are given when requested and logged in as Board member.
         [Fact]
         public void GetStatistics_ReturnsData_WhenBoardMemberIsLoggedIn()
         {
@@ -22,6 +23,7 @@ namespace UnitTests
             Assert.NotEmpty(result);
         }
 
+        // Tests that statistics are not given when requested and not logged in as Board member.
         [Fact]
         public void GetStatistics_ReturnsEmpty_WhenUserIsNotLoggedIn()
         {

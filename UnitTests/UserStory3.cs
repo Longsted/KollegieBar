@@ -4,6 +4,7 @@ namespace UnitTests
 {
     public class UserStory3
     {
+        // Tests that incoming stock is registered and stock is updated when logged in as Board member.
         [Fact]
         public void RegisterIncomingStock_UpdatesStock_WhenBoardMemberIsLoggedIn()
         {
@@ -17,6 +18,7 @@ namespace UnitTests
             Assert.Equal(30, product.Stock);
         }
 
+        // Tests that incoming stock is not registered and stock is not updated when not logged in as Board member.
         [Fact]
         public void RegisterIncomingStock_DoesNotUpdateStock_WhenUserIsNotLoggedIn()
         {

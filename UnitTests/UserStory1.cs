@@ -4,6 +4,7 @@ namespace UnitTests
 {
     public class UserStory1
     {
+        // Tests that stock is reduced when logged in and sale is registered. 
         [Fact]
         public void RegisterSale_ReducesStock_WhenBartenderIsLoggedIn()
         {
@@ -17,6 +18,7 @@ namespace UnitTests
             Assert.Equal(9, product.Stock);
         }
 
+        // Tests that Stock should not reduce when not logged in and sale is registered.
         [Fact]
         public void RegisterSale_DoesNotReduceStock_WhenUserIsNotLoggedIn()
         {

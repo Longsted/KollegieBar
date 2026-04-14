@@ -4,6 +4,7 @@ namespace UnitTests
 {
     public class UserStory4
     {
+        // Tests that a new product is created when a board member is logged in.
         [Fact]
         public void CreateProduct_ReturnsNewProduct_WhenBoardMemberIsLoggedIn()
         {
@@ -17,6 +18,7 @@ namespace UnitTests
             Assert.Equal(50, product.Stock);
         }
 
+        // Tests that a new product is not created when a user is not logged in.
         [Fact]
         public void CreateProduct_ReturnsNull_WhenUserIsNotLoggedIn()
         {
