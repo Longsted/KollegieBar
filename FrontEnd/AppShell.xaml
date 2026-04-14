@@ -6,9 +6,16 @@
     xmlns:local="clr-namespace:FrontEnd"
     Title="FrontEnd">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        
+        <Tab Title="Opret vare">
+            <ShellContent ContentTemplate="{DataTemplate local:CreateProductPage}" />
+        </Tab>
+        
+        
+    </TabBar>
+    
+    
+    
 
 </Shell>
