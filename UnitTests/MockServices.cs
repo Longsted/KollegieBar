@@ -203,4 +203,26 @@
             return true;
         }
     }
-}
+
+    public class LoginService
+    {
+        private readonly Dictionary<string, UserRole> _accounts;
+
+        public LoginService(Dictionary<string, UserRole> accounts)
+        {
+            _accounts = accounts;
+        }
+
+        public User Login(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return null;
+
+            if (_accounts.TryGetValue(username, out var role))
+            {
+                return new User { Role = role };
+            }
+
+            return null;
+
+        }
