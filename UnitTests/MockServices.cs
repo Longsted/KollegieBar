@@ -153,4 +153,76 @@
             return true;
         }
     }
-}
+
+    public class StockLimitService
+    {
+        public int MaxStock { get; private set; }
+
+        public StockLimitService(int initialMaxStock)
+        {
+            MaxStock = initialMaxStock;
+        }
+
+        public bool UpdateMaxStock(User user, Product product, int newMaxStock)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            MaxStock = newMaxStock;
+
+            // Adjust product stock if above new max
+            if (product.Stock > MaxStock)
+                product.Stock = MaxStock;
+
+            return true;
+        }
+    }
+
+    public class PantService
+    {
+        public decimal TotalPantIncome { get; private set; }
+
+        public bool RegisterPant(User user, decimal pantAmount)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            if (pantAmount <= 0)
+                return false;
+
+            TotalPantIncome += pantAmount;
+            return true;
+        }
+
+        public bool ResetPant(User user)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            TotalPantIncome = 0;
+            return true;
+        }
+    }
+
+    public class LoginService
+    {
+        private readonly Dictionary<string, UserRole> _accounts;
+
+        public LoginService(Dictionary<string, UserRole> accounts)
+        {
+            _accounts = accounts;
+        }
+
+        public User Login(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return null;
+
+            if (_accounts.TryGetValue(username, out var role))
+            {
+                return new User { Role = role };
+            }
+
+            return null;
+
+        }
