@@ -2,8 +2,6 @@
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
-
     public MainPage()
     {
         InitializeComponent();
@@ -17,9 +15,16 @@ public partial class MainPage : ContentPage
 
         string UserName = UsernameEntry.Text;
 
+        if (UserName == "Admin" && password == "1234")
+        {
+            // 1. Going to the DashBoard nicely
+            await Navigation.PushAsync(new DashBoard());
 
-
-
+            // 2. Removing the "LoginPage" from the stack
+            Navigation.RemovePage(this);
+        } else  if (UserName == "Bar" && password == "1234"){
+            await Navigation.PushAsync(new BarOverview());
+        }
 
     }
 
