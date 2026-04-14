@@ -1,0 +1,20 @@
+﻿namespace Domain.Entities;
+
+public abstract class Product
+{
+    public required string Name{ get; set; }
+    public decimal CostPrice{ get; set; }
+    public int StockQuantity{ get; set; }
+
+
+    protected Product(string name, decimal costPrice, int stockQuantity)
+    {
+        Name = name;
+        CostPrice = costPrice;
+        StockQuantity = stockQuantity;
+    }
+
+    protected Product()
+    {
+    }
+}
