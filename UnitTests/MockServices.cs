@@ -107,4 +107,17 @@
             return products.Remove(productToDelete);
         }
     }
+
+    public class ProductCategoryService
+    {
+        public Dictionary<DrinkType, List<Product>> GetProductsByCategory(User user, List<Product> products)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return new Dictionary<DrinkType, List<Product>>();
+
+            return products
+                .GroupBy(p => p.Type)
+                .ToDictionary(g => g.Key, g => g.ToList());
+        }
+    }
 }
