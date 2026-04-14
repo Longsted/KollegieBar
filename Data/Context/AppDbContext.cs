@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
+﻿using DataTransferObject.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Context;
 
