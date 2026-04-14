@@ -1,31 +1,40 @@
-﻿using DataTransferObject;
-using DataTransferObject.Model;
+﻿using DataTransferObject.Model;
+using Data.Repositories;
 
 namespace BusinessLogic;
 
 public class UserBusinessLogicLayer
 {
+    private readonly UserRepository _userRepository;
 
-    public User GetUserById(int userId)
+    public UserBusinessLogicLayer(UserRepository userRepository)
+    {
+        _userRepository = userRepository;
+    }
+
+    public User? GetUserById(int userId)
     {
         if (userId <= 0)
         {
             throw new IndexOutOfRangeException();
         }
-        
-        return Data.Repositories.UserRepository.GetUser(userId);
+
+        return _userRepository.GetUser(userId);
     }
 
     public List<User> GetUsers()
     {
-        return Data.Repositories.UserRepository.GetUsers();
+        return _userRepository.GetUsers();
     }
 
     public void AddUser(User user)
     {
-        if (user == null) throw new NullReferenceException();
-        
-        Data.Repositories.UserRepository.AddUser(user);
+        if (user == null)
+        {
+            throw new NullReferenceException();
+        }
+
+        _userRepository.AddUser(user);
     }
 
     public void DeleteUser(int userId)
@@ -34,23 +43,32 @@ public class UserBusinessLogicLayer
         {
             throw new IndexOutOfRangeException();
         }
-        
-        Data.Repositories.UserRepository.DeleteUser(userId);
+
+        _userRepository.DeleteUser(userId);
     }
-    
+
     public void UpdateUser(User user)
     {
-        if (user == null) throw new NullReferenceException();
-        if (user.Id <= 0) throw new IndexOutOfRangeException();
-        
-        Data.Repositories.UserRepository.UpdateUser(user);
+        if (user == null)
+        {
+            throw new NullReferenceException();
+        }
+
+        if (user.Id <= 0)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        _userRepository.UpdateUser(user);
     }
 
     public User CreateUser(User user)
     {
-        Data.Repositories.UserRepository.CreateUser(user);
-        return user;
+        if (user == null)
+        {
+            throw new NullReferenceException();
+        }
+
+        return _userRepository.CreateUser(user);
     }
-    
-    
 }
