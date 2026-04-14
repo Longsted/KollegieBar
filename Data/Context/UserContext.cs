@@ -10,7 +10,7 @@ namespace Data.Context
             
         }
         
-        public DbSet<User> Users { get; set; }
+        public DbSet<Data.Model.User> Users { get; set; }
         
         /*
         protected override void OnConfiguring(DbContextOptionsBuilder options)
