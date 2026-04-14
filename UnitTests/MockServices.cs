@@ -80,4 +80,20 @@
                 .ToList();
         }
     }
+
+    public class ProductEditingService
+    {
+        public bool EditProduct(User user, Product product, string newName, int newStock, DrinkType newType, decimal newPrice)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return false;
+
+            product.Name = newName;
+            product.Stock = newStock;
+            product.Type = newType;
+            product.Price = newPrice;
+
+            return true;
+        }
+    }
 }
