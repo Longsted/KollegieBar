@@ -41,4 +41,21 @@
             return true;
         }
     }
+
+    public class ProductCreationService
+    {
+        public Product CreateProduct(User user, string name, int stock, DrinkType type, decimal price)
+        {
+            if (user?.Role != UserRole.BoardMember)
+                return null;
+
+            return new Product
+            {
+                Name = name,
+                Stock = stock,
+                Type = type,
+                Price = price
+            };
+        }
+    }
 }
