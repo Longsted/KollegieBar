@@ -76,7 +76,7 @@ public class ProductBusinessLogicLayer
         if (product == null)
             throw new ArgumentException("Product not found");
         
-        product.StockQuantity += newQuantity;
-        // _repository.UpdateStock(productId);
+        var newTotalStock = product.StockQuantity += newQuantity;
+        _repository.UpdateStock(productId, newTotalStock);
     }
 }
