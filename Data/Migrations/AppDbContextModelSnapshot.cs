@@ -37,6 +37,12 @@ namespace Data.Migrations
                         .HasMaxLength(21)
                         .HasColumnType("character varying(21)");
 
+                    b.Property<int>("MaxStockQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinStockQuantity")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -91,8 +97,8 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Data.Model.Product");
 
-                    b.Property<decimal>("AlcoholPercentage")
-                        .HasColumnType("numeric");
+                    b.Property<double>("AlcoholPercentage")
+                        .HasColumnType("double precision");
 
                     b.Property<decimal>("SalesPrice")
                         .ValueGeneratedOnUpdateSometimes()
