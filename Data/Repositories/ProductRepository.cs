@@ -44,4 +44,14 @@ public class ProductRepository
         _context.Products.Add(ProductMapper.Map(dto));
         _context.SaveChanges();
     }
+    
+    public void UpdateStock(int productId, int newTotalStock)
+    {
+        var product = _context.Products.Find(productId);
+        if (product != null)
+        {
+            product.StockQuantity = newTotalStock;
+            _context.SaveChanges();
+        }
+    }
 }
