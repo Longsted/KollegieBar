@@ -12,23 +12,27 @@ public class ProductBusinessLogicLayer
         _repository = repository;
     }
 
-    public void CreateSnack(Snack snack)
+    public void CreateProduct(Product product)
     {
-        _repository.CreateSnack(snack);
+        ValidateProduct(product);
+        _repository.Create(product);
     }
 
-    public void CreateLiquidWithAlcohol(LiquidWithAlcohol liquidWithAlcohol)
+    public void ValidateProduct(Product product)
     {
-        _repository.CreateLiquidWithAlcohol(liquidWithAlcohol);
-    }
+        if (string.IsNullOrWhiteSpace(product.Name))
+            throw new ArgumentException("Name is required");
 
-    public void CreateLiquidWithoutAlcohol(LiquidWithoutAlcohol liquidWithoutAlcohol)
-    {
-        _repository.CreateLiquidWithoutAlcohol(liquidWithoutAlcohol);
-    }
+        if (product.CostPrice < 0)
+            throw new ArgumentException("Invalid price");
 
-    public void CreateConsumables(Consumables consumables)
-    {
-        _repository.CreateConsumables(consumables);
+        if (product.StockQuantity < 0)
+            throw new ArgumentException("Invalid stock");
+
+        if (product is LiquidWithAlcohol alcohol)
+        {
+            if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
+                throw new ArgumentException("Invalid alcohol percentage");
+        }
     }
 }
