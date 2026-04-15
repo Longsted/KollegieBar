@@ -6,16 +6,18 @@ namespace Data.Repositories;
 
 public class UserRepository
 {
-    private readonly AppDbContext _context;
 
-    public UserRepository(AppDbContext context)
+    private readonly AppDbContext _context = new AppDbContextFactory().CreateDbContext(Array.Empty<string>());
+
+    public UserRepository()
     {
-        _context = context;
+
     }
 
     public DataTransferObject.Model.User? GetUser(int id)
     {
         var user = _context.Users.Find(id);
+
 
         if (user == null)
         {

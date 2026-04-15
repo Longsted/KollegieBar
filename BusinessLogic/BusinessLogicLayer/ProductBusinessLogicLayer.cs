@@ -1,27 +1,82 @@
-﻿using DataTransferObject.Model;
+﻿using Data.Repositories;
+using DataTransferObject.Model;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
 public class ProductBusinessLogicLayer
 {
-    public void CreateSnack(Snack snack)
+    private readonly ProductRepository _repository;
+
+    public ProductBusinessLogicLayer(ProductRepository repository)
     {
-        Data.Repositories.ProductRepository.CreateSnack(snack);
+        _repository = repository;
     }
-    
-    public void CreateLiquidWithAlcohol(LiquidWithAlcohol liquidWithAlcohol)
+
+    public Product? GetProduct(int id)
     {
-        Data.Repositories.ProductRepository.CreateSnack(liquidWithAlcohol);
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid product id");
+        }
+
+        return _repository.GetProduct(id);
     }
-    
-    public void CreateLiquidWithoutAlcohol(LiquidWithoutAlcohol liquidWithoutAlcohol)
+
+    public void CreateProduct(Product product)
     {
-        Data.Repositories.ProductRepository.CreateLiquidWithoutAlcohol(liquidWithoutAlcohol);
+        ValidateProduct(product);
+        _repository.Create(product);
     }
-    
-    public void CreateConsumables(Consumables consumables)
+
+    public void ValidateProduct(Product product)
     {
-        Data.Repositories.ProductRepository.CreateConsumables(consumables);
+        if (string.IsNullOrWhiteSpace(product.Name))
+            throw new ArgumentException("Name is required");
+
+        if (product.CostPrice < 0)
+            throw new ArgumentException("Invalid price");
+
+        if (product.StockQuantity < 0)
+            throw new ArgumentException("Invalid stock");
+
+        if (product is LiquidWithAlcohol alcohol)
+        {
+            if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
+                throw new ArgumentException("Invalid alcohol percentage");
+        }
     }
-    
+
+    // registrere solgt produkt
+
+    public void SellProduct(int productId, int quantity)
+    {
+        if (quantity <= 0)
+            throw new ArgumentException("Invalid quantity");
+
+
+        var product = _repository.GetProduct(productId);
+
+        if (product == null)
+            throw new NullReferenceException("Product not found");
+
+        if (product.StockQuantity < quantity)
+            throw new InvalidOperationException("Not enough stock");
+
+        product.StockQuantity -= quantity;
+        _repository.Update(product);
+    }
+
+    public void RegisterIncomingStock(int productId, int newQuantity)
+    {
+        if (newQuantity < 0)
+            throw new ArgumentException("Invalid quantity");
+        
+        var product = _repository.GetProduct(productId);
+        
+        if (product == null)
+            throw new ArgumentException("Product not found");
+        
+        var newTotalStock = product.StockQuantity += newQuantity;
+        _repository.UpdateStock(productId, newTotalStock);
+    }
 }

@@ -1,4 +1,6 @@
-﻿namespace DataTransferObject.Model;
+﻿using DataTransferObject.Model;
+
+namespace Data.Model;
 
 
 public class LiquidWithAlcohol : LiquidProduct
