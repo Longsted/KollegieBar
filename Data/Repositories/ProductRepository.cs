@@ -1,5 +1,6 @@
 ﻿
 using Data.Context;
+using Data.Mappers;
 using DataTransferObject.Model;
 
 namespace Data.Repositories;
@@ -13,26 +14,9 @@ public class ProductRepository
         _context = context;
     }
 
-    public void CreateSnack(Snack snack)
+    public void Create(DataTransferObject.Model.Product dto) 
     {
-        _context.Products.Add(snack);
-        _context.SaveChanges();
-    }
-
-    public void CreateLiquidWithAlcohol(LiquidWithAlcohol liquidWithAlcohol)
-    {
-        _context.Products.Add(liquidWithAlcohol);
-        _context.SaveChanges();
-    }
-
-    public void CreateLiquidWithoutAlcohol(LiquidWithoutAlcohol liquidWithoutAlcohol)
-    {
-        _context.Products.Add(liquidWithoutAlcohol);
-        _context.SaveChanges();
-    }
-    public void CreateConsumables(Consumables consumables)
-    {
-        _context.Products.Add(consumables);
+        _context.Products.Add(ProductMapper.Map(dto));
         _context.SaveChanges();
     }
 }
