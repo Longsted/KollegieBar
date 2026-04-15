@@ -140,11 +140,13 @@ namespace UnitTests
 
     public class StockLimitService
     {
-        public int MaxStock { get; private set; }
+        public int MaxStockQuantity { get; private set; }
+        public int MinStockQuantity { get; private set; }
 
-        public StockLimitService(int initialMaxStock)
+        public StockLimitService(int initialLimit)
         {
-            MaxStock = initialMaxStock;
+            MaxStockQuantity = initialLimit;
+            MinStockQuantity = initialLimit;
         }
 
         public bool UpdateMaxStock(User user, Product product, int newMaxStock)
@@ -152,11 +154,25 @@ namespace UnitTests
             if (user?.Role != UserRoles.BoardMember)
                 return false;
 
-            MaxStock = newMaxStock;
-
+            MaxStockQuantity = newMaxStock;
+            
             // Adjust product stock if above new max
-            if (product.StockQuantity > MaxStock)
-                product.StockQuantity = MaxStock;
+            if (product.StockQuantity > MaxStockQuantity)
+                product.StockQuantity = MaxStockQuantity;
+
+            return true;
+        }
+
+        public bool UpdateMinStock(User user, Product product, int newMinStock)
+        {
+            if (user?.Role != UserRoles.BoardMember)
+                return false;
+
+            MinStockQuantity = newMinStock;
+
+            // Adjust product stock if below new min
+            if (product.StockQuantity < MinStockQuantity)
+                product.StockQuantity = MinStockQuantity;
 
             return true;
         }

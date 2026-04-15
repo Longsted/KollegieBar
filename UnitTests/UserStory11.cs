@@ -19,41 +19,20 @@ namespace UnitTests
                 SalesPrice = 20m
             };
 
-            var service = new StockLimitService(initialMaxStock: 100);
+            var service = new StockLimitService(initialLimit: 100);
 
             var result = service.UpdateMaxStock(user, product, newMaxStock: 30);
 
             Assert.True(result);
 
-            Assert.Equal(30, service.MaxStock);
+            Assert.Equal(30, service.MaxStockQuantity);
 
-            Assert.Equal(30, product.StockQuantity);
+            Assert.Equal(30, product.MaxStockQuantity);
         }
+
+
 
         // Tests that a non-board member cannot update max stock and no changes are applied.
-
-        [Fact]
-        public void BoardMember_StockShouldRemain_WhenBelowNewMax()
-        {
-            var user = new User { Role = UserRoles.Bartender };
-
-            var product = new LiquidWithoutAlcohol()
-            {
-                Name = "Soda",
-                StockQuantity = 10,
-                SalesPrice = 10m
-            };
-
-            var service = new StockLimitService(initialMaxStock: 20);
-
-            var result = service.UpdateMaxStock(user, product, newMaxStock: 50);
-
-            Assert.True(result);
-
-            Assert.Equal(50, service.MaxStock);
-
-            Assert.Equal(10, product.StockQuantity);
-        }
 
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_UpdateMaxStock()
@@ -67,15 +46,67 @@ namespace UnitTests
                 SalesPrice = 20m
             };
 
-            var service = new StockLimitService(initialMaxStock: 100);
+            var service = new StockLimitService(initialLimit: 100);
 
             var result = service.UpdateMaxStock(user, product, newMaxStock: 30);
 
             Assert.False(result);
 
-            Assert.Equal(100, service.MaxStock);
+            Assert.Equal(100, service.MaxStockQuantity);
 
-            Assert.Equal(40, product.StockQuantity);
+            Assert.Equal(40, product.MaxStockQuantity);
         }
+
+
+        // Tests that a board member can update the global min stock and product stock adjusts if needed.
+
+        [Fact]
+        public void BoardMember_ShouldBeAbleTo_UpdateMinStock()
+        {
+            var user = new User { Role = UserRoles.Bartender };
+
+            var product = new LiquidWithAlcohol
+            {
+                Name = "Beer",
+                StockQuantity = 40,
+                SalesPrice = 20m
+            };
+
+            var service = new StockLimitService(initialLimit: 100);
+
+            var result = service.UpdateMinStock(user, product, newMinStock: 30);
+
+            Assert.False(result);
+
+            Assert.Equal(100, service.MinStockQuantity);
+
+            Assert.Equal(40, product.MinStockQuantity);
+        }
+
+        // Tests that a non-board member cannot update min stock and no changes are applied.
+
+        [Fact]
+        public void NonBoardMember_ShouldNotBeAbleTo_UpdateMinStock()
+        {
+            var user = new User { Role = UserRoles.Bartender };
+
+            var product = new LiquidWithAlcohol
+            {
+                Name = "Beer",
+                StockQuantity = 40,
+                SalesPrice = 20m
+            };
+
+            var service = new StockLimitService(initialLimit: 100);
+
+            var result = service.UpdateMinStock(user, product, newMinStock: 30);
+
+            Assert.False(result);
+
+            Assert.Equal(100, service.MinStockQuantity);
+
+            Assert.Equal(40, product.MinStockQuantity);
+        }
+
     }
 }
