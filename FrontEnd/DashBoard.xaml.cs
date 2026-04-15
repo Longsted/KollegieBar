@@ -6,4 +6,9 @@ public partial class DashBoard : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private async void GoToCreateProductButton_OnClicked(object? sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new CreateProductPage());
+	}
 }
