@@ -2,11 +2,37 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontEnd.DashBoard"
-             Title="DashBoard">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="DashBoard"
+             BackgroundColor="Azure">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+            
+            <Border Stroke="#D1D5DB"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 16"
+                    Padding="20"> 
+                
+                <VerticalStackLayout Spacing="20">
+                    
+                    <Grid ColumnDefinitions="*,*,*"
+                          ColumnSpacing="12">
+                          
+                          <Button x:Name="GoToCreateProductButton"
+                                   Grid.Column="0"
+                                   Text="Create product"
+                                   Clicked="GoToCreateProductButton_OnClicked"
+                                   BackgroundColor="#E8F0FE"
+                                   TextColor="#1F2937"
+                                   CornerRadius="10"
+                                   HeightRequest="48"
+                                   BorderColor="#93C5FD"
+                                   BorderWidth="1.5"
+                                   ></Button>
+                          </Grid>
+                    </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
