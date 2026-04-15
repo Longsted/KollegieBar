@@ -5,7 +5,7 @@ namespace Data.Model;
 
 public class LiquidWithAlcohol : LiquidProduct
 {
-    public decimal AlcoholPercentage { get; set; }
+    public double AlcoholPercentage { get; set; }
     
     public LiquidWithAlcohol() : base()
     {
