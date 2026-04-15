@@ -2,15 +2,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontEnd.CreateProductPage"
              Title="Create product">
+       
+       <ScrollView>
+           <VerticalStackLayout Padding="20">
 
-    <VerticalStackLayout Padding="20">
+               <Entry x:Name="NameEntry"
+                      Placeholder="Navn" />
 
-        <Entry Placeholder="Productname " />
+               <Entry x:Name="CostPriceEntry"
+                      Placeholder="Kostpris"
+                      Keyboard="Numeric" />
 
-        <Entry Placeholder="Price" Keyboard="Numeric" />
+               <Entry x:Name="StockQuantityEntry"
+                      Placeholder="Lagerantal"
+                      Keyboard="Numeric" />
 
-        <Button Text="Create product"/>
+               <Entry x:Name="VolumeClEntry"
+                      Placeholder="Volumen i cl"
+                      Keyboard="Numeric" />
 
-    </VerticalStackLayout>
+               <Entry x:Name="SalesPriceEntry"
+                      Placeholder="Salgspris"
+                      Keyboard="Numeric" />
 
+               <Entry x:Name="AlcoholPercentageEntry"
+                      Placeholder="Alkoholprocent"
+                      Keyboard="Numeric" />
+
+               <Button Text="Opret produkt"
+                       Clicked="OnCreateProduct_Clicked" />
+
+               <Label x:Name="ResultLabel" />
+
+           </VerticalStackLayout>
+       </ScrollView>
 </ContentPage>
+
