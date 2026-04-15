@@ -1,25 +1,24 @@
 ﻿using System.Collections.Generic;
+using DataTransferObject.Model;
 using Xunit;
 
 namespace UnitTests
 {
     
-    
-
     public class UserStory8
     {
         // Tests that a board member sees products grouped by category.
         [Fact]
         public void BoardMember_ShouldSee_ProductsGroupedByCategory()
         {
-            var user = new User { Role = UserRole.BoardMember };
+            var user = new User { Role = UserRoles.BoardMember };
 
             var products = new List<Product>
             {
-                new Product { Name = "Beer A", Stock = 10, Type = DrinkType.Beer, Price = 20m },
-                new Product { Name = "Beer B", Stock = 5, Type = DrinkType.Beer, Price = 18m },
-                new Product { Name = "Cider A", Stock = 7, Type = DrinkType.Cider, Price = 15m },
-                new Product { Name = "Soda A", Stock = 12, Type = DrinkType.Soda, Price = 10m }
+                new LiquidWithAlcohol { Name = "Beer A", StockQuantity = 10, CostPrice = 20m },
+                new LiquidWithAlcohol { Name = "Beer B", StockQuantity = 5, CostPrice = 18m },
+                new Snack { Name = "Chips", StockQuantity = 7, CostPrice = 15m },
+                new LiquidWithoutAlcohol { Name = "Soda", StockQuantity = 12, CostPrice = 10m }
             };
 
             var service = new ProductCategoryService();
@@ -27,11 +26,12 @@ namespace UnitTests
             var result = service.GetProductsByCategory(user, products);
 
             Assert.NotNull(result);
+            
             Assert.Equal(3, result.Count); 
-
-            Assert.Equal(2, result[DrinkType.Beer].Count);
-            Assert.Single(result[DrinkType.Cider]);
-            Assert.Single(result[DrinkType.Soda]);
+            
+            Assert.Equal(2, result["LiquidWithAlcohol"].Count);
+            Assert.Single(result["Snack"]);
+            Assert.Single(result["LiquidWithoutAlcohol"]);
         }
 
         // Tests that a non-board member receives an empty category list.
@@ -39,11 +39,11 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldReceive_EmptyCategoryList()
         {
-            var user = new User { Role = UserRole.Bartender };
+            var user = new User { Role = UserRoles.Bartender };
 
             var products = new List<Product>
             {
-                new Product { Name = "Beer A", Stock = 10, Type = DrinkType.Beer, Price = 20m }
+                new LiquidWithAlcohol { Name = "Beer A", StockQuantity = 10, CostPrice = 20m }
             };
 
             var service = new ProductCategoryService();
