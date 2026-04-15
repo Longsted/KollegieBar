@@ -1,15 +1,15 @@
-﻿using DataTransferObject.Model;
-using Data.Repositories;
+﻿using Data.Repositories;
+using DataTransferObject.Model;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
 public class UserBusinessLogicLayer
 {
-    private readonly UserRepository _userRepository;
+    private readonly UserRepository _userRepository = new UserRepository();
 
-    public UserBusinessLogicLayer(UserRepository userRepository)
+    public UserBusinessLogicLayer()
     {
-        _userRepository = userRepository;
+
     }
 
     public User? GetUserById(int userId)
@@ -71,7 +71,7 @@ public class UserBusinessLogicLayer
 
         return _userRepository.CreateUser(user);
     }
-    
-    
-    
+
+
+
 }
