@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using DataTransferObject.Model;
+using Xunit;
 
 namespace UnitTests
 {
@@ -10,14 +11,13 @@ namespace UnitTests
         [Fact]
         public void Bartender_ShouldBeAbleTo_RegisterWaste()
         {
-            var user = new User { Role = UserRole.Bartender };
+            var user = new User { Role = UserRoles.Bartender };
 
-            var product = new Product
+            var product = new LiquidWithAlcohol
             {
                 Name = "Beer Bottle",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 20m
+                StockQuantity = 10,
+                SalesPrice = 20m
             };
 
             var service = new WasteRegistrationService();
@@ -25,7 +25,7 @@ namespace UnitTests
             var result = service.RegisterWaste(user, product, amountLost: 2);
 
             Assert.True(result);
-            Assert.Equal(8, product.Stock); 
+            Assert.Equal(8, product.StockQuantity); 
         }
 
         // Tests that a non-bartender cannot register waste and stock remains unchanged.
@@ -33,14 +33,13 @@ namespace UnitTests
         [Fact]
         public void NonBartender_ShouldNotBeAbleTo_RegisterWaste()
         {
-            var user = new User { Role = UserRole.BoardMember };
+            var user = new User { Role = UserRoles.BoardMember };
 
-            var product = new Product
+            var product = new LiquidWithAlcohol
             {
                 Name = "Beer Bottle",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 20m
+                StockQuantity = 10,
+                SalesPrice = 20m
             };
 
             var service = new WasteRegistrationService();
@@ -48,7 +47,7 @@ namespace UnitTests
             var result = service.RegisterWaste(user, product, amountLost: 2);
 
             Assert.False(result);
-            Assert.Equal(10, product.Stock); 
+            Assert.Equal(10, product.StockQuantity); 
         }
     }
 }
