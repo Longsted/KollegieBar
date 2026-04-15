@@ -1,33 +1,43 @@
-﻿using Xunit;
+﻿using BusinessLogic.BusinessLogicLayer;
+using Data.Repositories;
+using DataTransferObject.Model;
+using Moq;
+using Xunit;
 
 namespace UnitTests
 {
     public class UserStory4
     {
-        // Tests that a new product is created when a board member is logged in.
         [Fact]
-        public void CreateProduct_ReturnsNewProduct_WhenBoardMemberIsLoggedIn()
+        public void CreateLiquidWithAlcohol_ShouldCallRepository_WhenCalled()
         {
-            var user = new User { Role = UserRole.BoardMember };
+            // 1. Arrange (Opsætning)
+            // Vi "mocker" repository'et så vi ikke behøver en rigtig database
+            var mockRepository = new Mock<ProductRepository>(null); 
+            var service = new ProductBusinessLogicLayer(mockRepository.Object);
+            
+            var newBeer = new LiquidWithAlcohol("Thy Classic", 10m, 100, 33, 25m, 4.6);
 
-            var service = new ProductCreationService();
-            var product = service.CreateProduct(user, "NewBeer", 50, DrinkType.Beer, 25m);
+            // 2. Act (Udfør handlingen)
+            service.CreateLiquidWithAlcohol(newBeer);
 
-            Assert.NotNull(product);
-            Assert.Equal("NewBeer", product.Name);
-            Assert.Equal(50, product.Stock);
+            // 3. Assert (Verificér at BLL har sendt varen videre til Repository)
+            mockRepository.Verify(r => r.CreateLiquidWithAlcohol(It.IsAny<LiquidWithAlcohol>()), Times.Once);
         }
 
-        // Tests that a new product is not created when a user is not logged in.
         [Fact]
-        public void CreateProduct_ReturnsNull_WhenUserIsNotLoggedIn()
+        public void CreateSnack_ShouldStoreCorrectData()
         {
-            var user = new User { Role = null };
+            // Arrange
+            var mockRepository = new Mock<ProductRepository>(null);
+            var service = new ProductBusinessLogicLayer(mockRepository.Object);
+            var snack = new Snack("Chips", 5m, 50, 15m);
 
-            var service = new ProductCreationService();
-            var product = service.CreateProduct(user, "NewBeer", 50, DrinkType.Beer, 25m);
+            // Act
+            service.CreateSnack(snack);
 
-            Assert.Null(product);
+            // Assert
+            mockRepository.Verify(r => r.CreateSnack(It.Is<Snack>(s => s.Name == "Chips")), Times.Once);
         }
     }
 }

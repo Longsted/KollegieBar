@@ -8,7 +8,7 @@ public class ProductRepository
 {
     private readonly AppDbContext _context;
 
-    private ProductRepository(AppDbContext context)
+    public ProductRepository(AppDbContext context)
     {
         _context = context;
     }
