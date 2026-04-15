@@ -65,4 +65,18 @@ public class ProductBusinessLogicLayer
         product.StockQuantity -= quantity;
         _repository.Update(product);
     }
+
+    public void RegisterIncomingStock(int productId, int newQuantity)
+    {
+        if (newQuantity < 0)
+            throw new ArgumentException("Invalid quantity");
+        
+        var product = _repository.GetProduct(productId);
+        
+        if (product == null)
+            throw new ArgumentException("Product not found");
+        
+        product.StockQuantity += newQuantity;
+        // _repository.UpdateStock(productId);
+    }
 }
