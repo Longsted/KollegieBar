@@ -1,13 +1,15 @@
-﻿namespace UnitTests
+﻿using DataTransferObject.Model;
+
+namespace UnitTests
 {
     public class SaleService
     {
         public bool RegisterSale(User user, Product product)
         {
-            if (user?.Role != UserRole.Bartender)
+            if (user?.Role != UserRoles.Bartender)
                 return false;
 
-            product.Stock -= 1;
+            product.StockQuantity -= 1;
             return true;
         }
     }
@@ -23,7 +25,7 @@
 
         public List<Product> GetStatistics(User user)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return new List<Product>();
 
             return _salesData;
@@ -34,28 +36,11 @@
     {
         public bool RegisterIncomingStock(User user, Product product, int newAmount)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return false;
 
-            product.Stock = newAmount;
+            product.StockQuantity = newAmount;
             return true;
-        }
-    }
-
-    public class ProductCreationService
-    {
-        public Product CreateProduct(User user, string name, int stock, DrinkType type, decimal price)
-        {
-            if (user?.Role != UserRole.BoardMember)
-                return null;
-
-            return new Product
-            {
-                Name = name,
-                Stock = stock,
-                Type = type,
-                Price = price
-            };
         }
     }
 
@@ -72,27 +57,26 @@
 
         public List<Product> GetLowInventory(User user)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return new List<Product>();
 
             return _products
-                .Where(p => p.Stock <= _threshold)
+                .Where(p => p.StockQuantity <= _threshold)
                 .ToList();
         }
     }
 
     public class ProductEditingService
     {
-        public bool EditProduct(User user, Product product, string newName, int newStock, DrinkType newType,
+        public bool EditProduct(User user, Product product, string newName, int newStock,
             decimal newPrice)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return false;
 
             product.Name = newName;
-            product.Stock = newStock;
-            product.Type = newType;
-            product.Price = newPrice;
+            product.StockQuantity = newStock;
+            product.CostPrice = newPrice;
 
             return true;
         }
@@ -102,7 +86,7 @@
     {
         public bool DeleteProduct(User user, List<Product> products, Product productToDelete)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return false;
 
             return products.Remove(productToDelete);
@@ -111,26 +95,25 @@
 
     public class ProductCategoryService
     {
-        public Dictionary<DrinkType, List<Product>> GetProductsByCategory(User user, List<Product> products)
+        public Dictionary<string, List<Product>> GetProductsByCategory(User user, List<Product> products)
         {
-            if (user?.Role != UserRole.BoardMember)
-                return new Dictionary<DrinkType, List<Product>>();
+            if (user?.Role != UserRoles.BoardMember)
+                return new Dictionary<string, List<Product>>();
 
             return products
-                .GroupBy(p => p.Type)
+                .GroupBy(p => p.GetType().Name) // Her får vi "Snack", "LiquidWithAlcohol" osv.
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
     }
 
     public class DrinkCustomizationService
     {
-        public bool CustomizeDrink(User user, Product product, decimal newPrice, DrinkType newType)
+        public bool CustomizeDrink(User user, Drink drink, double newPrice)
         {
-            if (user?.Role != UserRole.Bartender)
+            if (user?.Role != UserRoles.Bartender)
                 return false;
 
-            product.Price = newPrice;
-            product.Type = newType;
+            drink.CostPrice = newPrice;
 
             return true;
         }
@@ -140,16 +123,16 @@
     {
         public bool RegisterWaste(User user, Product product, int amountLost)
         {
-            if (user?.Role != UserRole.Bartender)
+            if (user?.Role != UserRoles.Bartender)
                 return false;
 
             if (amountLost <= 0)
                 return false;
 
-            product.Stock -= amountLost;
+            product.StockQuantity -= amountLost;
 
-            if (product.Stock < 0)
-                product.Stock = 0;
+            if (product.StockQuantity < 0)
+                product.StockQuantity = 0;
 
             return true;
         }
@@ -157,23 +140,39 @@
 
     public class StockLimitService
     {
-        public int MaxStock { get; private set; }
+        public int MaxStockQuantity { get; private set; }
+        public int MinStockQuantity { get; private set; }
 
-        public StockLimitService(int initialMaxStock)
+        public StockLimitService(int initialLimit)
         {
-            MaxStock = initialMaxStock;
+            MaxStockQuantity = initialLimit;
+            MinStockQuantity = initialLimit;
         }
 
         public bool UpdateMaxStock(User user, Product product, int newMaxStock)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return false;
 
-            MaxStock = newMaxStock;
-
+            MaxStockQuantity = newMaxStock;
+            
             // Adjust product stock if above new max
-            if (product.Stock > MaxStock)
-                product.Stock = MaxStock;
+            if (product.StockQuantity > MaxStockQuantity)
+                product.StockQuantity = MaxStockQuantity;
+
+            return true;
+        }
+
+        public bool UpdateMinStock(User user, Product product, int newMinStock)
+        {
+            if (user?.Role != UserRoles.BoardMember)
+                return false;
+
+            MinStockQuantity = newMinStock;
+
+            // Adjust product stock if below new min
+            if (product.StockQuantity < MinStockQuantity)
+                product.StockQuantity = MinStockQuantity;
 
             return true;
         }
@@ -185,7 +184,7 @@
 
         public bool RegisterPant(User user, decimal pantAmount)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return false;
 
             if (pantAmount <= 0)
@@ -197,7 +196,7 @@
 
         public bool ResetPant(User user)
         {
-            if (user?.Role != UserRole.BoardMember)
+            if (user?.Role != UserRoles.BoardMember)
                 return false;
 
             TotalPantIncome = 0;
@@ -207,9 +206,9 @@
 
     public class LoginService
     {
-        private readonly Dictionary<string, UserRole> _accounts;
+        private readonly Dictionary<string, UserRoles> _accounts;
 
-        public LoginService(Dictionary<string, UserRole> accounts)
+        public LoginService(Dictionary<string, UserRoles> accounts)
         {
             _accounts = accounts;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DataTransferObject.Model;
 using Xunit;
 
 namespace UnitTests
@@ -11,10 +12,10 @@ namespace UnitTests
         [Fact]
         public void ValidUser_ShouldLogin_AndReceiveCorrectRole()
         {
-            var accounts = new Dictionary<string, UserRole>
+            var accounts = new Dictionary<string, UserRoles>
             {
-                { "bartender1", UserRole.Bartender },
-                { "board1", UserRole.BoardMember }
+                { "bartender1", UserRoles.Bartender },
+                { "board1", UserRoles.BoardMember }
             };
 
             var service = new LoginService(accounts);
@@ -22,7 +23,7 @@ namespace UnitTests
             var user = service.Login("board1");
 
             Assert.NotNull(user);
-            Assert.Equal(UserRole.BoardMember, user.Role);
+            Assert.Equal(UserRoles.BoardMember, user.Role);
         }
 
         // Tests that an invalid user cannot log in and receives no access.
@@ -30,9 +31,9 @@ namespace UnitTests
         [Fact]
         public void InvalidUser_ShouldNotLogin()
         {
-            var accounts = new Dictionary<string, UserRole>
+            var accounts = new Dictionary<string, UserRoles>
             {
-                { "bartender1", UserRole.Bartender }
+                { "bartender1", UserRoles.Bartender }
             };
 
             var service = new LoginService(accounts);

@@ -1,5 +1,6 @@
 using Xunit;
 using System.Collections.Generic;
+using DataTransferObject.Model;
 
 namespace UnitTests
 {
@@ -9,12 +10,12 @@ namespace UnitTests
         [Fact]
         public void GetStatistics_ReturnsData_WhenBoardMemberIsLoggedIn()
         {
-            var user = new User { Role = UserRole.BoardMember };
+            var user = new User { Role = UserRoles.BoardMember };
 
             var salesData = new List<Product>
             {
-                new Product { Name = "Beer", Stock = 10 },
-                new Product { Name = "Cider", Stock = 5 }
+                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10 },
+                new LiquidWithAlcohol { Name = "Cider", StockQuantity = 5 }
             };
 
             var service = new SalesStatisticsService(salesData);
@@ -27,12 +28,12 @@ namespace UnitTests
         [Fact]
         public void GetStatistics_ReturnsEmpty_WhenUserIsNotLoggedIn()
         {
-            var user = new User { Role = null };
+            var user = new User { Role = UserRoles.Bartender };
 
             var salesData = new List<Product>
             {
-                new Product { Name = "Beer", Stock = 10 },
-                new Product { Name = "Cider", Stock = 5 }
+                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10 },
+                new LiquidWithAlcohol { Name = "Cider", StockQuantity = 5 }
             };
 
             var service = new SalesStatisticsService(salesData);

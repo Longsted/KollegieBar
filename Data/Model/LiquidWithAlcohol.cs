@@ -5,13 +5,13 @@ namespace Data.Model;
 
 public class LiquidWithAlcohol : LiquidProduct
 {
-    public decimal AlcoholPercentage { get; set; }
+    public double AlcoholPercentage { get; set; }
     
     public LiquidWithAlcohol() : base()
     {
     }
 
-    public LiquidWithAlcohol(string name, decimal costPrice, int stockQuantity, int volumeCl, decimal salesPrice, decimal alcoholPercentage): 
+    public LiquidWithAlcohol(string name, decimal costPrice, int stockQuantity, int volumeCl, decimal salesPrice, double alcoholPercentage): 
         base(name, costPrice,stockQuantity, volumeCl, salesPrice)
     {
         AlcoholPercentage = alcoholPercentage;
