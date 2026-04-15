@@ -142,7 +142,7 @@ public partial class CreateProductPage : ContentPage
                     return;
                 }
 
-                if (!decimal.TryParse(AlcoholPercentageEntry.Text, out decimal alcoholPercentage))
+                if (!double.TryParse(AlcoholPercentageEntry.Text, out double alcoholPercentage))
                 {
                     ResultLabel.Text = "Alcohol percentage must be a valid number.";
                     return;
