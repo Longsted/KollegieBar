@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using DataTransferObject.Model;
+using Xunit;
 
 namespace UnitTests
 {
@@ -10,13 +11,12 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_EditProductInformation()
         {
-            var user = new User { Role = UserRole.BoardMember };
-            var product = new Product
+            var user = new User { Role = UserRoles.BoardMember };
+            var product = new LiquidWithAlcohol
             {
                 Name = "Old Beer",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 20m
+                StockQuantity = 10,
+                CostPrice = 20m
             };
 
             var service = new ProductEditingService();
@@ -26,15 +26,13 @@ namespace UnitTests
                 product,
                 newName: "New Beer",
                 newStock: 25,
-                newType: DrinkType.Cider,
                 newPrice: 30m
             );
 
             Assert.True(result);
             Assert.Equal("New Beer", product.Name);
-            Assert.Equal(25, product.Stock);
-            Assert.Equal(DrinkType.Cider, product.Type);
-            Assert.Equal(30m, product.Price);
+            Assert.Equal(25, product.StockQuantity);
+            Assert.Equal(30m, product.CostPrice);
         }
 
         // Tests that a non-board member cannot edit a product and no changes are applied.
@@ -42,13 +40,12 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_EditProductInformation()
         {
-            var user = new User { Role = UserRole.Bartender }; // Not a board member
-            var product = new Product
+            var user = new User { Role = UserRoles.Bartender }; // Not a board member
+            var product = new LiquidWithAlcohol
             {
                 Name = "Beer",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 20m
+                StockQuantity = 10,
+                CostPrice = 20m
             };
 
             var service = new ProductEditingService();
@@ -58,15 +55,13 @@ namespace UnitTests
                 product,
                 newName: "New Beer",
                 newStock: 25,
-                newType: DrinkType.Cider,
                 newPrice: 30m
             );
 
             Assert.False(result);
             Assert.Equal("Beer", product.Name);
-            Assert.Equal(10, product.Stock);
-            Assert.Equal(DrinkType.Beer, product.Type);
-            Assert.Equal(20m, product.Price);
+            Assert.Equal(10, product.StockQuantity);
+            Assert.Equal(20m, product.CostPrice);
         }
     }
 }

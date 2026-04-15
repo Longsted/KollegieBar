@@ -1,5 +1,6 @@
 ﻿
 using Data.Context;
+using Data.Mappers;
 using DataTransferObject.Model;
 
 namespace Data.Repositories;
@@ -8,31 +9,39 @@ public class ProductRepository
 {
     private readonly AppDbContext _context;
 
-    private ProductRepository(AppDbContext context)
+    public ProductRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public void CreateSnack(Snack snack)
+    public DataTransferObject.Model.Product? GetProduct(int id)
     {
-        _context.Products.Add(snack);
-        _context.SaveChanges();
+        var product = _context.Products.Find(id);
+
+        if (product == null)
+        {
+            return null;
+        }
+
+        return ProductMapper.Map(product);
     }
 
-    public void CreateLiquidWithAlcohol(LiquidWithAlcohol liquidWithAlcohol)
+    public void Update(DataTransferObject.Model.Product dto)
     {
-        _context.Products.Add(liquidWithAlcohol);
+        var existing = _context.Products.Find(dto.Id);
+        if (existing == null)
+        {
+            throw new NullReferenceException("Product not found");
+        }
+        existing.Name = dto.Name;
+        existing.CostPrice = dto.CostPrice;
+        existing.StockQuantity = dto.StockQuantity;
         _context.SaveChanges();
     }
-
-    public void CreateLiquidWithoutAlcohol(LiquidWithoutAlcohol liquidWithoutAlcohol)
+    
+    public void Create(DataTransferObject.Model.Product dto) 
     {
-        _context.Products.Add(liquidWithoutAlcohol);
-        _context.SaveChanges();
-    }
-    public void CreateConsumables(Consumables consumables)
-    {
-        _context.Products.Add(consumables);
+        _context.Products.Add(ProductMapper.Map(dto));
         _context.SaveChanges();
     }
 }

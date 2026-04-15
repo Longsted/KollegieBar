@@ -12,23 +12,57 @@ public class ProductBusinessLogicLayer
         _repository = repository;
     }
 
-    public void CreateSnack(Snack snack)
+    public Product? GetProduct(int id)
     {
-        _repository.CreateSnack(snack);
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid product id");
+        }
+
+        return _repository.GetProduct(id);
     }
 
-    public void CreateLiquidWithAlcohol(LiquidWithAlcohol liquidWithAlcohol)
+    public void CreateProduct(Product product)
     {
-        _repository.CreateLiquidWithAlcohol(liquidWithAlcohol);
+        ValidateProduct(product);
+        _repository.Create(product);
     }
 
-    public void CreateLiquidWithoutAlcohol(LiquidWithoutAlcohol liquidWithoutAlcohol)
+    public void ValidateProduct(Product product)
     {
-        _repository.CreateLiquidWithoutAlcohol(liquidWithoutAlcohol);
+        if (string.IsNullOrWhiteSpace(product.Name))
+            throw new ArgumentException("Name is required");
+
+        if (product.CostPrice < 0)
+            throw new ArgumentException("Invalid price");
+
+        if (product.StockQuantity < 0)
+            throw new ArgumentException("Invalid stock");
+
+        if (product is LiquidWithAlcohol alcohol)
+        {
+            if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
+                throw new ArgumentException("Invalid alcohol percentage");
+        }
     }
 
-    public void CreateConsumables(Consumables consumables)
+    // registrere solgt produkt
+
+    public void SellProduct(int productId, int quantity)
     {
-        _repository.CreateConsumables(consumables);
+        if (quantity <= 0)
+            throw new ArgumentException("Invalid quantity");
+
+
+        var product = _repository.GetProduct(productId);
+
+        if (product == null)
+            throw new NullReferenceException("Product not found");
+
+        if (product.StockQuantity < quantity)
+            throw new InvalidOperationException("Not enough stock");
+
+        product.StockQuantity -= quantity;
+        _repository.Update(product);
     }
 }
