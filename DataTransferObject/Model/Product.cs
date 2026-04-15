@@ -7,6 +7,10 @@ public abstract class Product
     public decimal CostPrice{ get; set; }
     public int StockQuantity{ get; set; }
 
+    public int MaxStockQuantity { get; set; }
+
+    public int MinStockQuantity { get; set; }
+
 
     protected Product(string name, decimal costPrice, int stockQuantity)
     {
