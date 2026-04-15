@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using DataTransferObject.Model;
+using Xunit;
 
 namespace UnitTests
 {
@@ -9,14 +10,12 @@ namespace UnitTests
         [Fact]
         public void Bartender_ShouldBeAbleTo_CustomizeDrink()
         {
-            var user = new User { Role = UserRole.Bartender };
+            var user = new User { Role = UserRoles.Bartender };
 
-            var product = new Product
+            var product = new Drink()
             {
                 Name = "Special Drink",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 20m
+                SalesPrice = 20
             };
 
             var service = new DrinkCustomizationService();
@@ -24,29 +23,25 @@ namespace UnitTests
             var result = service.CustomizeDrink(
                 user,
                 product,
-                newPrice: 35m,          
-                newType: DrinkType.Spirit
+                newPrice: 35
             );
 
             Assert.True(result);
-            Assert.Equal(35m, product.Price);
-            Assert.Equal(DrinkType.Spirit, product.Type);
+            Assert.Equal(35, product.CostPrice);
+            // Assert.Equal(DrinkType.Spirit, product.Type);
         }
-
 
         // Tests that a non-bartender cannot customize a drink and no changes are applied.
 
         [Fact]
         public void NonBartender_ShouldNotBeAbleTo_CustomizeDrink()
         {
-            var user = new User { Role = UserRole.BoardMember }; 
+            var user = new User { Role = UserRoles.BoardMember }; 
 
-            var product = new Product
+            var product = new Drink
             {
                 Name = "Special Drink",
-                Stock = 10,
-                Type = DrinkType.Beer,
-                Price = 20m
+                SalesPrice = 20
             };
 
             var service = new DrinkCustomizationService();
@@ -54,13 +49,11 @@ namespace UnitTests
             var result = service.CustomizeDrink(
                 user,
                 product,
-                newPrice: 35m,
-                newType: DrinkType.Spirit
+                newPrice: 35
             );
 
             Assert.False(result);
-            Assert.Equal(20m, product.Price);
-            Assert.Equal(DrinkType.Beer, product.Type);
+            Assert.Equal(20, product.SalesPrice);
         }
     }
 }

@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
+using DataTransferObject.Model;
 using Xunit;
 
 namespace UnitTests
 {
     
-
     public class UserStory7
     {
         // Tests that a board member can delete a product and it is removed from the database.
         [Fact]
         public void BoardMember_ShouldBeAbleTo_DeleteProduct()
         {
-            var user = new User { Role = UserRole.BoardMember };
+            var user = new User { Role = UserRoles.BoardMember };
 
             var products = new List<Product>
             {
-                new Product { Name = "Beer", Stock = 10, Type = DrinkType.Beer, Price = 20m },
-                new Product { Name = "Cider", Stock = 5, Type = DrinkType.Cider, Price = 15m }
+                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10, CostPrice = 20m },
+                new Snack { Name = "Chips", StockQuantity = 5, CostPrice = 15m }
             };
 
             var productToDelete = products[0];
@@ -33,11 +33,11 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_DeleteProduct()
         {
-            var user = new User { Role = UserRole.Bartender };
+            var user = new User { Role = UserRoles.Bartender };
 
             var products = new List<Product>
             {
-                new Product { Name = "Beer", Stock = 10, Type = DrinkType.Beer, Price = 20m }
+                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10, CostPrice = 20m }
             };
 
             var productToDelete = products[0];

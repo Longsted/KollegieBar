@@ -82,7 +82,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
-      <ProjectReference Include="..\DataTransferObject\DataTransferObject.csproj" />
     </ItemGroup>
 
 </Project>

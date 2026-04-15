@@ -12,6 +12,16 @@ public class ProductBusinessLogicLayer
         _repository = repository;
     }
 
+    public Product? GetProduct(int id)
+    {
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid product id");
+        }
+
+        return _repository.GetProduct(id);
+    }
+
     public void CreateProduct(Product product)
     {
         ValidateProduct(product);
@@ -34,5 +44,39 @@ public class ProductBusinessLogicLayer
             if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
                 throw new ArgumentException("Invalid alcohol percentage");
         }
+    }
+
+    // registrere solgt produkt
+
+    public void SellProduct(int productId, int quantity)
+    {
+        if (quantity <= 0)
+            throw new ArgumentException("Invalid quantity");
+
+
+        var product = _repository.GetProduct(productId);
+
+        if (product == null)
+            throw new NullReferenceException("Product not found");
+
+        if (product.StockQuantity < quantity)
+            throw new InvalidOperationException("Not enough stock");
+
+        product.StockQuantity -= quantity;
+        _repository.Update(product);
+    }
+
+    public void RegisterIncomingStock(int productId, int newQuantity)
+    {
+        if (newQuantity < 0)
+            throw new ArgumentException("Invalid quantity");
+        
+        var product = _repository.GetProduct(productId);
+        
+        if (product == null)
+            throw new ArgumentException("Product not found");
+        
+        product.StockQuantity += newQuantity;
+        // _repository.UpdateStock(productId);
     }
 }
