@@ -14,6 +14,31 @@ public class ProductRepository
         _context = context;
     }
 
+    public DataTransferObject.Model.Product? GetProduct(int id)
+    {
+        var product = _context.Products.Find(id);
+
+        if (product == null)
+        {
+            return null;
+        }
+
+        return ProductMapper.Map(product);
+    }
+
+    public void Update(DataTransferObject.Model.Product dto)
+    {
+        var existing = _context.Products.Find(dto.Id);
+        if (existing == null)
+        {
+            throw new NullReferenceException("Product not found");
+        }
+        existing.Name = dto.Name;
+        existing.CostPrice = dto.CostPrice;
+        existing.StockQuantity = dto.StockQuantity;
+        _context.SaveChanges();
+    }
+    
     public void Create(DataTransferObject.Model.Product dto) 
     {
         _context.Products.Add(ProductMapper.Map(dto));
