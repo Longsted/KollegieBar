@@ -1,6 +1,7 @@
-﻿using DataTransferObject.Model;
+﻿using Data.Model;
 
-namespace DataTransferObject.Model;
+namespace Data.Model;
+
 public class Drink
 {
     public int Id { get; set; }
