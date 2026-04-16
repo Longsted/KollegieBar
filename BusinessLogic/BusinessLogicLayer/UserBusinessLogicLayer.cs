@@ -5,11 +5,11 @@ namespace BusinessLogic.BusinessLogicLayer;
 
 public class UserBusinessLogicLayer
 {
-    private readonly UserRepository _userRepository = new UserRepository();
+    private readonly UserRepository _userRepository;
 
-    public UserBusinessLogicLayer()
+    public UserBusinessLogicLayer(UserRepository repository)
     {
-
+        _userRepository = repository;
     }
 
     public User? GetUserById(int userId)

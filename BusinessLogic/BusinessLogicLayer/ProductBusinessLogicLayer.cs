@@ -14,6 +14,16 @@ public class ProductBusinessLogicLayer
 
  
 
+    public void AddProduct(Product product)
+    {
+        if (product == null)
+        {
+            throw new NullReferenceException("Product not found");
+        }
+        
+        
+    }
+
     public void CreateProduct(Product product)
     {
         ValidateProduct(product);
@@ -87,5 +97,10 @@ public class ProductBusinessLogicLayer
             throw new ArgumentNullException("existingProduct", "Product not found");
         }
         _repository.Update(updatedProduct);
+    }
+
+    public List<Product> GetAllProducts()
+    {
+        return _repository.GetAllProducts();
     }
 }

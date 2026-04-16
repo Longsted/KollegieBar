@@ -6,12 +6,14 @@ namespace FrontEnd;
 public partial class CreateProductPage : ContentPage
 {
     private string _selectedTab = "Snack";
-    private readonly UserBusinessLogicLayer _businessLogicLayer;
     private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
-
-    public CreateProductPage()
+    
+    public CreateProductPage(ProductBusinessLogicLayer productBusinessLogicLayer)
     {
         InitializeComponent();
+        
+        _productBusinessLogicLayer = productBusinessLogicLayer;
+        
         UpdateUI();
         
     }
@@ -125,7 +127,7 @@ public partial class CreateProductPage : ContentPage
                 }
 
                 Snack snack = new Snack(name, costPrice, stockQuantity, salesPrice);
-
+                
                 ResultLabel.Text = $"Snack created: {snack.Name}";
             }
             else if (_selectedTab == "LiquidWithPct")
@@ -183,6 +185,8 @@ public partial class CreateProductPage : ContentPage
                     salesPrice,
                     sugarFree
                 );
+                
+                _productBusinessLogicLayer.AddProduct(liquid);
 
                 ResultLabel.Text = $"Liquid without alcohol created: {liquid.Name}";
             }
@@ -195,6 +199,8 @@ public partial class CreateProductPage : ContentPage
                     StockQuantity = stockQuantity,
                     Description = DescriptionEntry.Text
                 };
+                
+                _productBusinessLogicLayer.AddProduct(consumable);
 
                 ResultLabel.Text = $"Consumable created: {consumable.Name}";
             }

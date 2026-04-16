@@ -12,6 +12,7 @@ public class ProductRepository
     public ProductRepository(AppDbContext context)
     {
         _context = context;
+        
     }
 
     public virtual DataTransferObject.Model.Product? GetProduct(int id)
@@ -43,6 +44,12 @@ public class ProductRepository
         existing.StockQuantity = dto.StockQuantity;
         _context.SaveChanges();
     }
+
+    public void AddProduct(DataTransferObject.Model.Product product)
+    {
+        _context.Products.Add(ProductMapper.Map(product));
+        _context.SaveChanges();
+    }
     
     public virtual void Create(DataTransferObject.Model.Product dto) 
     {
@@ -58,5 +65,13 @@ public class ProductRepository
             product.StockQuantity = newTotalStock;
             _context.SaveChanges();
         }
+    }
+
+    public virtual List<DataTransferObject.Model.Product> GetAllProducts()
+    {
+        return _context.Products
+            .ToList()
+            .Select(ProductMapper.Map)
+            .ToList();
     }
 }
