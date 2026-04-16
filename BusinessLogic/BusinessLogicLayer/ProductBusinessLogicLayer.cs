@@ -12,15 +12,7 @@ public class ProductBusinessLogicLayer
         _repository = repository;
     }
 
-    public Product? GetProduct(int id)
-    {
-        if (id <= 0)
-        {
-            throw new ArgumentException("Invalid product id");
-        }
-
-        return _repository.GetProduct(id);
-    }
+ 
 
     public void AddProduct(Product product)
     {
@@ -80,13 +72,30 @@ public class ProductBusinessLogicLayer
     {
         if (newQuantity < 0)
             throw new ArgumentException("Invalid quantity");
-        
+
         var product = _repository.GetProduct(productId);
-        
+
         if (product == null)
             throw new ArgumentException("Product not found");
-        
+
         var newTotalStock = product.StockQuantity += newQuantity;
         _repository.UpdateStock(productId, newTotalStock);
+    }
+
+    public void UpdateProduct(Product updatedProduct)
+    {
+        if (updatedProduct == null)
+        {
+            throw new ArgumentNullException(nameof(updatedProduct));
+        }
+
+        ValidateProduct(updatedProduct);
+        
+        var existingProduct = _repository.GetProduct(updatedProduct.Id);
+        if (existingProduct == null)
+        {
+            throw new ArgumentNullException("existingProduct", "Product not found");
+        }
+        _repository.Update(updatedProduct);
     }
 }

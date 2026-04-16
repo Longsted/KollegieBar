@@ -14,7 +14,7 @@ public class UserRepository
         _context = context;
     }
 
-    public DataTransferObject.Model.User? GetUser(int id)
+    public virtual DataTransferObject.Model.User? GetUser(int id)
     {
         var user = _context.Users.Find(id);
 
@@ -27,20 +27,20 @@ public class UserRepository
         return UserMapper.Map(user);
     }
 
-    public List<DataTransferObject.Model.User> GetUsers()
+    public virtual List<DataTransferObject.Model.User> GetUsers()
     {
         return _context.Users
             .Select(u => UserMapper.Map(u))
             .ToList();
     }
 
-    public void AddUser(DataTransferObject.Model.User user)
+    public virtual void AddUser(DataTransferObject.Model.User user)
     {
         _context.Users.Add(UserMapper.Map(user));
         _context.SaveChanges();
     }
 
-    public void DeleteUser(int id)
+    public virtual void DeleteUser(int id)
     {
         var user = _context.Users.Find(id);
 
@@ -51,7 +51,7 @@ public class UserRepository
         }
     }
 
-    public DataTransferObject.Model.User CreateUser(DataTransferObject.Model.User user)
+    public virtual DataTransferObject.Model.User CreateUser(DataTransferObject.Model.User user)
     {
         var entityUser = UserMapper.Map(user);
 
@@ -61,7 +61,7 @@ public class UserRepository
         return UserMapper.Map(entityUser);
     }
 
-    public void UpdateUser(DataTransferObject.Model.User user)
+    public virtual void UpdateUser(DataTransferObject.Model.User user)
     {
         var existingUser = _context.Users.Find(user.Id);
 

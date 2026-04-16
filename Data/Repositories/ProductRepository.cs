@@ -14,19 +14,24 @@ public class ProductRepository
         _context = context;
     }
 
-    public DataTransferObject.Model.Product? GetProduct(int id)
+    public virtual DataTransferObject.Model.Product? GetProduct(int id)
     {
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid product Id");
+        }
+        
         var product = _context.Products.Find(id);
 
         if (product == null)
         {
-            return null;
+            throw new ArgumentNullException("Product not found");
         }
 
         return ProductMapper.Map(product);
     }
 
-    public void Update(DataTransferObject.Model.Product dto)
+    public virtual void Update(DataTransferObject.Model.Product dto)
     {
         var existing = _context.Products.Find(dto.Id);
         if (existing == null)
@@ -45,13 +50,13 @@ public class ProductRepository
         _context.SaveChanges();
     }
     
-    public void Create(DataTransferObject.Model.Product dto) 
+    public virtual void Create(DataTransferObject.Model.Product dto) 
     {
         _context.Products.Add(ProductMapper.Map(dto));
         _context.SaveChanges();
     }
     
-    public void UpdateStock(int productId, int newTotalStock)
+    public virtual void UpdateStock(int productId, int newTotalStock)
     {
         var product = _context.Products.Find(productId);
         if (product != null)
