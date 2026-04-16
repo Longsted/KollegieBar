@@ -12,14 +12,15 @@ public class ProductBusinessLogicLayer
         _repository = repository;
     }
 
- 
 
+    // Creates a new product after validating its details.
     public void CreateProduct(Product product)
     {
         ValidateProduct(product);
         _repository.Create(product);
     }
 
+    // Validates product details before creation or update.
     public void ValidateProduct(Product product)
     {
         if (string.IsNullOrWhiteSpace(product.Name))
@@ -54,10 +55,31 @@ public class ProductBusinessLogicLayer
         if (product.StockQuantity < quantity)
             throw new InvalidOperationException("Not enough stock");
 
+
+
         product.StockQuantity -= quantity;
         _repository.Update(product);
     }
 
+    // Register waste for a product, which decreases the stock quantity.
+    public void RegisterWaste(int productID, int quantityLost)
+    {
+        if (quantityLost <= 0)
+            throw new ArgumentException("Invalid quantity");
+
+        var product = _repository.GetProduct(productID);
+
+        if (product == null)
+            throw new NullReferenceException("Product not found");
+
+        if (product.StockQuantity < quantityLost)
+            throw new InvalidOperationException("Not enough stock to register waste");
+
+        product.StockQuantity -= quantityLost;
+        _repository.Update(product);
+    }
+
+    // Register incoming stock for a product, which increases the stock quantity.
     public void RegisterIncomingStock(int productId, int newQuantity)
     {
         if (newQuantity < 0)
@@ -72,6 +94,7 @@ public class ProductBusinessLogicLayer
         _repository.UpdateStock(productId, newTotalStock);
     }
 
+    // Update product details such as name, price, etc.
     public void UpdateProduct(Product updatedProduct)
     {
         if (updatedProduct == null)

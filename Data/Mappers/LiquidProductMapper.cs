@@ -13,6 +13,7 @@ namespace Data.Mappers
             // liquid-specifikke felter
             dto.VolumeCl = entity.VolumeCl;
             dto.SalesPrice = entity.SalesPrice;
+            dto.Pant = entity.Pant;
         }
 
         public static void MapToEntity(DTO.LiquidProduct dto, DataEntity.LiquidProduct entity)
@@ -23,6 +24,7 @@ namespace Data.Mappers
             // liquid-specifikke felter
             entity.VolumeCl = dto.VolumeCl;
             entity.SalesPrice = dto.SalesPrice;
+            entity.Pant = dto.Pant;
         }
     }
 }
