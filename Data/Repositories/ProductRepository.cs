@@ -62,6 +62,7 @@ public class ProductRepository
         var product = _context.Products.Find(productId);
         if (product != null)
         {
+            
             product.StockQuantity = newTotalStock;
             _context.SaveChanges();
         }
@@ -74,4 +75,20 @@ public class ProductRepository
             .Select(ProductMapper.Map)
             .ToList();
     }
+
+    public virtual void UpdateMaxStock(int productId, int newMaxStock)
+    {
+        var product = _context.Products.Find(productId);
+        if(product != null)
+            product.MaxStockQuantity = newMaxStock;
+        _context.SaveChanges();
+    }
+    public virtual void UpdateMinStock(int productId, int newMinStock)
+    {
+        var product = _context.Products.Find(productId);
+        if(product != null)
+            product.MinStockQuantity = newMinStock;
+        _context.SaveChanges();
+    }
+    
 }
