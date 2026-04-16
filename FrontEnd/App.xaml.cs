@@ -4,13 +4,12 @@ namespace FrontEnd;
 
 public partial class App : Application
 {
-    public App()
+    public App(IServiceProvider serviceProvider)
     {
         InitializeComponent();
 
-        // Here vi put MainPage in a NavigationPage.
-        // So we can use Navigation.PushAsync() later.
-        MainPage = new NavigationPage(new MainPage());
+        MainPage = new NavigationPage(serviceProvider.GetRequiredService<MainPage>()
+        );
     }
 
     //protected override Window CreateWindow(IActivationState? activationState)

@@ -29,10 +29,10 @@ public static class MauiProgram
         builder.Services.AddScoped<UserBusinessLogicLayer>();
         builder.Services.AddScoped<ProductBusinessLogicLayer>();
 
-        builder.Services.AddScoped<MainPage>();
-        builder.Services.AddScoped<CreateProductPage>();
-        builder.Services.AddScoped<DashBoard>();
-        builder.Services.AddScoped<BarOverview>();
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<CreateProductPage>();
+        builder.Services.AddTransient<DashBoard>();
+        builder.Services.AddTransient<BarOverview>();
 
 #if DEBUG
         builder.Logging.AddDebug();
