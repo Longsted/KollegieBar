@@ -1,4 +1,4 @@
-﻿namespace Data.Model
+﻿namespace DataTransferObject.Model
 {
     public class Sale
     {
@@ -13,7 +13,6 @@
         //Foreign key to Product
         public int ProductId { get; set; }
         public Product Product { get; set; }
-
         public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, int productId)
         {
             SaleId = saleId;
@@ -21,8 +20,11 @@
             SaleDate = saleDate;
             TransactionId = transactionId;
             ProductId = productId;
+
         }
+
 
         public Sale() { }
     }
 }
+

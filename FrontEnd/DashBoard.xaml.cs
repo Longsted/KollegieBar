@@ -13,7 +13,7 @@ public partial class DashBoard : ContentPage
 	{
 		InitializeComponent();
 		
-		BindingContext = new DashboardViewModel();
+		BindingContext = new DashboardViewModel(new ProductBusinessLogicLayer());
 	}
 }
 
@@ -22,7 +22,7 @@ public class DashboardViewModel : INotifyPropertyChanged
 	public ObservableCollection<Product> Products { get; set; }
 	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
 
-	
+
 
 	private Product _selectedProduct;
 	public Product SelectedProduct

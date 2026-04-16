@@ -32,18 +32,6 @@ namespace UnitTests
         }
     }
 
-    public class IncomingStockService
-    {
-        public bool RegisterIncomingStock(User user, Product product, int newAmount)
-        {
-            if (user?.Role != UserRoles.BoardMember)
-                return false;
-
-            product.StockQuantity = newAmount;
-            return true;
-        }
-    }
-
     public class LowInventoryService
     {
         private readonly List<Product> _products;
