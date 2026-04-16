@@ -13,7 +13,6 @@ namespace UnitTests
 
         public UserStory4()
         {
-            // Vi mocker AppDbContext som null, da vi ikke tester selve databasen her
             _mockRepository = new Mock<ProductRepository>(null);
             _service = new ProductBusinessLogicLayer(_mockRepository.Object);
         }
