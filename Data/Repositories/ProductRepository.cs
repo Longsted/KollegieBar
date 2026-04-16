@@ -38,6 +38,12 @@ public class ProductRepository
         existing.StockQuantity = dto.StockQuantity;
         _context.SaveChanges();
     }
+
+    public void AddProduct(DataTransferObject.Model.Product product)
+    {
+        _context.Products.Add(ProductMapper.Map(product));
+        _context.SaveChanges();
+    }
     
     public void Create(DataTransferObject.Model.Product dto) 
     {
