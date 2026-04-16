@@ -10,10 +10,11 @@ namespace FrontEnd;
 public partial class DashBoard : ContentPage
 {
 	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
-	
-	public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer)
+	private readonly IServiceProvider _provider;
+	public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
 	{
 		InitializeComponent();
+		_provider = provider;
 		_productBusinessLogicLayer = productBusinessLogicLayer;
 		BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
 		
@@ -28,8 +29,8 @@ public class DashboardViewModel : INotifyPropertyChanged
 	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
 	{
 		_productBusinessLogicLayer = productBusinessLogicLayer;
-		// Products = new ObservableCollection<Product>(
-		// _productBusinessLogicLayer.GetAllProducts());
+		Products = new ObservableCollection<Product>(
+		_productBusinessLogicLayer.GetAllProducts());
 	}
 
 	private Product _selectedProduct;

@@ -98,4 +98,9 @@ public class ProductBusinessLogicLayer
         }
         _repository.Update(updatedProduct);
     }
+
+    public List<Product> GetAllProducts()
+    {
+        return _repository.GetAllProducts();
+    }
 }
