@@ -20,8 +20,6 @@ public class ProductBusinessLogicLayer
         {
             throw new NullReferenceException("Product not found");
         }
-        
-        
     }
 
     public void CreateProduct(Product product)
