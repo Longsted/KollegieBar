@@ -9,11 +9,14 @@ namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-	public DashBoard()
+	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+	
+	public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer)
 	{
 		InitializeComponent();
+		_productBusinessLogicLayer = productBusinessLogicLayer;
+		BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
 		
-		BindingContext = new DashboardViewModel(new ProductBusinessLogicLayer());
 	}
 }
 
@@ -22,7 +25,12 @@ public class DashboardViewModel : INotifyPropertyChanged
 	public ObservableCollection<Product> Products { get; set; }
 	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
 
-
+	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
+	{
+		_productBusinessLogicLayer = productBusinessLogicLayer;
+		// Products = new ObservableCollection<Product>(
+		// _productBusinessLogicLayer.GetAllProducts());
+	}
 
 	private Product _selectedProduct;
 	public Product SelectedProduct
@@ -52,13 +60,6 @@ public class DashboardViewModel : INotifyPropertyChanged
 	private void AddQuantity()
 	{
 		_productBusinessLogicLayer.RegisterIncomingStock(SelectedProduct.Id, Quantity);
-	}
-
-	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
-	{
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		 Products = new ObservableCollection<Product>(
-		_productBusinessLogicLayer.GetAllProducts());
 	}
 
 
