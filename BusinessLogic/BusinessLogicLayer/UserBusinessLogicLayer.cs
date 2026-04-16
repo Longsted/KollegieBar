@@ -72,6 +72,28 @@ public class UserBusinessLogicLayer
         return _userRepository.CreateUser(user);
     }
 
+    public int ChekcUser(string password, string username)
+    {
+        var users = GetUsers();
+
+        var foundUser = users.FirstOrDefault(U => U.Password == password && U.UserName == username);
+
+        if(foundUser == null)
+        {
+            return 0;
+        }
+
+        if(foundUser.Role == UserRoles.BoardMember)
+        {
+            return 1;
+        }
+        else if (foundUser.Role == UserRoles.Bartender)
+        {
+            return 2;
+        }
+        return 0;
+    }
+
 
 
 }
