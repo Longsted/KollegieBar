@@ -7,11 +7,11 @@ namespace Data.Repositories;
 public class UserRepository
 {
 
-    private readonly AppDbContext _context = new AppDbContextFactory().CreateDbContext(Array.Empty<string>());
+    private readonly AppDbContext _context;
 
-    public UserRepository()
+    public UserRepository(AppDbContext  context)
     {
-
+        _context = context;
     }
 
     public virtual DataTransferObject.Model.User? GetUser(int id)

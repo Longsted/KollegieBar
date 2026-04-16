@@ -6,71 +6,55 @@ namespace FrontEnd;
 
 public partial class MainPage : ContentPage
 {
-
-    private readonly UserRepository _userRepository;
-    public MainPage()
+    private readonly UserBusinessLogicLayer _userBusinessLogicLayer;
+    private readonly IServiceProvider _serviceProvider;
+    
+    public MainPage(UserBusinessLogicLayer userBusinessLogicLayer, IServiceProvider serviceProvider)
     {
-        InitializeComponent();
+        _userBusinessLogicLayer = userBusinessLogicLayer;
+        _serviceProvider = serviceProvider;
     }
-
-
+    
 
     private async void LoginClicked(object sender, EventArgs e)
     {
-        string password = PasswordEntry.Text;
-
-        string UserName = UsernameEntry.Text;
-
-        tjekUsers(sender, e);
-
-        //if (UserName == "Admin" && password == "1234")
-        //{
-        //    // 1. Going to the DashBoard nicely
-        //    await Navigation.PushAsync(new DashBoard());
-
-        //    // 2. Removing the "LoginPage" from the stack
-        //    Navigation.RemovePage(this);
-        //} else  if (UserName == "Bar" && password == "1234"){
-        //    await Navigation.PushAsync(new BarOverview());
+        await CheckUsers();
     }
 
-    private async void tjekUsers(object sender, EventArgs e)
+    private async Task CheckUsers()
     {
         string password = PasswordEntry.Text;
         string UserName = UsernameEntry.Text;
 
-        var logic = new UserBusinessLogicLayer();
-        var users = logic.GetUsers();
-
+        var users = _userBusinessLogicLayer.GetUsers();
+        
         var foundUser = users.FirstOrDefault(U => U.Password == password && U.UserName == UserName);
 
+        if (foundUser == null)
+        {
+            await DisplayAlert("Error", "Username or password is incorrect", "OK");
+            return;
+        }
+        
         if (foundUser.Role == UserRoles.BoardMember)
         {
             // 1. Going to the DashBoard nicely
-            await Navigation.PushAsync(new DashBoard());
+            var dashboard = _serviceProvider.GetRequiredService<DashBoard>();
+            await Navigation.PushAsync(dashboard);
+            Navigation.RemovePage(this);
 
         }
         else if (foundUser.Role == UserRoles.Bartender)
         {
+            var barOverview = _serviceProvider.GetRequiredService<BarOverview>();
             await Navigation.PushAsync(new BarOverview());
+            Navigation.RemovePage(this);
         }
-        // 2. Removing the "LoginPage" from the stack
-        Navigation.RemovePage(this);
-
+        else
+        {
+            await DisplayAlert("Error", "Username or password is incorrect", "OK");
+        }
     }
 
 }
 
-
-
-//private void OnCounterClicked(object? sender, EventArgs e)
-//{
-//    count++;
-
-//    if (count == 1)
-//        CounterBtn.Text = $"Clicked {count} time";
-//    else
-//        CounterBtn.Text = $"Clicked {count} times";
-
-//    SemanticScreenReader.Announce(CounterBtn.Text);
-//}

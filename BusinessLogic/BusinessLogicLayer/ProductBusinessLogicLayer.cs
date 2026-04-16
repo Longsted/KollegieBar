@@ -14,6 +14,16 @@ public class ProductBusinessLogicLayer
 
  
 
+    public void AddProduct(Product product)
+    {
+        if (product == null)
+        {
+            throw new NullReferenceException("Product not found");
+        }
+        
+        
+    }
+
     public void CreateProduct(Product product)
     {
         ValidateProduct(product);
