@@ -9,6 +9,9 @@ public class AppDbContext : DbContext
     public DbSet<Data.Model.User> Users { get; set; }
     public DbSet<Data.Model.Product> Products { get; set; }
     public DbSet<Data.Model.Sale> Sales { get; set; }
+    public DbSet<Data.Model.Drink> Drinks { get; set; }
+    public DbSet<Data.Model.DrinkIngredient> DrinkIngredients { get; set; }
+
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
