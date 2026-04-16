@@ -100,4 +100,31 @@ public class ProductBusinessLogicLayer
     {
         return _repository.GetAllProducts();
     }
+
+    public void UpdateMaxStock(int productId, int newMaxStock)
+    {
+        if (newMaxStock < 0)
+        {
+            throw new ArgumentException("Invalid stock");
+        }
+
+        if (productId < 0)
+        {
+            throw new ArgumentException("Invalid productId");
+        }
+        _repository.UpdateMaxStock(productId, newMaxStock);
+    }
+    public void UpdateMinStock(int productId, int newMinStock)
+    {
+        if (newMinStock < 0)
+        {
+            throw new ArgumentException("Invalid stock");
+        }
+
+        if (productId < 0)
+        {
+            throw new ArgumentException("Invalid productId");
+        }
+        _repository.UpdateMaxStock(productId, newMinStock);
+    }
 }
