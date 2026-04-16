@@ -4,35 +4,48 @@
              x:Class="FrontEnd.DashBoard"
              Title="DashBoard"
              BackgroundColor="Azure">
-    
-    <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
-            
-            <Border Stroke="#D1D5DB"
-                    StrokeThickness="1"
-                    BackgroundColor="White"
-                    StrokeShape="RoundRectangle 16"
-                    Padding="20"> 
-                
-                <VerticalStackLayout Spacing="20">
-                    
-                    <Grid ColumnDefinitions="*,*,*"
-                          ColumnSpacing="12">
-                          
-                          <Button x:Name="GoToCreateProductButton"
-                                   Grid.Column="0"
-                                   Text="Create product"
-                                   Clicked="GoToCreateProductButton_OnClicked"
-                                   BackgroundColor="#E8F0FE"
-                                   TextColor="#1F2937"
-                                   CornerRadius="10"
-                                   HeightRequest="48"
-                                   BorderColor="#93C5FD"
-                                   BorderWidth="1.5"
-                                   ></Button>
-                          </Grid>
-                    </VerticalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
-    </ScrollView>
+
+    <Grid ColumnDefinitions="250,*" Padding="20" ColumnSpacing="20">
+
+        <!-- VENSTRE: CollectionView -->
+        <CollectionView Grid.Column="0"
+                        ItemsSource="{Binding Products}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedProduct}">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5"
+                           BorderColor="#D1D5DB"
+                           CornerRadius="10">
+                        <Label Text="{Binding Name}" />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- HØJRE: Info panel -->
+        <VerticalStackLayout Grid.Column="1" Spacing="15">
+
+            <Label Text="Selected product:" FontAttributes="Bold"/>
+            <Entry Text="{Binding SelectedProduct.Name}"
+                   IsReadOnly="True"/>
+
+            <Label Text="Quantity:" FontAttributes="Bold"/>
+            <Entry Placeholder="Add quantity here"
+                   Keyboard="Numeric"
+                   Text="{Binding Quantity}" />
+
+            <Button Text="Add quantity"
+                    BackgroundColor="#E57373"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Command="{Binding AddQuantityCommand}" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+
 </ContentPage>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="FrontEnd.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -6,16 +7,14 @@
     xmlns:local="clr-namespace:FrontEnd"
     Title="FrontEnd">
 
-    <TabBar>
-        
-        <Tab Title="Opret vare">
-            <ShellContent ContentTemplate="{DataTemplate local:CreateProductPage}" />
-        </Tab>
-        
-        
-    </TabBar>
-    
-    
+
+    <FlyoutItem Title="Dashboard">
+        <ShellContent ContentTemplate="{DataTemplate local:DashBoard}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Create Product">
+        <ShellContent ContentTemplate="{DataTemplate local:CreateProductPage}" />
+    </FlyoutItem>
     
 
 </Shell>
