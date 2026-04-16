@@ -5,7 +5,7 @@ namespace Data.Mappers
 {
     internal static class ProductMapper
     {
-        // 🔹 ENTITY → DTO
+        // entity -> dto
         public static DTO.Product Map(DataEntity.Product product)
         {
             return product switch
@@ -20,7 +20,7 @@ namespace Data.Mappers
             };
         }
 
-        // 🔹 DTO → ENTITY
+        //dto -> entity
         public static DataEntity.Product Map(DTO.Product product)
         {
             return product switch
@@ -35,7 +35,7 @@ namespace Data.Mappers
             };
         }
 
-        // 🔹 BASE mapping (som du allerede har)
+       
         public static void MapToDto(DataEntity.Product entity, DTO.Product dto)
         {
             dto.Id = entity.Id;
