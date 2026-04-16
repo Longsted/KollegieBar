@@ -1,4 +1,4 @@
-﻿using DataTransferObject.Model;
+﻿using Data.Model;
 
 namespace Data.Model;
 

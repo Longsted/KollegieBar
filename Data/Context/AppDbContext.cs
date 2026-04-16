@@ -1,4 +1,5 @@
 ﻿using Data.Model;
+using DataTransferObject.Model;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -9,6 +10,12 @@ public class AppDbContext : DbContext
     public DbSet<Data.Model.User> Users { get; set; }
     public DbSet<Data.Model.Product> Products { get; set; }
     public DbSet<Data.Model.Sale> Sales { get; set; }
+
+    public DbSet<Data.Model.Drink> Drink { get; set; }
+
+    public DbSet<Data.Model.DrinkIngredient> DrinkIngredient { get; set; }
+
+
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
