@@ -8,9 +8,11 @@ public partial class MainPage : ContentPage
 {
     private readonly UserBusinessLogicLayer _userBusinessLogicLayer;
     private readonly IServiceProvider _serviceProvider;
-    
+
     public MainPage(UserBusinessLogicLayer userBusinessLogicLayer, IServiceProvider serviceProvider)
     {
+        InitializeComponent();
+
         _userBusinessLogicLayer = userBusinessLogicLayer;
         _serviceProvider = serviceProvider;
     }
@@ -47,7 +49,7 @@ public partial class MainPage : ContentPage
         else if (foundUser.Role == UserRoles.Bartender)
         {
             var barOverview = _serviceProvider.GetRequiredService<BarOverview>();
-            await Navigation.PushAsync(new BarOverview());
+            await Navigation.PushAsync(barOverview);
             Navigation.RemovePage(this);
         }
         else
