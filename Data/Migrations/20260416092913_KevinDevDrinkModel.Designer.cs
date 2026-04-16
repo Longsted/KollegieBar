@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260416085702_KevinDevDrinkModel")]
+    [Migration("20260416092913_KevinDevDrinkModel")]
     partial class KevinDevDrinkModel
     {
         /// <inheritdoc />

@@ -11,6 +11,12 @@ public class AppDbContext : DbContext
     public DbSet<Data.Model.User> Users { get; set; }
     public DbSet<Data.Model.Product> Products { get; set; }
 
+    public DbSet<Data.Model.Drink> Drink { get; set; }
+
+    public DbSet<Data.Model.DrinkIngredient> DrinkIngredient { get; set; }
+
+
+
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -23,6 +29,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Data.Model.LiquidWithoutAlcohol>();
         modelBuilder.Entity<Data.Model.Snack>();
         modelBuilder.Entity<Data.Model.Consumables>();
+
 
         //seed users
         modelBuilder.Entity<Data.Model.User>().HasData(
