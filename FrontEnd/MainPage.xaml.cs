@@ -16,47 +16,97 @@ public partial class MainPage : ContentPage
         _userBusinessLogicLayer = userBusinessLogicLayer;
         _serviceProvider = serviceProvider;
     }
-    
+
 
     private async void LoginClicked(object sender, EventArgs e)
     {
-        await CheckUsers();
-    }
-
-    private async Task CheckUsers()
-    {
         string password = PasswordEntry.Text;
+
         string UserName = UsernameEntry.Text;
 
-        var users = _userBusinessLogicLayer.GetUsers();
-        
-        var foundUser = users.FirstOrDefault(U => U.Password == password && U.UserName == UserName);
-
-        if (foundUser == null)
-        {
-            await DisplayAlert("Error", "Username or password is incorrect", "OK");
-            return;
-        }
-        
-        if (foundUser.Role == UserRoles.BoardMember)
+        int check = _userBusinessLogicLayer.ChekcUser(password, UserName);
+        if (1 == check)
         {
             // 1. Going to the DashBoard nicely
             var dashboard = _serviceProvider.GetRequiredService<DashBoard>();
             await Navigation.PushAsync(dashboard);
             Navigation.RemovePage(this);
-
         }
-        else if (foundUser.Role == UserRoles.Bartender)
+        else if (2 == check)
         {
             var barOverview = _serviceProvider.GetRequiredService<BarOverview>();
             await Navigation.PushAsync(barOverview);
             Navigation.RemovePage(this);
         }
-        else
+        else if (0 == check)
         {
-            await DisplayAlert("Error", "Username or password is incorrect", "OK");
+            await DisplayAlert("Error", "Username or Password is incorrect", "OK");
+            return;
         }
-    }
 
+    }
 }
 
+//    private async Task CheckUsers()
+//    {
+//        string password = PasswordEntry.Text;
+//        string UserName = UsernameEntry.Text;
+
+//        var users = _userBusinessLogicLayer.GetUsers();
+        
+//        var foundUser = users.FirstOrDefault(U => U.Password == password && U.UserName == UserName);
+
+//        if (foundUser == null)
+//        {
+//            await DisplayAlert("Error", "Username or password is incorrect", "OK");
+//            return;
+//        }
+        
+//        if (foundUser.Role == UserRoles.BoardMember)
+//        {
+//            // 1. Going to the DashBoard nicely
+//            var dashboard = _serviceProvider.GetRequiredService<DashBoard>();
+//            await Navigation.PushAsync(dashboard);
+//            Navigation.RemovePage(this);
+
+//        }
+//        else if (foundUser.Role == UserRoles.Bartender)
+//        {
+//            var barOverview = _serviceProvider.GetRequiredService<BarOverview>();
+//            await Navigation.PushAsync(barOverview);
+//            Navigation.RemovePage(this);
+//        }
+//        else
+//        {
+//            await DisplayAlert("Error", "Username or password is incorrect", "OK");
+//        }
+//    }
+
+//}
+
+
+
+//private void OnCounterClicked(object? sender, EventArgs e)
+//{
+//    count++;
+
+//    if (count == 1)
+//        CounterBtn.Text = $"Clicked {count} time";
+//    else
+//        CounterBtn.Text = $"Clicked {count} times";
+
+//    SemanticScreenReader.Announce(CounterBtn.Text);
+//}
+
+
+//private void OnCounterClicked(object? sender, EventArgs e)
+//{
+//    count++;
+
+//    if (count == 1)
+//        CounterBtn.Text = $"Clicked {count} time";
+//    else
+//        CounterBtn.Text = $"Clicked {count} times";
+
+//    SemanticScreenReader.Announce(CounterBtn.Text);
+//}
