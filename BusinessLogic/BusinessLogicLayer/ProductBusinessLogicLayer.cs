@@ -48,14 +48,11 @@ public class ProductBusinessLogicLayer
         }
     }
 
-    // registrere solgt produkt
-
-    public void SellProduct(int productId, int quantity)
+    public void RegisterSale(int productId, int quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Invalid quantity");
-
-
+        
         var product = _repository.GetProduct(productId);
 
         if (product == null)
@@ -64,8 +61,8 @@ public class ProductBusinessLogicLayer
         if (product.StockQuantity < quantity)
             throw new InvalidOperationException("Not enough stock");
 
-        product.StockQuantity -= quantity;
-        _repository.Update(product);
+        var newTotalStock = product.StockQuantity -= quantity;
+        _repository.UpdateStock(productId, newTotalStock);
     }
 
     public void RegisterIncomingStock(int productId, int newQuantity)
