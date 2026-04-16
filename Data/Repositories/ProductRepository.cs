@@ -45,7 +45,7 @@ public class ProductRepository
         _context.SaveChanges();
     }
 
-    public void AddProduct(DataTransferObject.Model.Product product)
+    public virtual void AddProduct(DataTransferObject.Model.Product product)
     {
         _context.Products.Add(ProductMapper.Map(product));
         _context.SaveChanges();

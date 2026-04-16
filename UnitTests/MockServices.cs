@@ -2,18 +2,6 @@
 
 namespace UnitTests
 {
-    public class SaleService
-    {
-        public bool RegisterSale(User user, Product product)
-        {
-            if (user?.Role != UserRoles.Bartender)
-                return false;
-
-            product.StockQuantity -= 1;
-            return true;
-        }
-    }
-
     public class SalesStatisticsService
     {
         private readonly List<Product> _salesData;
