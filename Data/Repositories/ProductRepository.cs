@@ -16,11 +16,16 @@ public class ProductRepository
 
     public virtual DataTransferObject.Model.Product? GetProduct(int id)
     {
+        if (id <= 0)
+        {
+            throw new ArgumentException("Invalid product Id");
+        }
+        
         var product = _context.Products.Find(id);
 
         if (product == null)
         {
-            return null;
+            throw new ArgumentNullException("Product not found");
         }
 
         return ProductMapper.Map(product);
