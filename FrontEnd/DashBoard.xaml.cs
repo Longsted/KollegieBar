@@ -9,68 +9,73 @@ namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
-	private readonly IServiceProvider _provider;
 	public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
 	{
 		InitializeComponent();
-		_provider = provider;
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
-		
+		BindingContext = new DashboardViewModel(productBusinessLogicLayer);
 	}
 }
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-	public ObservableCollection<Product> Products { get; set; }
 	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+	// Dynamic list that updates the UI automatically when items change
+	public ObservableCollection<Product> Products { get; set; }
 
-	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
+	public DashboardViewModel(ProductBusinessLogicLayer logic)
 	{
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		Products = new ObservableCollection<Product>(
-		_productBusinessLogicLayer.GetAllProducts());
+		_productBusinessLogicLayer = logic;
+		// Load all products from the backend into the collection
+		Products = new ObservableCollection<Product>(_productBusinessLogicLayer.GetAllProducts());
 	}
 
 	private Product _selectedProduct;
 	public Product SelectedProduct
 	{
 		get => _selectedProduct;
-		set
-		{
-			_selectedProduct = value;
-			Quantity = 0; // reset når ny vælges
-			OnPropertyChanged();
+		set 
+		{ 
+			_selectedProduct = value; 
+			Quantity = null; // Reset input field when a new product is picked
+			OnPropertyChanged(); // Notify UI that the selection changed
 		}
 	}
 
-	private int _quantity;
-	public int Quantity
+	private int? _quantity;
+	public int? Quantity
 	{
 		get => _quantity;
-		set
-		{
-			_quantity = value;
-			OnPropertyChanged();
+		set 
+		{ 
+			_quantity = value; 
+			OnPropertyChanged(); // Notify UI to update the entry field
 		}
 	}
 
-	public ICommand AddQuantityCommand => new Command(AddQuantity);
-
-	private void AddQuantity()
+	// Logic executed when the "Add quantity" button is clicked
+	public ICommand AddQuantityCommand => new Command(async() => 
 	{
-		_productBusinessLogicLayer.RegisterIncomingStock(SelectedProduct.Id, Quantity);
-	}
+		if (SelectedProduct == null)
+		{
+			await Shell.Current.DisplayAlert("Error", "Please select a product first", "OK");
+			return;
+		}
+		
+		if (Quantity == null || Quantity <= 0)
+		{
+			await Shell.Current.DisplayAlert("Error", "Please enter a quantity greater than 0", "OK");
+			return;
+		}
+		
+		_productBusinessLogicLayer.RegisterIncomingStock(SelectedProduct.Id, Quantity.Value);
+		
+		await Shell.Current.DisplayAlert("Success", $"{Quantity} items added to {SelectedProduct.Name}", "OK");
+		
+		Quantity = null;
+	});
 
-
+	// Boilerplate code to tell the UI when a property has been updated
 	public event PropertyChangedEventHandler PropertyChanged;
 	protected void OnPropertyChanged([CallerMemberName] string name = null)
 		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
-	
-	
-	// private async void GoToCreateProductButton_OnClicked(object? sender, EventArgs e)
-	// {
-	// 	await Navigation.PushAsync(new CreateProductPage());
-	// }
