@@ -28,9 +28,7 @@ public partial class MainPage : ContentPage
         if (1 == check)
         {
             // 1. Going to the DashBoard nicely
-            var dashboard = _serviceProvider.GetRequiredService<DashBoard>();
-            await Navigation.PushAsync(dashboard);
-            Navigation.RemovePage(this);
+            Application.Current.MainPage = new AppShell();
         }
         else if (2 == check)
         {
