@@ -39,7 +39,9 @@
                              VerticalOptions="Center">
 
             <Image Source="dambaren.png"
-                   HeightRequest="650"
+                   BackgroundColor="Transparent"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
                    Aspect="AspectFit" />
         </VerticalStackLayout>
 

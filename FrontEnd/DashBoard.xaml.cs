@@ -9,33 +9,28 @@ namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-    private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
-    private readonly IServiceProvider _provider;
-
     public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
     {
         InitializeComponent();
-        _provider = provider;
-        _productBusinessLogicLayer = productBusinessLogicLayer;
-
-        BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
+        BindingContext = new DashboardViewModel(productBusinessLogicLayer);
     }
 }
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-    public ObservableCollection<ProductDto> Products { get; set; }
     private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
 
-    public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
+    public ObservableCollection<ProductDto> Products { get; set; }
+
+    public DashboardViewModel(ProductBusinessLogicLayer logic)
     {
-        _productBusinessLogicLayer = productBusinessLogicLayer;
+        _productBusinessLogicLayer = logic;
         Products = new ObservableCollection<ProductDto>();
 
         LoadProducts();
     }
 
-    private async void LoadProducts() 
+    private async void LoadProducts()
     {
         var products = await _productBusinessLogicLayer.GetAllProductsAsync();
 
@@ -45,20 +40,20 @@ public class DashboardViewModel : INotifyPropertyChanged
         }
     }
 
-    private ProductDto _selectedProductDto;
-    public ProductDto SelectedProductDto
+    private ProductDto _selectedProduct;
+    public ProductDto SelectedProduct
     {
-        get => _selectedProductDto;
+        get => _selectedProduct;
         set
         {
-            _selectedProductDto = value;
-            Quantity = 0;
+            _selectedProduct = value;
+            Quantity = null;
             OnPropertyChanged();
         }
     }
 
-    private int _quantity;
-    public int Quantity
+    private int? _quantity;
+    public int? Quantity
     {
         get => _quantity;
         set
@@ -68,15 +63,27 @@ public class DashboardViewModel : INotifyPropertyChanged
         }
     }
 
-    public ICommand AddQuantityCommand => new Command(AddQuantity);
-
-    private async void AddQuantity() 
+    public ICommand AddQuantityCommand => new Command(async () =>
     {
-        if (SelectedProductDto == null) return; 
+        if (SelectedProduct == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select a product first", "OK");
+            return;
+        }
+
+        if (Quantity == null || Quantity <= 0)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter a quantity greater than 0", "OK");
+            return;
+        }
 
         await _productBusinessLogicLayer.RegisterIncomingStockAsync(
-            SelectedProductDto.Id, Quantity);
-    }
+            SelectedProduct.Id, Quantity.Value);
+
+        await Shell.Current.DisplayAlert("Success", $"{Quantity} items added to {SelectedProduct.Name}", "OK");
+
+        Quantity = null;
+    });
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
