@@ -9,68 +9,76 @@ namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
-	private readonly IServiceProvider _provider;
-	public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
-	{
-		InitializeComponent();
-		_provider = provider;
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
-		
-	}
+    private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+    private readonly IServiceProvider _provider;
+
+    public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
+    {
+        InitializeComponent();
+        _provider = provider;
+        _productBusinessLogicLayer = productBusinessLogicLayer;
+
+        BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
+    }
 }
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-	public ObservableCollection<ProductDto> Products { get; set; }
-	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+    public ObservableCollection<ProductDto> Products { get; set; }
+    private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
 
-	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
-	{
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		Products = new ObservableCollection<ProductDto>(
-		_productBusinessLogicLayer.GetAllProductsAsync());
-	}
+    public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
+    {
+        _productBusinessLogicLayer = productBusinessLogicLayer;
+        Products = new ObservableCollection<ProductDto>();
 
-	private ProductDto _selectedProductDto;
-	public ProductDto SelectedProductDto
-	{
-		get => _selectedProductDto;
-		set
-		{
-			_selectedProductDto = value;
-			Quantity = 0; // reset når ny vælges
-			OnPropertyChanged();
-		}
-	}
+        LoadProducts();
+    }
 
-	private int _quantity;
-	public int Quantity
-	{
-		get => _quantity;
-		set
-		{
-			_quantity = value;
-			OnPropertyChanged();
-		}
-	}
+    private async void LoadProducts() 
+    {
+        var products = await _productBusinessLogicLayer.GetAllProductsAsync();
 
-	public ICommand AddQuantityCommand => new Command(AddQuantity);
+        foreach (var product in products)
+        {
+            Products.Add(product);
+        }
+    }
 
-	private void AddQuantity()
-	{
-		_productBusinessLogicLayer.RegisterIncomingStockAsync(SelectedProductDto.Id, Quantity);
-	}
+    private ProductDto _selectedProductDto;
+    public ProductDto SelectedProductDto
+    {
+        get => _selectedProductDto;
+        set
+        {
+            _selectedProductDto = value;
+            Quantity = 0;
+            OnPropertyChanged();
+        }
+    }
 
+    private int _quantity;
+    public int Quantity
+    {
+        get => _quantity;
+        set
+        {
+            _quantity = value;
+            OnPropertyChanged();
+        }
+    }
 
-	public event PropertyChangedEventHandler PropertyChanged;
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
-		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    public ICommand AddQuantityCommand => new Command(AddQuantity);
+
+    private async void AddQuantity() 
+    {
+        if (SelectedProductDto == null) return; 
+
+        await _productBusinessLogicLayer.RegisterIncomingStockAsync(
+            SelectedProductDto.Id, Quantity);
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
-	
-	
-	// private async void GoToCreateProductButton_OnClicked(object? sender, EventArgs e)
-	// {
-	// 	await Navigation.PushAsync(new CreateProductPage());
-	// }
