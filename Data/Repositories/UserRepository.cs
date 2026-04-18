@@ -1,77 +1,55 @@
 using Data.Context;
-using Data.Mappers;
+using Data.Interfaces;
+using Data.Model;
+using Microsoft.EntityFrameworkCore;
 
-//tet
+
 namespace Data.Repositories;
 
-public class UserRepository
+public class UserRepository : IUserRepository
 {
-
     private readonly AppDbContext _context;
 
-    public UserRepository(AppDbContext  context)
+    public UserRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public virtual DataTransferObject.Model.User? GetUser(int id)
+    public async Task<User?> GetByIdAsync(int id)
     {
         var user = _context.Users.Find(id);
 
+        if (id <= 0)
+        {
+            throw new InvalidOperationException("Id must be greater than zero.");
+        }
 
+        return await _context.Users.FindAsync(user);
+    }
+
+    public async Task<List<User>> GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
+    }
+
+    public async Task AddAsync(User user)
+    {
+        await _context.Users.AddAsync(user);
+    }
+
+    public Task DeleteAsync(User user)
+    {
         if (user == null)
         {
-            return null;
+            throw new InvalidOperationException("User cannot be null.");
         }
 
-        return UserMapper.Map(user);
+        _context.Users.Remove(user);
+        return Task.CompletedTask;
     }
 
-    public virtual List<DataTransferObject.Model.User> GetUsers()
+    public async Task SaveChangesAsync()
     {
-        return _context.Users
-            .Select(u => UserMapper.Map(u))
-            .ToList();
-    }
-
-    public virtual void AddUser(DataTransferObject.Model.User user)
-    {
-        _context.Users.Add(UserMapper.Map(user));
-        _context.SaveChanges();
-    }
-
-    public virtual void DeleteUser(int id)
-    {
-        var user = _context.Users.Find(id);
-
-        if (user != null)
-        {
-            _context.Users.Remove(user);
-            _context.SaveChanges();
-        }
-    }
-
-    public virtual DataTransferObject.Model.User CreateUser(DataTransferObject.Model.User user)
-    {
-        var entityUser = UserMapper.Map(user);
-
-        _context.Users.Add(entityUser);
-        _context.SaveChanges();
-
-        return UserMapper.Map(entityUser);
-    }
-
-    public virtual void UpdateUser(DataTransferObject.Model.User user)
-    {
-        var existingUser = _context.Users.Find(user.Id);
-
-        if (existingUser != null)
-        {
-            existingUser.UserName = user.UserName;
-            existingUser.Password = user.Password;
-            existingUser.Role = (Data.Model.UserRole)user.Role;
-
-            _context.SaveChanges();
-        }
+        await _context.SaveChangesAsync();
     }
 }

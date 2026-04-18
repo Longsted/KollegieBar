@@ -23,23 +23,23 @@ public partial class DashBoard : ContentPage
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-	public ObservableCollection<Product> Products { get; set; }
+	public ObservableCollection<ProductDto> Products { get; set; }
 	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
 
 	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
 	{
 		_productBusinessLogicLayer = productBusinessLogicLayer;
-		Products = new ObservableCollection<Product>(
-		_productBusinessLogicLayer.GetAllProducts());
+		Products = new ObservableCollection<ProductDto>(
+		_productBusinessLogicLayer.GetAllProductsAsync());
 	}
 
-	private Product _selectedProduct;
-	public Product SelectedProduct
+	private ProductDto _selectedProductDto;
+	public ProductDto SelectedProductDto
 	{
-		get => _selectedProduct;
+		get => _selectedProductDto;
 		set
 		{
-			_selectedProduct = value;
+			_selectedProductDto = value;
 			Quantity = 0; // reset når ny vælges
 			OnPropertyChanged();
 		}
@@ -60,7 +60,7 @@ public class DashboardViewModel : INotifyPropertyChanged
 
 	private void AddQuantity()
 	{
-		_productBusinessLogicLayer.RegisterIncomingStock(SelectedProduct.Id, Quantity);
+		_productBusinessLogicLayer.RegisterIncomingStockAsync(SelectedProductDto.Id, Quantity);
 	}
 
 

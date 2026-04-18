@@ -4,17 +4,17 @@ namespace UnitTests
 {
     public class SalesStatisticsService
     {
-        private readonly List<Product> _salesData;
+        private readonly List<ProductDto> _salesData;
 
-        public SalesStatisticsService(List<Product> salesData)
+        public SalesStatisticsService(List<ProductDto> salesData)
         {
             _salesData = salesData;
         }
 
-        public List<Product> GetStatistics(User user)
+        public List<ProductDto> GetStatistics(UserDto userDto)
         {
-            if (user?.Role != UserRoles.BoardMember)
-                return new List<Product>();
+            if (userDto?.Role != UserRole.BoardMember)
+                return new List<ProductDto>();
 
             return _salesData;
         }
@@ -22,19 +22,19 @@ namespace UnitTests
 
     public class LowInventoryService
     {
-        private readonly List<Product> _products;
+        private readonly List<ProductDto> _products;
         private readonly int _threshold;
 
-        public LowInventoryService(List<Product> products, int threshold)
+        public LowInventoryService(List<ProductDto> products, int threshold)
         {
             _products = products;
             _threshold = threshold;
         }
 
-        public List<Product> GetLowInventory(User user)
+        public List<ProductDto> GetLowInventory(UserDto userDto)
         {
-            if (user?.Role != UserRoles.BoardMember)
-                return new List<Product>();
+            if (userDto?.Role != UserRole.BoardMember)
+                return new List<ProductDto>();
 
             return _products
                 .Where(p => p.StockQuantity <= _threshold)
@@ -44,15 +44,15 @@ namespace UnitTests
 
     public class ProductEditingService
     {
-        public bool EditProduct(User user, Product product, string newName, int newStock,
+        public bool EditProduct(UserDto userDto, ProductDto productDto, string newName, int newStock,
             decimal newPrice)
         {
-            if (user?.Role != UserRoles.BoardMember)
+            if (userDto?.Role != UserRole.BoardMember)
                 return false;
 
-            product.Name = newName;
-            product.StockQuantity = newStock;
-            product.CostPrice = newPrice;
+            productDto.Name = newName;
+            productDto.StockQuantity = newStock;
+            productDto.CostPrice = newPrice;
 
             return true;
         }
@@ -60,21 +60,21 @@ namespace UnitTests
 
     public class ProductDeletionService
     {
-        public bool DeleteProduct(User user, List<Product> products, Product productToDelete)
+        public bool DeleteProduct(UserDto userDto, List<ProductDto> products, ProductDto productDtoToDelete)
         {
-            if (user?.Role != UserRoles.BoardMember)
+            if (userDto?.Role != UserRole.BoardMember)
                 return false;
 
-            return products.Remove(productToDelete);
+            return products.Remove(productDtoToDelete);
         }
     }
 
     public class ProductCategoryService
     {
-        public Dictionary<string, List<Product>> GetProductsByCategory(User user, List<Product> products)
+        public Dictionary<string, List<ProductDto>> GetProductsByCategory(UserDto userDto, List<ProductDto> products)
         {
-            if (user?.Role != UserRoles.BoardMember)
-                return new Dictionary<string, List<Product>>();
+            if (userDto?.Role != UserRole.BoardMember)
+                return new Dictionary<string, List<ProductDto>>();
 
             return products
                 .GroupBy(p => p.GetType().Name) // Her får vi "Snack", "LiquidWithAlcohol" osv.
@@ -84,9 +84,9 @@ namespace UnitTests
 
     public class DrinkCustomizationService
     {
-        public bool CustomizeDrink(User user, Drink drink, double newPrice)
+        public bool CustomizeDrink(UserDto userDto, Drink drink, double newPrice)
         {
-            if (user?.Role != UserRoles.Bartender)
+            if (userDto?.Role != UserRole.Bartender)
                 return false;
 
             drink.CostPrice = newPrice;
@@ -97,18 +97,18 @@ namespace UnitTests
 
     public class WasteRegistrationService
     {
-        public bool RegisterWaste(User user, Product product, int amountLost)
+        public bool RegisterWaste(UserDto userDto, ProductDto productDto, int amountLost)
         {
-            if (user?.Role != UserRoles.Bartender)
+            if (userDto?.Role != UserRole.Bartender)
                 return false;
 
             if (amountLost <= 0)
                 return false;
 
-            product.StockQuantity -= amountLost;
+            productDto.StockQuantity -= amountLost;
 
-            if (product.StockQuantity < 0)
-                product.StockQuantity = 0;
+            if (productDto.StockQuantity < 0)
+                productDto.StockQuantity = 0;
 
             return true;
         }
@@ -125,30 +125,30 @@ namespace UnitTests
             MinStockQuantity = initialLimit;
         }
 
-        public bool UpdateMaxStock(User user, Product product, int newMaxStock)
+        public bool UpdateMaxStock(UserDto userDto, ProductDto productDto, int newMaxStock)
         {
-            if (user?.Role != UserRoles.BoardMember)
+            if (userDto?.Role != UserRole.BoardMember)
                 return false;
 
             MaxStockQuantity = newMaxStock;
             
             // Adjust product stock if above new max
-            if (product.StockQuantity > MaxStockQuantity)
-                product.StockQuantity = MaxStockQuantity;
+            if (productDto.StockQuantity > MaxStockQuantity)
+                productDto.StockQuantity = MaxStockQuantity;
 
             return true;
         }
 
-        public bool UpdateMinStock(User user, Product product, int newMinStock)
+        public bool UpdateMinStock(UserDto userDto, ProductDto productDto, int newMinStock)
         {
-            if (user?.Role != UserRoles.BoardMember)
+            if (userDto?.Role != UserRole.BoardMember)
                 return false;
 
             MinStockQuantity = newMinStock;
 
             // Adjust product stock if below new min
-            if (product.StockQuantity < MinStockQuantity)
-                product.StockQuantity = MinStockQuantity;
+            if (productDto.StockQuantity < MinStockQuantity)
+                productDto.StockQuantity = MinStockQuantity;
 
             return true;
         }
@@ -158,9 +158,9 @@ namespace UnitTests
     {
         public decimal TotalPantIncome { get; private set; }
 
-        public bool RegisterPant(User user, decimal pantAmount)
+        public bool RegisterPant(UserDto userDto, decimal pantAmount)
         {
-            if (user?.Role != UserRoles.BoardMember)
+            if (userDto?.Role != UserRole.BoardMember)
                 return false;
 
             if (pantAmount <= 0)
@@ -170,9 +170,9 @@ namespace UnitTests
             return true;
         }
 
-        public bool ResetPant(User user)
+        public bool ResetPant(UserDto userDto)
         {
-            if (user?.Role != UserRoles.BoardMember)
+            if (userDto?.Role != UserRole.BoardMember)
                 return false;
 
             TotalPantIncome = 0;
@@ -182,21 +182,21 @@ namespace UnitTests
 
     public class LoginService
     {
-        private readonly Dictionary<string, UserRoles> _accounts;
+        private readonly Dictionary<string, UserRole> _accounts;
 
-        public LoginService(Dictionary<string, UserRoles> accounts)
+        public LoginService(Dictionary<string, UserRole> accounts)
         {
             _accounts = accounts;
         }
 
-        public User Login(string username)
+        public UserDto Login(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 return null;
 
             if (_accounts.TryGetValue(username, out var role))
             {
-                return new User { Role = role };
+                return new UserDto { Role = role };
             }
 
             return null;

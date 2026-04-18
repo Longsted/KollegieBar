@@ -11,9 +11,9 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldReceive_ListOfLowInventoryItems()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
 
-            var products = new List<Product>
+            var products = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer", StockQuantity = 2, CostPrice = 10 },
                 new LiquidWithAlcohol { Name = "Cider", StockQuantity = 10, CostPrice = 12 },
@@ -40,9 +40,9 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldReceive_EmptyList()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
-            var products = new List<Product>
+            var products = new List<ProductDto>
                 {
                 new LiquidWithAlcohol { Name = "Beer", StockQuantity = 1, CostPrice = 10 }
                 };

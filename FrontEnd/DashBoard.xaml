@@ -11,7 +11,7 @@
         <CollectionView Grid.Column="0"
                         ItemsSource="{Binding Products}"
                         SelectionMode="Single"
-                        SelectedItem="{Binding SelectedProduct}">
+                        SelectedItem="{Binding SelectedProductDto}">
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -29,7 +29,7 @@
         <VerticalStackLayout Grid.Column="1" Spacing="15">
 
             <Label Text="Selected product:" FontAttributes="Bold"/>
-            <Entry Text="{Binding SelectedProduct.Name}"
+            <Entry Text="{Binding SelectedProductDto.Name}"
                    IsReadOnly="True"/>
 
             <Label Text="Quantity:" FontAttributes="Bold"/>

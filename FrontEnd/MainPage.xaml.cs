@@ -24,7 +24,7 @@ public partial class MainPage : ContentPage
 
         string UserName = UsernameEntry.Text;
 
-        int check = _userBusinessLogicLayer.ChekcUser(password, UserName);
+        int check = _userBusinessLogicLayer.CheckUserAsync(password, UserName);
         if (1 == check)
         {
             // 1. Going to the DashBoard nicely

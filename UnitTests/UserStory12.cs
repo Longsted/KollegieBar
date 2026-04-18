@@ -11,7 +11,7 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_RegisterPant()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
             var service = new PantService();
 
             var result = service.RegisterPant(user, pantAmount: 5.0m);
@@ -25,7 +25,7 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_ResetPant()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
             var service = new PantService();
 
             service.RegisterPant(user, 10.0m);
@@ -41,7 +41,7 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_RegisterPant()
         {
-            var user = new User { Role = UserRoles.Bartender }; 
+            var user = new UserDto { Role = UserRole.Bartender }; 
             var service = new PantService();
 
             var result = service.RegisterPant(user, pantAmount: 5.0m);
@@ -55,10 +55,10 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_ResetPant()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
             var service = new PantService();
 
-            service.RegisterPant(new User { Role = UserRoles.BoardMember }, 10.0m);
+            service.RegisterPant(new UserDto { Role = UserRole.BoardMember }, 10.0m);
 
             var result = service.ResetPant(user);
 

@@ -1,7 +1,7 @@
 ﻿using Data.Model;
 using DataTransferObject.Model;
 
-namespace Data.Mappers
+namespace BusinessLogic.Mappers
 {
     internal static class LiquidWithAlcoholMapper
     {

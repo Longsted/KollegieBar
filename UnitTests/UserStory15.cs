@@ -1,50 +1,59 @@
-﻿using System.Collections.Generic;
-using BusinessLogic.BusinessLogicLayer;
-using DataTransferObject.Model;
+﻿using BusinessLogic.BusinessLogicLayer;
+using Data.Interfaces;
+using Data.Model;
+using Data.UnitOfWork;
+using Moq;
 using Xunit;
+using EntityUserRole = Data.Model.UserRole;
+using DtoUserRole = DataTransferObject.Model.UserRole;
 
 namespace UnitTests
 {
-    
-
     public class UserStory15
     {
+        private readonly Mock<IUnitOfWork> _mockUow;
+        private readonly Mock<IUserRepository> _mockUserRepo;
+        private readonly UserBusinessLogicLayer _service;
 
-        
-        // Tests that a valid user can log in and receives the correct role.
-        [Fact]
-        public void ValidUser_ShouldLogin_AndReceiveCorrectRole()
+        public UserStory15()
         {
-            var logic = new UserBusinessLogicLayer();
+            _mockUow = new Mock<IUnitOfWork>();
+            _mockUserRepo = new Mock<IUserRepository>();
 
-            var user1 = logic.GetUsers().FirstOrDefault(U => U.Role == UserRoles.BoardMember);
+            _mockUow.Setup(u => u.Users).Returns(_mockUserRepo.Object);
 
-            var accounts = new Dictionary<string, UserRoles>
-            {
-                { "bartender1", UserRoles.Bartender },
-                { "board1", UserRoles.BoardMember }
-            };
-
-            var service = logic.ChekcUser(user1.Password, user1.UserName);
-
-            Assert.NotNull(user1);
-            Assert.Equal(UserRoles.BoardMember, user1.Role);
+            _service = new UserBusinessLogicLayer(_mockUow.Object);
         }
 
-        // Tests that an invalid user cannot log in and receives no access.
+        [Fact]
+        public async Task ValidUser_ShouldLogin_AndReceiveCorrectRole()
+        {
+            var users = new List<User>
+            {
+                new User
+                {
+                    UserName = "board1",
+                    Password = "1234",
+                    Role = EntityUserRole.BoardMember
+                }
+            };
+
+            _mockUserRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+
+            var result = await _service.CheckUserAsync("1234", "board1");
+
+            Assert.Equal(1, result);
+        }
 
         [Fact]
-        public void InvalidUser_ShouldNotLogin()
+        public async Task InvalidUser_ShouldNotLogin()
         {
+            _mockUserRepo.Setup(r => r.GetAllAsync())
+                .ReturnsAsync(new List<User>());
 
-            // The user is not added to the Database and should not have acces
-            var fakeuser = new User("Kato", "1234", UserRoles.BoardMember);
+            var result = await _service.CheckUserAsync("wrong", "user");
 
-            var logic = new UserBusinessLogicLayer();
-
-            var check = logic.ChekcUser(fakeuser.Password, fakeuser.UserName);
-
-            Assert.Equal(0,check);
+            Assert.Equal(0, result);
         }
     }
 }

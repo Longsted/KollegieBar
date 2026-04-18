@@ -11,9 +11,9 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldSee_ProductsGroupedByCategory()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
 
-            var products = new List<Product>
+            var products = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer A", StockQuantity = 10, CostPrice = 20m },
                 new LiquidWithAlcohol { Name = "Beer B", StockQuantity = 5, CostPrice = 18m },
@@ -39,9 +39,9 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldReceive_EmptyCategoryList()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
-            var products = new List<Product>
+            var products = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer A", StockQuantity = 10, CostPrice = 20m }
             };

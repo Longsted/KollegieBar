@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public class LiquidWithoutAlcohol : LiquidProduct
+public class LiquidWithoutAlcohol : LiquidProductDto
 {
     public bool SugarFree { get; set; }
 

@@ -10,9 +10,9 @@ namespace UnitTests
         [Fact]
         public void GetStatistics_ReturnsData_WhenBoardMemberIsLoggedIn()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
 
-            var salesData = new List<Product>
+            var salesData = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10 },
                 new LiquidWithAlcohol { Name = "Cider", StockQuantity = 5 }
@@ -28,9 +28,9 @@ namespace UnitTests
         [Fact]
         public void GetStatistics_ReturnsEmpty_WhenUserIsNotLoggedIn()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
-            var salesData = new List<Product>
+            var salesData = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10 },
                 new LiquidWithAlcohol { Name = "Cider", StockQuantity = 5 }
