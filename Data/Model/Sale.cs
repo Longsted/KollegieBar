@@ -11,16 +11,31 @@
         public Guid TransactionId { get; set; }
 
         //Foreign key to Product
-        public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public int? ProductId { get; set; }
+        public Product? Product { get; set; }
 
-        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, int productId)
+        //Foreign key to Drink
+        public int? DrinkId { get; set; }
+        public Drink? Drink { get; set; }
+
+        //Constructor for Sale
+        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, Product product)
         {
             SaleId = saleId;
             PriceAtSale = priceAtSale;
             SaleDate = saleDate;
             TransactionId = transactionId;
-            ProductId = productId;
+            Product = product;
+        }
+
+        //Overloaded constructor for when we want to create a sale for a drink
+        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, Drink drink)
+        {
+            SaleId = saleId;
+            PriceAtSale = priceAtSale;
+            SaleDate = saleDate;
+            TransactionId = transactionId;
+            Drink = drink;
         }
 
         public Sale() { }

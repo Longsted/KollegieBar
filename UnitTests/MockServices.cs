@@ -84,7 +84,7 @@ namespace UnitTests
 
     public class DrinkCustomizationService
     {
-        public bool CustomizeDrink(UserDto userDto, Drink drink, double newPrice)
+        public bool CustomizeDrink(UserDto userDto, DrinkDto drink, double newPrice)
         {
             if (userDto?.Role != UserRole.Bartender)
                 return false;

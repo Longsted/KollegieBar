@@ -12,7 +12,7 @@ namespace UnitTests
         {
             var user = new UserDto { Role = UserRole.Bartender };
 
-            var product = new Drink()
+            var product = new DrinkDto()
             {
                 Name = "Special Drink",
                 SalesPrice = 20
@@ -38,7 +38,7 @@ namespace UnitTests
         {
             var user = new UserDto { Role = UserRole.BoardMember }; 
 
-            var product = new Drink
+            var product = new DrinkDto
             {
                 Name = "Special Drink",
                 SalesPrice = 20

@@ -2,7 +2,7 @@
 
 namespace DataTransferObject.Model;
 
-public class Drink
+public class DrinkDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -14,9 +14,9 @@ public class Drink
 
     public List<DrinkIngredient> Ingredients { get; set; } = new();
 
-    public Drink() { }
+    public DrinkDto() { }
 
-    public Drink(string name, double costPrice, double salesPrice, bool isAlcoholic)
+    public DrinkDto(string name, double costPrice, double salesPrice, bool isAlcoholic)
     {
         Name = name;
         CostPrice = costPrice;
