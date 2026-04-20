@@ -11,14 +11,14 @@ public class Liquid : Product
     {
     }
 
-    public Liquid(string name, decimal costPrice, int stockQuantity, int volumeCl, double pant, double alcoholPercentage) : base(name, costPrice, stockQuantity)
+    public Liquid(string name, decimal costPrice, int stockQuantity, int volumeCl, Pant pant, double alcoholPercentage) : base(name, costPrice, stockQuantity)
     {
         VolumeCl = volumeCl;
         Pant = pant;
         AlcoholPercentage = alcoholPercentage;
     }
 
-    public Liquid(string name, decimal costPrice, int stockQuantity, int volumeCl, double pant, bool sugarFree) : base(name, costPrice, stockQuantity)
+    public Liquid(string name, decimal costPrice, int stockQuantity, int volumeCl, Pant pant, bool sugarFree) : base(name, costPrice, stockQuantity)
     {
         VolumeCl = volumeCl;
         Pant = pant;
