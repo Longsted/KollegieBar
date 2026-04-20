@@ -1,3 +1,4 @@
+using System;
 using BusinessLogic.BusinessLogicLayer;
 using DataTransferObject.Model;
 
@@ -14,8 +15,8 @@ public partial class CreateProductPage : ContentPage
         
         _productBusinessLogicLayer = productBusinessLogicLayer;
         
+
         UpdateUI();
-        
     }
 
     private void OnSnackSelected(object sender, EventArgs e)
@@ -49,6 +50,7 @@ public partial class CreateProductPage : ContentPage
         LiquidWithoutPctFieldsContainer.IsVisible = _selectedTab == "LiquidWithoutPct";
         ConsumableFieldsContainer.IsVisible = _selectedTab == "Consumable";
 
+
         if (_selectedTab == "Snack")
             CreateButton.Text = "Create Snack";
         else if (_selectedTab == "LiquidWithPct")
@@ -80,15 +82,15 @@ public partial class CreateProductPage : ContentPage
 
     private void ResetButton(Button button)
     {
-        button.BackgroundColor = Color.FromArgb("#111114");   // mørk baggrund
-        button.BorderColor = Color.FromArgb("#B84A84");       // pink kant
+        button.BackgroundColor = Color.FromArgb("#111114");   // dark background
+        button.BorderColor = Color.FromArgb("#B84A84");       // pink corner
         button.BorderWidth = 1;
-        button.TextColor = Color.FromArgb("#FFD3E6");         // lys pink tekst
+        button.TextColor = Color.FromArgb("#FFD3E6");         // light pink text
     }
 
     private void SetActive(Button button)
     {
-        button.BackgroundColor = Color.FromArgb("#FF4FA3");   // SAMME SOM CREATE KNAP
+        button.BackgroundColor = Color.FromArgb("#FF4FA3");   // Same as create button
         button.BorderColor = Color.FromArgb("#FF4FA3");
         button.BorderWidth = 1.5;
         button.TextColor = Colors.White;
@@ -126,9 +128,11 @@ public partial class CreateProductPage : ContentPage
                     return;
                 }
 
-                SnackDataTransferObject snackDataTransferObject = new SnackDataTransferObject(name, costPrice, stockQuantity, salesPrice);
+                var snackDto = new SnackDataTransferObject(name, costPrice, stockQuantity);
                 
-                ResultLabel.Text = $"Snack created: {snackDataTransferObject.Name}";
+                await _productBusinessLogicLayer.CreateProductAsync(snackDto);
+
+                ResultLabel.Text = $"Snack created: {snackDto.Name}";
             }
             else if (_selectedTab == "LiquidWithPct")
             {
@@ -150,16 +154,13 @@ public partial class CreateProductPage : ContentPage
                     return;
                 }
 
-                LiquidWithAlcohol liquid = new LiquidWithAlcohol(
-                    name,
-                    costPrice,
-                    stockQuantity,
-                    volumeCl,
-                    salesPrice,
-                    alcoholPercentage
-                );
+                DataTransferObject.Model.Pant pantEnum = DataTransferObject.Model.Pant.A;
+                
+                var liquidDto = new LiquidDataTransferObject(name, costPrice, stockQuantity, volumeCl, pantEnum, alcoholPercentage);
+                
+                await _productBusinessLogicLayer.CreateProductAsync(liquidDto);
 
-                ResultLabel.Text = $"Liquid with alcohol created: {liquid.Name}";
+                ResultLabel.Text = $"Liquid with alcohol created: {liquidDto.Name}";
             }
             else if (_selectedTab == "LiquidWithoutPct")
             {
@@ -177,18 +178,14 @@ public partial class CreateProductPage : ContentPage
 
                 bool sugarFree = SugarFreeCheckBox.IsChecked;
 
-                LiquidWithoutAlcohol liquid = new LiquidWithoutAlcohol(
-                    name,
-                    costPrice,
-                    stockQuantity,
-                    volumeCl,
-                    salesPrice,
-                    sugarFree
-                );
+                DataTransferObject.Model.Pant pantEnum = DataTransferObject.Model.Pant.A;
                 
-                await _productBusinessLogicLayer.CreateProductAsync(liquid);
 
-                ResultLabel.Text = $"Liquid without alcohol created: {liquid.Name}";
+                var liquidDto = new LiquidDataTransferObject(name, costPrice, stockQuantity, volumeCl, pantEnum, sugarFree);
+                
+                await _productBusinessLogicLayer.CreateProductAsync(liquidDto);
+
+                ResultLabel.Text = $"Liquid without alcohol created: {liquidDto.Name}";
             }
             else if (_selectedTab == "Consumable")
             {
@@ -200,7 +197,7 @@ public partial class CreateProductPage : ContentPage
                     Description = DescriptionEntry.Text
                 };
                 
-               await _productBusinessLogicLayer.CreateProductAsync(consumableDataTransferObject);
+                await _productBusinessLogicLayer.CreateProductAsync(consumableDataTransferObject);
 
                 ResultLabel.Text = $"Consumable created: {consumableDataTransferObject.Name}";
             }
