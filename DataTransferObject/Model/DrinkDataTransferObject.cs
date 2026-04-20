@@ -2,25 +2,20 @@
 
 namespace DataTransferObject.Model;
 
-public class Drink
+public class DrinkDataTransferObject
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
-
     public double CostPrice { get; set; }
-    public double SalesPrice { get; set; }
-
     public bool IsAlcoholic { get; set; }
+    public List<DrinkIngredientDataTransferObject> Ingredients { get; set; } = new();
 
-    public List<DrinkIngredient> Ingredients { get; set; } = new();
+    public DrinkDataTransferObject() { }
 
-    public Drink() { }
-
-    public Drink(string name, double costPrice, double salesPrice, bool isAlcoholic)
+    public DrinkDataTransferObject(string name, double costPrice, bool isAlcoholic)
     {
         Name = name;
         CostPrice = costPrice;
-        SalesPrice = salesPrice;
         IsAlcoholic = isAlcoholic;
     }
 }

@@ -1,6 +1,6 @@
 namespace DataTransferObject.Model;
 
-public enum UserRole
+public enum UserRoleDataTransferObject
 {
     Bartender, BoardMember
 }

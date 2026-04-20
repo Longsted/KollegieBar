@@ -5,51 +5,50 @@ namespace BusinessLogic.Mappers
 {
     internal static class ProductMapper
     {
-        // entity -> dto
+        // Entity -> DataTransferObject
         public static DTO.ProductDto Map(DataEntity.Product product)
         {
             return product switch
             {
-                DataEntity.LiquidWithAlcohol lwa => LiquidWithAlcoholMapper.Map(lwa),
-                DataEntity.LiquidWithoutAlcohol lwo => LiquidWithoutAlcoholMapper.Map(lwo),
-                DataEntity.Snack s => SnackMapper.Map(s),
-                DataEntity.Consumables c => ConsumablesMapper.Map(c),
+                DataEntity.LiquidWithAlcohol liquidWithAlcohol => LiquidWithAlcoholMapper.Map(liquidWithAlcohol),
+                DataEntity.LiquidWithoutAlcohol liquidWithoutAlcohol => LiquidWithoutAlcoholMapper.Map(liquidWithoutAlcohol),
+                DataEntity.Snack snack => SnackMapper.Map(snack),
+                DataEntity.Consumables consumables => ConsumablesMapper.Map(consumables),
                 _ => throw new NotImplementedException(
                     $"Mapping not implemented for {product.GetType()}"
                 )
             };
         }
 
-        //dto -> entity
-        public static DataEntity.Product Map(DTO.ProductDto productDto)
+        // DataTransferObject -> entity
+        public static DataEntity.Product Map(DTO.ProductDto productDataTransferObject)
         {
-            return productDto switch
+            return productDataTransferObject switch
             {
-                DTO.LiquidWithAlcohol lwa => LiquidWithAlcoholMapper.Map(lwa),
-                DTO.LiquidWithoutAlcohol lwo => LiquidWithoutAlcoholMapper.Map(lwo),
-                DTO.Snack s => SnackMapper.Map(s),
-                DTO.Consumables c => ConsumablesMapper.Map(c),
+                DTO.LiquidWithAlcohol liquidWithAlcohol => LiquidWithAlcoholMapper.Map(liquidWithAlcohol),
+                DTO.LiquidWithoutAlcohol liquidWithoutAlcohol => LiquidWithoutAlcoholMapper.Map(liquidWithoutAlcohol),
+                DTO.SnackDataTransferObject snack => SnackMapper.Map(snack),
+                DTO.ConsumablesDataTransferObject consumables => ConsumablesMapper.Map(consumables),
                 _ => throw new NotImplementedException(
-                    $"Mapping not implemented for {productDto.GetType()}"
+                    $"Mapping not implemented for {productDataTransferObject.GetType()}"
                 )
             };
         }
-
        
-        public static void MapToDto(DataEntity.Product entity, DTO.ProductDto dto)
+        public static void MapToDto(DataEntity.Product entity, DTO.ProductDto dataTransferObject)
         {
-            dto.Id = entity.Id;
-            dto.Name = entity.Name;
-            dto.CostPrice = entity.CostPrice;
-            dto.StockQuantity = entity.StockQuantity;
+            dataTransferObject.Id = entity.Id;
+            dataTransferObject.Name = entity.Name;
+            dataTransferObject.CostPrice = entity.CostPrice;
+            dataTransferObject.StockQuantity = entity.StockQuantity;
         }
 
-        public static void MapToEntity(DTO.ProductDto dto, DataEntity.Product entity)
+        public static void MapToEntity(DTO.ProductDto dataTransferObject, DataEntity.Product entity)
         {
-            entity.Id = dto.Id;
-            entity.Name = dto.Name;
-            entity.CostPrice = dto.CostPrice;
-            entity.StockQuantity = dto.StockQuantity;
+            entity.Id = dataTransferObject.Id;
+            entity.Name = dataTransferObject.Name;
+            entity.CostPrice = dataTransferObject.CostPrice;
+            entity.StockQuantity = dataTransferObject.StockQuantity;
         }
     }
 }

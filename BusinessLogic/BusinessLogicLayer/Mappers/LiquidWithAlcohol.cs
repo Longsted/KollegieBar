@@ -7,22 +7,22 @@ namespace BusinessLogic.Mappers
     {
         public static DataTransferObject.Model.LiquidWithAlcohol Map(Data.Model.LiquidWithAlcohol entity)
         {
-            var dto = new DataTransferObject.Model.LiquidWithAlcohol();
+            var dataTransferObject = new DataTransferObject.Model.LiquidWithAlcohol();
 
-            LiquidProductMapper.MapToDto(entity, dto);
+            LiquidMapper.MapToDto(entity, dataTransferObject);
 
-            dto.AlcoholPercentage = entity.AlcoholPercentage;
+            dataTransferObject.AlcoholPercentage = entity.AlcoholPercentage;
 
-            return dto;
+            return dataTransferObject;
         }
 
-        public static Data.Model.LiquidWithAlcohol Map(DataTransferObject.Model.LiquidWithAlcohol dto)
+        public static Data.Model.LiquidWithAlcohol Map(DataTransferObject.Model.LiquidWithAlcohol dataTransferObject)
         {
             var entity = new Data.Model.LiquidWithAlcohol();
 
-            LiquidProductMapper.MapToEntity(dto, entity);
+            LiquidMapper.MapToEntity(dataTransferObject, entity);
 
-            entity.AlcoholPercentage = dto.AlcoholPercentage;
+            entity.AlcoholPercentage = dataTransferObject.AlcoholPercentage;
 
             return entity;
         }

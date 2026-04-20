@@ -5,24 +5,20 @@ namespace BusinessLogic.Mappers
 {
     internal static class SnackMapper
     {
-        public static DTO.Snack Map(DataEntity.Snack entity)
+        public static DTO.SnackDataTransferObject Map(DataEntity.Snack entity)
         {
-            var dto = new DTO.Snack();
+            var dataTransferObject = new DTO.SnackDataTransferObject();
 
-            ProductMapper.MapToDto(entity, dto);
+            ProductMapper.MapToDto(entity, dataTransferObject);
 
-            dto.SalesPrice = entity.SalesPrice;
-
-            return dto;
+            return dataTransferObject;
         }
 
-        public static DataEntity.Snack Map(DTO.Snack dto)
+        public static DataEntity.Snack Map(DTO.SnackDataTransferObject dataTransferObject)
         {
             var entity = new DataEntity.Snack();
 
-            ProductMapper.MapToEntity(dto, entity);
-
-            entity.SalesPrice = dto.SalesPrice;
+            ProductMapper.MapToEntity(dataTransferObject, entity);
 
             return entity;
         }
