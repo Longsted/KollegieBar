@@ -8,7 +8,6 @@ public class Drink
     public string Name { get; set; } = string.Empty;
 
     public double CostPrice { get; set; }
-    public double SalesPrice { get; set; }
 
     public bool IsAlcoholic { get; set; }
 
@@ -16,11 +15,10 @@ public class Drink
 
     public Drink() { }
 
-    public Drink(string name, double costPrice, double salesPrice, bool isAlcoholic)
+    public Drink(string name, double costPrice, bool isAlcoholic)
     {
         Name = name;
         CostPrice = costPrice;
-        SalesPrice = salesPrice;
         IsAlcoholic = isAlcoholic;
     }
 }

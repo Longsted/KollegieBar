@@ -5,18 +5,18 @@ namespace BusinessLogic.Mappers
 {
     internal static class ConsumablesMapper
     {
-        public static DTO.Consumables Map(DataEntity.Consumables entity)
+        public static DTO.ConsumablesDataTransferObject Map(DataEntity.Consumables entity)
         {
-            var dto = new DTO.Consumables();
+            var dataTransferObject = new DTO.ConsumablesDataTransferObject();
 
-            ProductMapper.MapToDto(entity, dto);
+            ProductMapper.MapToDto(entity, dataTransferObject);
 
-            dto.Description = entity.Description;
+            dataTransferObject.Description = entity.Description;
 
-            return dto;
+            return dataTransferObject;
         }
 
-        public static DataEntity.Consumables Map(DTO.Consumables dto)
+        public static DataEntity.Consumables Map(DTO.ConsumablesDataTransferObject dto)
         {
             var entity = new DataEntity.Consumables();
 

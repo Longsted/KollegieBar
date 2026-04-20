@@ -10,12 +10,11 @@ namespace UnitTests
         [Fact]
         public void Bartender_ShouldBeAbleTo_CustomizeDrink()
         {
-            var user = new UserDto { Role = UserRole.Bartender };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
 
-            var product = new DrinkDto()
+            var product = new DrinkDataTransferObject()
             {
-                Name = "Special Drink",
-                SalesPrice = 20
+                Name = "Special Drink"
             };
 
             var service = new DrinkCustomizationService();
@@ -28,20 +27,17 @@ namespace UnitTests
 
             Assert.True(result);
             Assert.Equal(35, product.CostPrice);
-            // Assert.Equal(DrinkType.Spirit, product.Type);
         }
 
         // Tests that a non-bartender cannot customize a drink and no changes are applied.
-
         [Fact]
         public void NonBartender_ShouldNotBeAbleTo_CustomizeDrink()
         {
-            var user = new UserDto { Role = UserRole.BoardMember }; 
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember }; 
 
-            var product = new DrinkDto
+            var product = new DrinkDataTransferObject
             {
-                Name = "Special Drink",
-                SalesPrice = 20
+                Name = "Special Drink"
             };
 
             var service = new DrinkCustomizationService();
@@ -53,7 +49,6 @@ namespace UnitTests
             );
 
             Assert.False(result);
-            Assert.Equal(20, product.SalesPrice);
         }
     }
 }

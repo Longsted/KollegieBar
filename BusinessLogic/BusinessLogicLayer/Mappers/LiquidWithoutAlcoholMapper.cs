@@ -11,22 +11,20 @@ internal static class LiquidWithoutAlcoholMapper
             CostPrice = entity.CostPrice,
             StockQuantity = entity.StockQuantity,
             VolumeCl = entity.VolumeCl,
-            SalesPrice = entity.SalesPrice,
             SugarFree = entity.SugarFree
         };
     }
 
-    public static Data.Model.LiquidWithoutAlcohol Map(DataTransferObject.Model.LiquidWithoutAlcohol dto)
+    public static Data.Model.LiquidWithoutAlcohol Map(DataTransferObject.Model.LiquidWithoutAlcohol dataTransferObject)
     {
         return new Data.Model.LiquidWithoutAlcohol
         {
-            Id = dto.Id,
-            Name = dto.Name,
-            CostPrice = dto.CostPrice,
-            StockQuantity = dto.StockQuantity,
-            VolumeCl = dto.VolumeCl,
-            SalesPrice = dto.SalesPrice,
-            SugarFree = dto.SugarFree
+            Id = dataTransferObject.Id,
+            Name = dataTransferObject.Name,
+            CostPrice = dataTransferObject.CostPrice,
+            StockQuantity = dataTransferObject.StockQuantity,
+            VolumeCl = dataTransferObject.VolumeCl,
+            SugarFree = dataTransferObject.SugarFree
         };
     }
 }

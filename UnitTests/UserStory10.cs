@@ -11,13 +11,12 @@ namespace UnitTests
         [Fact]
         public void Bartender_ShouldBeAbleTo_RegisterWaste()
         {
-            var user = new UserDto { Role = UserRole.Bartender };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
 
-            var product = new LiquidWithAlcohol
+            var product = new LiquidDataTransferObject
             {
                 Name = "Beer Bottle",
-                StockQuantity = 10,
-                SalesPrice = 20m
+                StockQuantity = 10
             };
 
             var service = new WasteRegistrationService();
@@ -33,13 +32,12 @@ namespace UnitTests
         [Fact]
         public void NonBartender_ShouldNotBeAbleTo_RegisterWaste()
         {
-            var user = new UserDto { Role = UserRole.BoardMember };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
 
-            var product = new LiquidWithAlcohol
+            var product = new LiquidDataTransferObject
             {
                 Name = "Beer Bottle",
-                StockQuantity = 10,
-                SalesPrice = 20m
+                StockQuantity = 10
             };
 
             var service = new WasteRegistrationService();

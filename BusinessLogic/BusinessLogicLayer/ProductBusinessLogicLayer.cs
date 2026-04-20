@@ -50,7 +50,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         if (product.StockQuantity < 0)
             throw new ArgumentException("Invalid stock");
 
-        if (product is LiquidWithAlcohol alcohol)
+        if (product is LiquidDataTransferObject alcohol)
         {
             if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
                 throw new ArgumentException("Invalid alcohol percentage");

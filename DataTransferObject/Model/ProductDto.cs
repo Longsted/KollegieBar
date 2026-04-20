@@ -8,7 +8,6 @@ public abstract class ProductDto
     public int StockQuantity { get; set; }
 
     public int MaxStockQuantity { get; set; }
-
     public int MinStockQuantity { get; set; }
 
 

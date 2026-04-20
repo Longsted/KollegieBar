@@ -126,9 +126,9 @@ public partial class CreateProductPage : ContentPage
                     return;
                 }
 
-                Snack snack = new Snack(name, costPrice, stockQuantity, salesPrice);
+                SnackDataTransferObject snackDataTransferObject = new SnackDataTransferObject(name, costPrice, stockQuantity, salesPrice);
                 
-                ResultLabel.Text = $"Snack created: {snack.Name}";
+                ResultLabel.Text = $"Snack created: {snackDataTransferObject.Name}";
             }
             else if (_selectedTab == "LiquidWithPct")
             {
@@ -192,7 +192,7 @@ public partial class CreateProductPage : ContentPage
             }
             else if (_selectedTab == "Consumable")
             {
-                Consumables consumable = new Consumables
+                ConsumablesDataTransferObject consumableDataTransferObject = new ConsumablesDataTransferObject
                 {
                     Name = name,
                     CostPrice = costPrice,
@@ -200,9 +200,9 @@ public partial class CreateProductPage : ContentPage
                     Description = DescriptionEntry.Text
                 };
                 
-               await _productBusinessLogicLayer.CreateProductAsync(consumable);
+               await _productBusinessLogicLayer.CreateProductAsync(consumableDataTransferObject);
 
-                ResultLabel.Text = $"Consumable created: {consumable.Name}";
+                ResultLabel.Text = $"Consumable created: {consumableDataTransferObject.Name}";
             }
 
             await DisplayAlert("Success", "Product has been created.", "OK");

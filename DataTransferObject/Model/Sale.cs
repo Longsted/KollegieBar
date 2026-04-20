@@ -16,7 +16,7 @@
 
         //Foreign key to Drink
         public int? DrinkId { get; set; }
-        public DrinkDto? Drink { get; set; }
+        public DrinkDataTransferObject? Drink { get; set; }
 
         //Constructor for Sale
         public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, ProductDto product)
@@ -29,7 +29,7 @@
         }
 
         //Overloaded constructor for when we want to create a sale for a drink
-        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, DrinkDto drink)
+        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, DrinkDataTransferObject drink)
         {
             SaleId = saleId;
             PriceAtSale = priceAtSale;
