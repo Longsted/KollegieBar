@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420083541_KevinDevPantToEnum")]
+    partial class KevinDevPantToEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,13 +123,10 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SaleId"));
 
-                    b.Property<int?>("DrinkId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("PriceAtSale")
                         .HasColumnType("numeric");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("SaleDate")
@@ -136,8 +136,6 @@ namespace Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("SaleId");
-
-                    b.HasIndex("DrinkId");
 
                     b.HasIndex("ProductId");
 
@@ -267,15 +265,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
-                    b.HasOne("Data.Model.Drink", "Drink")
-                        .WithMany()
-                        .HasForeignKey("DrinkId");
-
                     b.HasOne("Data.Model.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Drink");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });
