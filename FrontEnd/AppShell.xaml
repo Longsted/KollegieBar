@@ -17,13 +17,16 @@
         </Grid>
     </Shell.FlyoutHeader>
     
-    <FlyoutItem Title="Dashboard">
+    <FlyoutItem Title="Dashboard" x:Name="DashboardItem">
         <ShellContent ContentTemplate="{DataTemplate local:DashBoard}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Create Product">
+    <FlyoutItem Title="Create Product" x:Name="CreateProductItem">
         <ShellContent ContentTemplate="{DataTemplate local:CreateProductPage}" />
     </FlyoutItem>
     
+    <FlyoutItem Title="Bar Overview" Route="BarOverview">
+        <ShellContent ContentTemplate="{DataTemplate local:BarOverview}" />
+    </FlyoutItem>
 
 </Shell>

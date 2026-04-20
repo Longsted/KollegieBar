@@ -8,11 +8,11 @@ namespace BusinessLogic.BusinessLogicLayer;
 
 public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
 {
-    private readonly IUnitOfWork _uow;
+    private readonly IUnitOfWork _unitOfWork;
 
     public UserBusinessLogicLayer(IUnitOfWork repository)
     {
-        _uow = repository;
+        _unitOfWork = repository;
     }
 
     public async Task<UserDto?> GetUserByIdAsync(int userId)
@@ -22,7 +22,7 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
             throw new ArgumentException("Invalid user id");
         }
 
-        var user = await _uow.Users.GetByIdAsync(userId);
+        var user = await _unitOfWork.Users.GetByIdAsync(userId);
 
         if (user == null)
         {
@@ -34,7 +34,7 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
 
     public async Task<List<UserDto>> GetUsersAsync()
     {
-        var users = await _uow.Users.GetAllAsync();
+        var users = await _unitOfWork.Users.GetAllAsync();
         return users.Select(UserMapper.Map).ToList();
     }
 

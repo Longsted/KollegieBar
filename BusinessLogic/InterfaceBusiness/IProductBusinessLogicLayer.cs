@@ -10,9 +10,9 @@ public interface IProductBusinessLogicLayer
     
     Task<List<ProductDto>> GetAllProductsAsync();
     
-    Task CreateProductAsync(ProductDto productDto);
+    Task CreateProductAsync(ProductDto product);
     
-    Task UpdateProductAsync(ProductDto productDto);
+    Task UpdateProductAsync(ProductDto product);
     
     Task DeleteProductAsync(int id);
     
