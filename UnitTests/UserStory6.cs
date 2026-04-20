@@ -11,7 +11,7 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_EditProductInformation()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
             var product = new LiquidWithAlcohol
             {
                 Name = "Old Beer",
@@ -40,7 +40,7 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_EditProductInformation()
         {
-            var user = new User { Role = UserRoles.Bartender }; // Not a board member
+            var user = new UserDto { Role = UserRole.Bartender }; // Not a board member
             var product = new LiquidWithAlcohol
             {
                 Name = "Beer",

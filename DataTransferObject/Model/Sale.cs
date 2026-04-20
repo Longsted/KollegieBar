@@ -12,7 +12,7 @@
 
         //Foreign key to Product
         public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public ProductDto ProductDto { get; set; }
         public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, int productId)
         {
             SaleId = saleId;

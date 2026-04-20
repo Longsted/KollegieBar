@@ -186,7 +186,7 @@ public partial class CreateProductPage : ContentPage
                     sugarFree
                 );
                 
-                _productBusinessLogicLayer.AddProduct(liquid);
+                await _productBusinessLogicLayer.CreateProductAsync(liquid);
 
                 ResultLabel.Text = $"Liquid without alcohol created: {liquid.Name}";
             }
@@ -200,7 +200,7 @@ public partial class CreateProductPage : ContentPage
                     Description = DescriptionEntry.Text
                 };
                 
-                _productBusinessLogicLayer.AddProduct(consumable);
+               await _productBusinessLogicLayer.CreateProductAsync(consumable);
 
                 ResultLabel.Text = $"Consumable created: {consumable.Name}";
             }

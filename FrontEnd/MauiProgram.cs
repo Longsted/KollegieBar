@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.BusinessLogicLayer;
 using Data.Context;
 using Data.Repositories;
+using Data.UnitOfWork;
+using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -23,8 +25,10 @@ public static class MauiProgram
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=1234;Database=appdb"));
 
-        builder.Services.AddScoped<UserRepository>();
-        builder.Services.AddScoped<ProductRepository>();
+        
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         builder.Services.AddScoped<UserBusinessLogicLayer>();
         builder.Services.AddScoped<ProductBusinessLogicLayer>();

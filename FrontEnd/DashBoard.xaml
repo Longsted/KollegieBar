@@ -2,49 +2,87 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FrontEnd.DashBoard"
-             Title="DashBoard"
-             BackgroundColor="Azure">
+             Title="↑ Menu - Dashboard"
+             BackgroundColor="White"
+             Shell.NavBarIsVisible="True">
 
-    <Grid ColumnDefinitions="250,*" Padding="20" ColumnSpacing="20">
+    <Grid ColumnDefinitions="300, *" Padding="40" ColumnSpacing="50">
 
-        <!-- VENSTRE: CollectionView -->
-        <CollectionView Grid.Column="0"
-                        ItemsSource="{Binding Products}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedProduct}">
+        <!-- VENSTRE: Liste -->
+        <Border Grid.Column="0" 
+                Stroke="#000000" 
+                StrokeThickness="1"
+                VerticalOptions="Fill">
+            
+            <CollectionView ItemsSource="{Binding Products}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedProduct}">
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="15">
+                            <Label Text="{Binding Name}" FontSize="18" VerticalOptions="Center" />
+                            
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="#AED6F1" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" Margin="5"
-                           BorderColor="#D1D5DB"
-                           CornerRadius="10">
-                        <Label Text="{Binding Name}" />
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
 
-        </CollectionView>
+        <!-- HØJRE: Form -->
+        <Grid Grid.Column="1" 
+              RowDefinitions="Auto, Auto, Auto" 
+              ColumnDefinitions="200, 400" 
+              RowSpacing="30" 
+              ColumnSpacing="10"
+              VerticalOptions="Start"
+              Margin="0,50,0,0">
 
-        <!-- HØJRE: Info panel -->
-        <VerticalStackLayout Grid.Column="1" Spacing="15">
+            <Label Grid.Row="0" Grid.Column="0" 
+                   Text="Selected product:" 
+                   VerticalOptions="Center" 
+                   FontSize="18" />
+            
+            <Entry Grid.Row="0" Grid.Column="1" 
+                   Text="{Binding SelectedProduct.Name}" 
+                   IsReadOnly="True" 
+                   HeightRequest="45"
+                   FontSize="18" />
 
-            <Label Text="Selected product:" FontAttributes="Bold"/>
-            <Entry Text="{Binding SelectedProduct.Name}"
-                   IsReadOnly="True"/>
+            <Label Grid.Row="1" Grid.Column="0" 
+                   Text="Quantity:" 
+                   VerticalOptions="Center" 
+                   FontSize="18" />
+            
+            <Entry Grid.Row="1" Grid.Column="1" 
+                   Placeholder="Enter amount.."
+                   PlaceholderColor="Gray"
+                   Keyboard="Numeric" 
+                   Text="{Binding Quantity, TargetNullValue=''}"
+                   HeightRequest="45"
+                   FontSize="18" />
 
-            <Label Text="Quantity:" FontAttributes="Bold"/>
-            <Entry Placeholder="Add quantity here"
-                   Keyboard="Numeric"
-                   Text="{Binding Quantity}" />
+            <Button Grid.Row="2" Grid.Column="1" 
+                    Text="Add quantity" 
+                    BackgroundColor="HotPink" 
+                    TextColor="White" 
+                    CornerRadius="10" 
+                    HeightRequest="60"
+                    WidthRequest="220"
+                    HorizontalOptions="Start"
+                    Command="{Binding AddQuantityCommand}"/>
 
-            <Button Text="Add quantity"
-                    BackgroundColor="#E57373"
-                    TextColor="White"
-                    CornerRadius="10"
-                    HeightRequest="50"
-                    Command="{Binding AddQuantityCommand}" />
-
-        </VerticalStackLayout>
+        </Grid>
 
     </Grid>
 

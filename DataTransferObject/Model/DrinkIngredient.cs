@@ -10,7 +10,7 @@ public class DrinkIngredient
     public Drink Drink { get; set; }
 
     public int LiquidProductId { get; set; }
-    public LiquidProduct LiquidProduct { get; set; }
+    public LiquidProductDto LiquidProductDto { get; set; }
 
     public int VolumeCl { get; set; }
 

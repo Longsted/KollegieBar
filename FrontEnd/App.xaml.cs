@@ -8,8 +8,7 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        MainPage = new NavigationPage(serviceProvider.GetRequiredService<MainPage>()
-        );
+        MainPage = serviceProvider.GetRequiredService<MainPage>();
     }
 
     //protected override Window CreateWindow(IActivationState? activationState)

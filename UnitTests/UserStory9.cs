@@ -10,7 +10,7 @@ namespace UnitTests
         [Fact]
         public void Bartender_ShouldBeAbleTo_CustomizeDrink()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
             var product = new Drink()
             {
@@ -36,7 +36,7 @@ namespace UnitTests
         [Fact]
         public void NonBartender_ShouldNotBeAbleTo_CustomizeDrink()
         {
-            var user = new User { Role = UserRoles.BoardMember }; 
+            var user = new UserDto { Role = UserRole.BoardMember }; 
 
             var product = new Drink
             {

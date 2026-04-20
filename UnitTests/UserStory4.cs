@@ -1,5 +1,7 @@
 ﻿using BusinessLogic.BusinessLogicLayer;
-using Data.Repositories;
+using Data.Interfaces;
+using Data.Model;
+using Data.UnitOfWork;
 using DataTransferObject.Model;
 using Moq;
 using Xunit;
@@ -8,77 +10,110 @@ namespace UnitTests
 {
     public class UserStory4
     {
-        private readonly Mock<ProductRepository> _mockRepository;
+        private readonly Mock<IUnitOfWork> _mockUow;
+        private readonly Mock<IProductRepository> _mockProductRepo;
         private readonly ProductBusinessLogicLayer _service;
 
         public UserStory4()
         {
-            _mockRepository = new Mock<ProductRepository>(null);
-            _service = new ProductBusinessLogicLayer(_mockRepository.Object);
+            _mockUow = new Mock<IUnitOfWork>();
+            _mockProductRepo = new Mock<IProductRepository>();
+
+            _mockUow.Setup(u => u.Products).Returns(_mockProductRepo.Object);
+
+            _service = new ProductBusinessLogicLayer(_mockUow.Object);
         }
 
         [Fact]
-        public void CreateProduct_ShouldCallRepository_WhenProductIsValid()
+        public async Task CreateProduct_ShouldCallRepository_WhenProductIsValid()
         {
-            // Arrange
-            var newBeer = new LiquidWithAlcohol("Thy Classic", 10m, 100, 33, 25m, 4.6);
+            var dto = new DataTransferObject.Model.LiquidWithAlcohol
+            {
+                Name = "Thy Classic",
+                CostPrice = 10m,
+                StockQuantity = 100,
+                VolumeCl = 33,
+                SalesPrice = 25m,
+                AlcoholPercentage = 4.6
+            };
 
-            // Act
-            _service.CreateProduct(newBeer);
+            await _service.CreateProductAsync(dto);
 
-            // Assert
-            // Vi verificerer at repository.Create bliver kaldt med et hvilket som helst Product
-            _mockRepository.Verify(r => r.Create(It.IsAny<Product>()), Times.Once);
+            _mockProductRepo.Verify(r => r.AddAsync(It.IsAny<Product>()), Times.Once);
+            _mockUow.Verify(u => u.SaveChangesAsync(), Times.Once);
         }
 
         [Fact]
-        public void CreateProduct_ShouldThrowException_WhenNameIsEmpty()
+        public async Task CreateProduct_ShouldThrowException_WhenNameIsEmpty()
         {
-            // Arrange
-            var invalidSnack = new Snack("", 5m, 50, 15m);
+            var dto = new DataTransferObject.Model.Snack
+            {
+                Name = "",
+                CostPrice = 5m,
+                StockQuantity = 50,
+                SalesPrice = 15m
+            };
 
-            // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => _service.CreateProduct(invalidSnack));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+                _service.CreateProductAsync(dto));
+
             Assert.Equal("Name is required", exception.Message);
-            
-            // Verificer at repository ALDRIG bliver kaldt, når valideringen fejler
-            _mockRepository.Verify(r => r.Create(It.IsAny<Product>()), Times.Never);
+
+            _mockProductRepo.Verify(r => r.AddAsync(It.IsAny<Product>()), Times.Never);
+            _mockUow.Verify(u => u.SaveChangesAsync(), Times.Never);
         }
 
         [Fact]
-        public void CreateProduct_ShouldThrowException_WhenPriceIsNegative()
+        public async Task CreateProduct_ShouldThrowException_WhenPriceIsNegative()
         {
-            // Arrange
-            var cheapBeer = new LiquidWithAlcohol("Free Beer", -1m, 100, 33, 0m, 4.6);
+            var dto = new DataTransferObject.Model.LiquidWithAlcohol
+            {
+                Name = "Free Beer",
+                CostPrice = -1m,
+                StockQuantity = 100,
+                VolumeCl = 33,
+                SalesPrice = 0m,
+                AlcoholPercentage = 4.6
+            };
 
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => _service.CreateProduct(cheapBeer));
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                _service.CreateProductAsync(dto));
         }
 
         [Fact]
-        public void CreateLiquidWithAlcohol_ShouldThrowException_WhenAlcoholPercentageIsInvalid()
+        public async Task CreateLiquidWithAlcohol_ShouldThrowException_WhenAlcoholPercentageIsInvalid()
         {
-            // Arrange
-            // Alkoholprocent på 110% er ugyldig
-            var magicDrink = new LiquidWithAlcohol("Magic", 10m, 10, 33, 50m, 110);
+            var dto = new DataTransferObject.Model.LiquidWithAlcohol
+            {
+                Name = "Magic",
+                CostPrice = 10m,
+                StockQuantity = 10,
+                VolumeCl = 33,
+                SalesPrice = 50m,
+                AlcoholPercentage = 110
+            };
 
-            // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => _service.CreateProduct(magicDrink));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
+                _service.CreateProductAsync(dto));
+
             Assert.Equal("Invalid alcohol percentage", exception.Message);
         }
 
         [Fact]
-        public void CreateSnack_ShouldWorkWithValidData()
+        public async Task CreateSnack_ShouldWorkWithValidData()
         {
-            // Arrange
-            var snack = new Snack("Chips", 5m, 50, 15m);
+            var dto = new DataTransferObject.Model.Snack
+            {
+                Name = "Chips",
+                CostPrice = 5m,
+                StockQuantity = 50,
+                SalesPrice = 15m
+            };
 
-            // Act
-            _service.CreateProduct(snack);
+            await _service.CreateProductAsync(dto);
 
-            // Assert
-            _mockRepository.Verify(r => r.Create(It.Is<Product>(p => p.Name == "Chips")), Times.Once);
+            _mockProductRepo.Verify(r =>
+                r.AddAsync(It.Is<Product>(p => p.Name == "Chips")), Times.Once);
         }
     }
 }
-

@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public class Snack : Product
+public class Snack : ProductDto
 {
    
     public decimal SalesPrice { get; set; }

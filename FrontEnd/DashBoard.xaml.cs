@@ -9,68 +9,83 @@ namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
-	private readonly IServiceProvider _provider;
-	public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
-	{
-		InitializeComponent();
-		_provider = provider;
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		BindingContext = new DashboardViewModel(_productBusinessLogicLayer);
-		
-	}
+    public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
+    {
+        InitializeComponent();
+        BindingContext = new DashboardViewModel(productBusinessLogicLayer);
+    }
 }
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-	public ObservableCollection<Product> Products { get; set; }
-	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+    private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
 
-	public DashboardViewModel(ProductBusinessLogicLayer productBusinessLogicLayer)
-	{
-		_productBusinessLogicLayer = productBusinessLogicLayer;
-		Products = new ObservableCollection<Product>(
-		_productBusinessLogicLayer.GetAllProducts());
-	}
+    public ObservableCollection<ProductDto> Products { get; set; }
 
-	private Product _selectedProduct;
-	public Product SelectedProduct
-	{
-		get => _selectedProduct;
-		set
-		{
-			_selectedProduct = value;
-			Quantity = 0; // reset når ny vælges
-			OnPropertyChanged();
-		}
-	}
+    public DashboardViewModel(ProductBusinessLogicLayer logic)
+    {
+        _productBusinessLogicLayer = logic;
+        Products = new ObservableCollection<ProductDto>();
 
-	private int _quantity;
-	public int Quantity
-	{
-		get => _quantity;
-		set
-		{
-			_quantity = value;
-			OnPropertyChanged();
-		}
-	}
+        LoadProducts();
+    }
 
-	public ICommand AddQuantityCommand => new Command(AddQuantity);
+    private async void LoadProducts()
+    {
+        var products = await _productBusinessLogicLayer.GetAllProductsAsync();
 
-	private void AddQuantity()
-	{
-		_productBusinessLogicLayer.RegisterIncomingStock(SelectedProduct.Id, Quantity);
-	}
+        foreach (var product in products)
+        {
+            Products.Add(product);
+        }
+    }
 
+    private ProductDto _selectedProduct;
+    public ProductDto SelectedProduct
+    {
+        get => _selectedProduct;
+        set
+        {
+            _selectedProduct = value;
+            Quantity = null;
+            OnPropertyChanged();
+        }
+    }
 
-	public event PropertyChangedEventHandler PropertyChanged;
-	protected void OnPropertyChanged([CallerMemberName] string name = null)
-		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    private int? _quantity;
+    public int? Quantity
+    {
+        get => _quantity;
+        set
+        {
+            _quantity = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ICommand AddQuantityCommand => new Command(async () =>
+    {
+        if (SelectedProduct == null)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please select a product first", "OK");
+            return;
+        }
+
+        if (Quantity == null || Quantity <= 0)
+        {
+            await Shell.Current.DisplayAlert("Error", "Please enter a quantity greater than 0", "OK");
+            return;
+        }
+
+        await _productBusinessLogicLayer.RegisterIncomingStockAsync(
+            SelectedProduct.Id, Quantity.Value);
+
+        await Shell.Current.DisplayAlert("Success", $"{Quantity} items added to {SelectedProduct.Name}", "OK");
+
+        Quantity = null;
+    });
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged([CallerMemberName] string name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 }
-	
-	
-	// private async void GoToCreateProductButton_OnClicked(object? sender, EventArgs e)
-	// {
-	// 	await Navigation.PushAsync(new CreateProductPage());
-	// }

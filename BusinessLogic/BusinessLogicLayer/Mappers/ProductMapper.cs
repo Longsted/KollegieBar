@@ -1,12 +1,12 @@
 ﻿using DataEntity = Data.Model;
 using DTO = DataTransferObject.Model;
 
-namespace Data.Mappers
+namespace BusinessLogic.Mappers
 {
     internal static class ProductMapper
     {
         // entity -> dto
-        public static DTO.Product Map(DataEntity.Product product)
+        public static DTO.ProductDto Map(DataEntity.Product product)
         {
             return product switch
             {
@@ -21,22 +21,22 @@ namespace Data.Mappers
         }
 
         //dto -> entity
-        public static DataEntity.Product Map(DTO.Product product)
+        public static DataEntity.Product Map(DTO.ProductDto productDto)
         {
-            return product switch
+            return productDto switch
             {
                 DTO.LiquidWithAlcohol lwa => LiquidWithAlcoholMapper.Map(lwa),
                 DTO.LiquidWithoutAlcohol lwo => LiquidWithoutAlcoholMapper.Map(lwo),
                 DTO.Snack s => SnackMapper.Map(s),
                 DTO.Consumables c => ConsumablesMapper.Map(c),
                 _ => throw new NotImplementedException(
-                    $"Mapping not implemented for {product.GetType()}"
+                    $"Mapping not implemented for {productDto.GetType()}"
                 )
             };
         }
 
        
-        public static void MapToDto(DataEntity.Product entity, DTO.Product dto)
+        public static void MapToDto(DataEntity.Product entity, DTO.ProductDto dto)
         {
             dto.Id = entity.Id;
             dto.Name = entity.Name;
@@ -44,7 +44,7 @@ namespace Data.Mappers
             dto.StockQuantity = entity.StockQuantity;
         }
 
-        public static void MapToEntity(DTO.Product dto, DataEntity.Product entity)
+        public static void MapToEntity(DTO.ProductDto dto, DataEntity.Product entity)
         {
             entity.Id = dto.Id;
             entity.Name = dto.Name;

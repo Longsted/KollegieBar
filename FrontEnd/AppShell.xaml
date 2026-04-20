@@ -5,9 +5,18 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:FrontEnd"
-    Title="FrontEnd">
-
-
+    Title=""
+    FlyoutBehavior="Flyout"
+    FlyoutIcon="{Null}">
+    
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="100" BackgroundColor="White">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <Image Source="dambaren.png" HeightRequest="100" Aspect="AspectFit"/>
+            </VerticalStackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+    
     <FlyoutItem Title="Dashboard">
         <ShellContent ContentTemplate="{DataTemplate local:DashBoard}" />
     </FlyoutItem>
