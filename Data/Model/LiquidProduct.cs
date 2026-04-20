@@ -6,7 +6,7 @@ public abstract class LiquidProduct : Product
     public int VolumeCl { get; set; }
     public decimal SalesPrice { get; set; }
 
-    public decimal Pant { get; set; }
+    public double Pant { get; set; }
 
     protected LiquidProduct(string name, decimal costPrice, int stockQuantity,int volumeCl, decimal salesPrice) : base(name, costPrice, stockQuantity)
     {
@@ -14,7 +14,7 @@ public abstract class LiquidProduct : Product
         SalesPrice = salesPrice;
     }
 
-    protected LiquidProduct(string name, decimal Pant, decimal costPrice, int stockQuantity, int volumeCl, decimal salesPrice) : base(name, costPrice, stockQuantity)
+    protected LiquidProduct(string name, double Pant, decimal costPrice, int stockQuantity, int volumeCl, decimal salesPrice) : base(name, costPrice, stockQuantity)
     {
         VolumeCl = volumeCl;
         SalesPrice = salesPrice;
