@@ -1,7 +1,7 @@
 using BusinessLogic.BusinessLogicLayer;
 using Data.Interfaces;
 using Data.UnitOfWork;
-using DataTransferObject.Model;
+using Data.Model;
 using Moq;
 using Xunit;
 
@@ -24,7 +24,7 @@ namespace UnitTests
         [Fact]
         public async Task RegisterSale_ReducesStock()
         {
-            var product = new LiquidDataTransferObject { Id = 1, Name = "Beer", StockQuantity = 10 };
+            var product = new Liquid { Id = 1, Name = "Beer", StockQuantity = 10 };
 
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(1)).ReturnsAsync(product);
 
@@ -37,7 +37,7 @@ namespace UnitTests
         [Fact]
         public async Task RegisterSale_ThrowsException_WhenStockIsTooLow()
         {
-            var product = new LiquidDataTransferObject { Id = 1, StockQuantity = 1 };
+            var product = new Liquid { Id = 1, Name = "Beer", StockQuantity = 1 };
 
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(1)).ReturnsAsync(product);
 
@@ -57,7 +57,7 @@ namespace UnitTests
         [Fact]
         public async Task RegisterSale_ThrowsException_WhenProductDoesNotExist()
         {
-            _mockProductRepository.Setup(x => x.GetByIdAsync(999)).ReturnsAsync((Product)null);
+            _mockProductRepository.Setup(x => x.GetByIdAsync(999)).ReturnsAsync((Product?)null);
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => _service.RegisterSaleAsync(999, 1));
         }

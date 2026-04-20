@@ -2,9 +2,9 @@
 
 internal static class LiquidWithoutAlcoholMapper
 {
-    public static DataTransferObject.Model.LiquidWithoutAlcohol Map(Data.Model.LiquidWithoutAlcohol entity)
+    public static DataTransferObject.Model.LiquidDataTransferObject Map(Data.Model.Liquid entity)
     {
-        return new DataTransferObject.Model.LiquidWithoutAlcohol
+        return new DataTransferObject.Model.LiquidDataTransferObject
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -15,9 +15,9 @@ internal static class LiquidWithoutAlcoholMapper
         };
     }
 
-    public static Data.Model.LiquidWithoutAlcohol Map(DataTransferObject.Model.LiquidWithoutAlcohol dataTransferObject)
+    public static Data.Model.Liquid Map(DataTransferObject.Model.LiquidDataTransferObject dataTransferObject)
     {
-        return new Data.Model.LiquidWithoutAlcohol
+        return new Data.Model.Liquid
         {
             Id = dataTransferObject.Id,
             Name = dataTransferObject.Name,

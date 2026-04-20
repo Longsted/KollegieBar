@@ -5,9 +5,9 @@ namespace BusinessLogic.Mappers
 {
     internal static class LiquidWithAlcoholMapper
     {
-        public static DataTransferObject.Model.LiquidWithAlcohol Map(Data.Model.LiquidWithAlcohol entity)
+        public static DataTransferObject.Model.LiquidDataTransferObject Map(Data.Model.Liquid entity)
         {
-            var dataTransferObject = new DataTransferObject.Model.LiquidWithAlcohol();
+            var dataTransferObject = new DataTransferObject.Model.LiquidDataTransferObject();
 
             LiquidMapper.MapToDto(entity, dataTransferObject);
 
@@ -16,9 +16,9 @@ namespace BusinessLogic.Mappers
             return dataTransferObject;
         }
 
-        public static Data.Model.LiquidWithAlcohol Map(DataTransferObject.Model.LiquidWithAlcohol dataTransferObject)
+        public static Data.Model.Liquid Map(DataTransferObject.Model.LiquidDataTransferObject dataTransferObject)
         {
-            var entity = new Data.Model.LiquidWithAlcohol();
+            var entity = new Data.Model.Liquid();
 
             LiquidMapper.MapToEntity(dataTransferObject, entity);
 
