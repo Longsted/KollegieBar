@@ -7,50 +7,50 @@ namespace BusinessLogic.BusinessLogicLayer;
 
 public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 {
-    private readonly IUnitOfWork _uow;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ProductBusinessLogicLayer(IUnitOfWork uow)
+    public ProductBusinessLogicLayer(IUnitOfWork unitOfWork)
     {
-        _uow = uow;
+        _unitOfWork = unitOfWork;
     }
     
 
-    public async Task CreateProductAsync(ProductDto dto)
+    public async Task CreateProductAsync(ProductDto product)
     {
-        ValidateProduct(dto);
+        ValidateProduct(product);
 
-        var entity = ProductMapper.Map(dto);
+        var entity = ProductMapper.Map(product);
 
-        await _uow.Products.AddAsync(entity);
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.Products.AddAsync(entity);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task DeleteProductAsync(int id)
     {
-        var product = await _uow.Products.GetByIdAsync(id);
+        var product = await _unitOfWork.Products.GetByIdAsync(id);
 
         if (product == null)
         {
             throw new InvalidOperationException("Product not found");
         }
 
-        await _uow.Products.DeleteAsync(product);
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.Products.DeleteAsync(product);
+        await _unitOfWork.SaveChangesAsync();
     }
 
 
-    public void ValidateProduct(ProductDto productDto)
+    public void ValidateProduct(ProductDto product)
     {
-        if (string.IsNullOrWhiteSpace(productDto.Name))
+        if (string.IsNullOrWhiteSpace(product.Name))
             throw new ArgumentException("Name is required");
 
-        if (productDto.CostPrice < 0)
+        if (product.CostPrice < 0)
             throw new ArgumentException("Invalid price");
 
-        if (productDto.StockQuantity < 0)
+        if (product.StockQuantity < 0)
             throw new ArgumentException("Invalid stock");
 
-        if (productDto is LiquidWithAlcohol alcohol)
+        if (product is LiquidWithAlcohol alcohol)
         {
             if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
                 throw new ArgumentException("Invalid alcohol percentage");
@@ -62,7 +62,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         if (quantity <= 0)
             throw new ArgumentException("Invalid quantity");
 
-        var product = await _uow.Products.GetByIdAsync(productId);
+        var product = await _unitOfWork.Products.GetByIdAsync(productId);
 
         if (product == null)
             throw new InvalidOperationException("Product not found");
@@ -71,7 +71,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
             throw new InvalidOperationException("Not enough stock");
 
         product.StockQuantity -= quantity;
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task RegisterIncomingStockAsync(int productId, int newQuantity)
@@ -79,34 +79,34 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         if (newQuantity < 0)
             throw new ArgumentException("Invalid quantity");
 
-        var product = await _uow.Products.GetByIdAsync(productId);
+        var product = await _unitOfWork.Products.GetByIdAsync(productId);
 
         if (product == null)
             throw new InvalidOperationException("Product not found");
 
         product.StockQuantity += newQuantity;
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task UpdateProductAsync(ProductDto dto)
+    public async Task UpdateProductAsync(ProductDto product)
     {
         
-        ValidateProduct(dto);
+        ValidateProduct(product);
 
-        var existingProduct = await _uow.Products.GetByIdAsync(dto.Id);
+        var existingProduct = await _unitOfWork.Products.GetByIdAsync(product.Id);
         if (existingProduct == null)
         {
             throw new InvalidOperationException("Product not found");
         }
 
-        ProductMapper.MapToEntity(dto, existingProduct);
+        ProductMapper.MapToEntity(product, existingProduct);
 
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<ProductDto?> GetProductAsync(int id)
     {
-        var product = await _uow.Products.GetByIdAsync(id);
+        var product = await _unitOfWork.Products.GetByIdAsync(id);
         if (product == null)
         {
             throw new InvalidOperationException("Product not found");
@@ -117,7 +117,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
     public async Task<List<ProductDto>> GetAllProductsAsync()
     {
-        var products = await _uow.Products.GetAllAsync();
+        var products = await _unitOfWork.Products.GetAllAsync();
         return products.Select(ProductMapper.Map).ToList();
     }
 
@@ -128,7 +128,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
             throw new ArgumentException("Invalid stock");
         }
 
-        var product = await _uow.Products.GetByIdAsync(productId);
+        var product = await _unitOfWork.Products.GetByIdAsync(productId);
 
         if (product == null)
         {
@@ -137,7 +137,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
         product.MaxStockQuantity = newMaxStock;
 
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task UpdateMinStock(int productId, int newMinStock)
@@ -147,7 +147,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
             throw new ArgumentException("Invalid stock");
         }
 
-        var product = await _uow.Products.GetByIdAsync(productId);
+        var product = await _unitOfWork.Products.GetByIdAsync(productId);
 
         if (product == null)
         {
@@ -155,6 +155,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         }
 
         product.MinStockQuantity = newMinStock;
-        await _uow.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }
