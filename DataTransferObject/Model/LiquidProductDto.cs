@@ -6,7 +6,7 @@ public abstract class LiquidProductDto : ProductDto
     public int VolumeCl { get; set; }
     public decimal SalesPrice { get; set; }
 
-    public double Pant { get; set; }
+    public Pant Pant { get; set; }
 
 
     protected LiquidProductDto(string name, decimal costPrice, int stockQuantity,int volumeCl, decimal salesPrice) : base(name, costPrice, stockQuantity)
@@ -15,7 +15,7 @@ public abstract class LiquidProductDto : ProductDto
         SalesPrice = salesPrice;
     }
 
-    protected LiquidProductDto(string name, double Pant, decimal costPrice, int stockQuantity, int volumeCl, decimal salesPrice) : base(name, costPrice, stockQuantity)
+    protected LiquidProductDto(string name, Pant Pant, decimal costPrice, int stockQuantity, int volumeCl, decimal salesPrice) : base(name, costPrice, stockQuantity)
     {
         VolumeCl = volumeCl;
         SalesPrice = salesPrice;
