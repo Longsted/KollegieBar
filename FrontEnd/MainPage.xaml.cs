@@ -1,12 +1,14 @@
 ﻿using BusinessLogic.BusinessLogicLayer;
+using BusinessLogic.InterfaceBusiness;
 using Data.Repositories;
+using Data.UnitOfWork;
 using DataTransferObject.Model;
 
 namespace FrontEnd;
 
 public partial class MainPage : ContentPage
 {
-    private readonly UserBusinessLogicLayer _userBusinessLogicLayer;
+    private readonly IUserBusinessLogicLayer _userBusinessLogicLayer;
     private readonly IServiceProvider _serviceProvider;
 
     public MainPage(UserBusinessLogicLayer userBusinessLogicLayer, IServiceProvider serviceProvider)
@@ -20,11 +22,13 @@ public partial class MainPage : ContentPage
 
     private async void LoginClicked(object sender, EventArgs e)
     {
+        await DisplayAlert("Login", "Reached login", "OK");
         string password = PasswordEntry.Text;
 
         string UserName = UsernameEntry.Text;
 
-        int check = _userBusinessLogicLayer.ChekcUser(password, UserName);
+        int check = await _userBusinessLogicLayer.CheckUserAsync(password, UserName);
+        await DisplayAlert("done",check.ToString(), "OK");
         if (1 == check)
         {
             // 1. Going to the DashBoard nicely

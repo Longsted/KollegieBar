@@ -1,4 +1,4 @@
-﻿namespace Data.Mappers;
+﻿namespace BusinessLogic.Mappers;
 
 internal static class LiquidWithoutAlcoholMapper
 {

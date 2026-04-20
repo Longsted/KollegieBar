@@ -8,6 +8,7 @@
 
     <Grid ColumnDefinitions="300, *" Padding="40" ColumnSpacing="50">
 
+        <!-- VENSTRE: Liste -->
         <Border Grid.Column="0" 
                 Stroke="#000000" 
                 StrokeThickness="1"
@@ -16,6 +17,7 @@
             <CollectionView ItemsSource="{Binding Products}"
                             SelectionMode="Single"
                             SelectedItem="{Binding SelectedProduct}">
+                
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="15">
@@ -33,9 +35,11 @@
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
+
             </CollectionView>
         </Border>
 
+        <!-- HØJRE: Form -->
         <Grid Grid.Column="1" 
               RowDefinitions="Auto, Auto, Auto" 
               ColumnDefinitions="200, 400" 
@@ -48,6 +52,7 @@
                    Text="Selected product:" 
                    VerticalOptions="Center" 
                    FontSize="18" />
+            
             <Entry Grid.Row="0" Grid.Column="1" 
                    Text="{Binding SelectedProduct.Name}" 
                    IsReadOnly="True" 
@@ -58,6 +63,7 @@
                    Text="Quantity:" 
                    VerticalOptions="Center" 
                    FontSize="18" />
+            
             <Entry Grid.Row="1" Grid.Column="1" 
                    Placeholder="Enter amount.."
                    PlaceholderColor="Gray"
@@ -75,6 +81,7 @@
                     WidthRequest="220"
                     HorizontalOptions="Start"
                     Command="{Binding AddQuantityCommand}"/>
+
         </Grid>
 
     </Grid>

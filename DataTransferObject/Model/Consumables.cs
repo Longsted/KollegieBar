@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public class Consumables : Product
+public class Consumables : ProductDto
 {
     public string? Description { get; set; }
     

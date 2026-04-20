@@ -11,9 +11,9 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_DeleteProduct()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
 
-            var products = new List<Product>
+            var products = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10, CostPrice = 20m },
                 new Snack { Name = "Chips", StockQuantity = 5, CostPrice = 15m }
@@ -33,9 +33,9 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_DeleteProduct()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
-            var products = new List<Product>
+            var products = new List<ProductDto>
             {
                 new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10, CostPrice = 20m }
             };

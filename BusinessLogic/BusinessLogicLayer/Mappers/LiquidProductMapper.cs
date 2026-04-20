@@ -1,11 +1,11 @@
 ﻿using DataEntity = Data.Model;
 using DTO = DataTransferObject.Model;
 
-namespace Data.Mappers
+namespace BusinessLogic.Mappers
 {
     internal static class LiquidProductMapper
     {
-        public static void MapToDto(DataEntity.LiquidProduct entity, DTO.LiquidProduct dto)
+        public static void MapToDto(DataEntity.LiquidProduct entity, DTO.LiquidProductDto dto)
         {
             // base (Product)
             ProductMapper.MapToDto(entity, dto);
@@ -15,7 +15,7 @@ namespace Data.Mappers
             dto.SalesPrice = entity.SalesPrice;
         }
 
-        public static void MapToEntity(DTO.LiquidProduct dto, DataEntity.LiquidProduct entity)
+        public static void MapToEntity(DTO.LiquidProductDto dto, DataEntity.LiquidProduct entity)
         {
             // base (Product)
             ProductMapper.MapToEntity(dto, entity);

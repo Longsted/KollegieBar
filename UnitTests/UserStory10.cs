@@ -11,7 +11,7 @@ namespace UnitTests
         [Fact]
         public void Bartender_ShouldBeAbleTo_RegisterWaste()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
             var product = new LiquidWithAlcohol
             {
@@ -33,7 +33,7 @@ namespace UnitTests
         [Fact]
         public void NonBartender_ShouldNotBeAbleTo_RegisterWaste()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
 
             var product = new LiquidWithAlcohol
             {

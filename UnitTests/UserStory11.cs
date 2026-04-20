@@ -10,7 +10,7 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_UpdateMaxStock_AndAdjustProductStock()
         {
-            var user = new User { Role = UserRoles.BoardMember };
+            var user = new UserDto { Role = UserRole.BoardMember };
 
             var product = new LiquidWithAlcohol
             {
@@ -37,7 +37,7 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_UpdateMaxStock()
         {
-            var user = new User { Role = UserRoles.Bartender }; 
+            var user = new UserDto { Role = UserRole.Bartender }; 
 
             var product = new LiquidWithAlcohol
             {
@@ -63,7 +63,7 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldBeAbleTo_UpdateMinStock()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
             var product = new LiquidWithAlcohol
             {
@@ -88,7 +88,7 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_UpdateMinStock()
         {
-            var user = new User { Role = UserRoles.Bartender };
+            var user = new UserDto { Role = UserRole.Bartender };
 
             var product = new LiquidWithAlcohol
             {

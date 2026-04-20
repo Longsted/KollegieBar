@@ -1,99 +1,109 @@
-﻿using Data.Repositories;
+﻿using BusinessLogic.InterfaceBusiness;
+using BusinessLogic.Mappers;
+using System.Linq;
+using Data.UnitOfWork;
 using DataTransferObject.Model;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
-public class UserBusinessLogicLayer
+public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
 {
-    private readonly UserRepository _userRepository;
+    private readonly IUnitOfWork _uow;
 
-    public UserBusinessLogicLayer(UserRepository repository)
+    public UserBusinessLogicLayer(IUnitOfWork repository)
     {
-        _userRepository = repository;
+        _uow = repository;
     }
 
-    public User? GetUserById(int userId)
+    public async Task<UserDto?> GetUserByIdAsync(int userId)
     {
         if (userId <= 0)
         {
-            throw new IndexOutOfRangeException();
+            throw new ArgumentException("Invalid user id");
         }
 
-        return _userRepository.GetUser(userId);
-    }
+        var user = await _uow.Users.GetByIdAsync(userId);
 
-    public List<User> GetUsers()
-    {
-        return _userRepository.GetUsers();
-    }
-
-    public void AddUser(User user)
-    {
         if (user == null)
         {
-            throw new NullReferenceException();
+            throw new InvalidOperationException("User not found");
         }
 
-        _userRepository.AddUser(user);
+        return UserMapper.Map(user);
     }
 
-    public void DeleteUser(int userId)
+    public async Task<List<UserDto>> GetUsersAsync()
     {
-        if (userId <= 0)
-        {
-            throw new IndexOutOfRangeException();
-        }
-
-        _userRepository.DeleteUser(userId);
+        var users = await _uow.Users.GetAllAsync();
+        return users.Select(UserMapper.Map).ToList();
     }
 
-    public void UpdateUser(User user)
+    // public void AddUser(UserDto userDto)
+    // {
+    //     if (userDto == null)
+    //     {
+    //         throw new NullReferenceException();
+    //     }
+    //
+    //     _userRepository.AddAsync(userDto);
+    // }
+    //
+    // public void DeleteUser(int userId)
+    // {
+    //     if (userId <= 0)
+    //     {
+    //         throw new IndexOutOfRangeException();
+    //     }
+    //
+    //     _userRepository.DeleteAsync(userId);
+    // }
+
+    // public async Task UpdateUserAsync(UserDto userDto)
+    // {
+    //     if (userDto == null)
+    //     {
+    //         throw new NullReferenceException();
+    //     }
+    //
+    //     if (userDto.Id <= 0)
+    //     {
+    //         throw new IndexOutOfRangeException();
+    //     }
+    //     var existingUser = await _userRepository.GetByIdAsync(userDto.Id);
+    //
+    //     if (existingUser == null)
+    //     {
+    //         throw new InvalidOperationException("User not found");
+    //     }
+    //     UserMapper
+    // }
+
+    // public UserDto CreateUser(UserDto userDto)
+    // {
+    //     if (userDto == null)
+    //     {
+    //         throw new NullReferenceException();
+    //     }
+    //
+    //     return _userRepository.CreateUser(userDto);
+    // }
+
+    public async Task<int> CheckUserAsync(string password, string username)
     {
-        if (user == null)
-        {
-            throw new NullReferenceException();
-        }
+        var users = await GetUsersAsync();
 
-        if (user.Id <= 0)
-        {
-            throw new IndexOutOfRangeException();
-        }
+        var foundUser = users.FirstOrDefault(u => u.Password == password && u.UserName == username);
 
-        _userRepository.UpdateUser(user);
-    }
-
-    public User CreateUser(User user)
-    {
-        if (user == null)
-        {
-            throw new NullReferenceException();
-        }
-
-        return _userRepository.CreateUser(user);
-    }
-
-    public int ChekcUser(string password, string username)
-    {
-        var users = GetUsers();
-
-        var foundUser = users.FirstOrDefault(U => U.Password == password && U.UserName == username);
-
-        if(foundUser == null)
+        if (foundUser == null)
         {
             return 0;
         }
 
-        if(foundUser.Role == UserRoles.BoardMember)
+        return foundUser.Role switch
         {
-            return 1;
-        }
-        else if (foundUser.Role == UserRoles.Bartender)
-        {
-            return 2;
-        }
-        return 0;
+            UserRole.BoardMember => 1,
+            UserRole.Bartender => 2,
+            _ => 0
+        };
     }
-
-
-
 }

@@ -1,7 +1,7 @@
 ﻿namespace DataTransferObject.Model;
 
 
-public class LiquidWithAlcohol : LiquidProduct
+public class LiquidWithAlcohol : LiquidProductDto
 {
     public double AlcoholPercentage { get; set; }
     

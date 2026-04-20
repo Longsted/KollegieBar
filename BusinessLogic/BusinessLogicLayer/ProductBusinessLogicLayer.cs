@@ -1,128 +1,160 @@
-﻿using Data.Repositories;
+﻿using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
+using BusinessLogic.Mappers;
+using Data.UnitOfWork;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
-public class ProductBusinessLogicLayer
+public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 {
-    private readonly ProductRepository _repository;
+    private readonly IUnitOfWork _uow;
 
-    public ProductBusinessLogicLayer(ProductRepository repository)
+    public ProductBusinessLogicLayer(IUnitOfWork uow)
     {
-        _repository = repository;
+        _uow = uow;
+    }
+    
+
+    public async Task CreateProductAsync(ProductDto dto)
+    {
+        ValidateProduct(dto);
+
+        var entity = ProductMapper.Map(dto);
+
+        await _uow.Products.AddAsync(entity);
+        await _uow.SaveChangesAsync();
     }
 
- 
-
-    public void AddProduct(Product product)
+    public async Task DeleteProductAsync(int id)
     {
+        var product = await _uow.Products.GetByIdAsync(id);
+
         if (product == null)
         {
-            throw new NullReferenceException("Product not found");
+            throw new InvalidOperationException("Product not found");
         }
+
+        await _uow.Products.DeleteAsync(product);
+        await _uow.SaveChangesAsync();
     }
 
-    public void CreateProduct(Product product)
-    {
-        ValidateProduct(product);
-        _repository.Create(product);
-    }
 
-    public void ValidateProduct(Product product)
+    public void ValidateProduct(ProductDto productDto)
     {
-        if (string.IsNullOrWhiteSpace(product.Name))
+        if (string.IsNullOrWhiteSpace(productDto.Name))
             throw new ArgumentException("Name is required");
 
-        if (product.CostPrice < 0)
+        if (productDto.CostPrice < 0)
             throw new ArgumentException("Invalid price");
 
-        if (product.StockQuantity < 0)
+        if (productDto.StockQuantity < 0)
             throw new ArgumentException("Invalid stock");
 
-        if (product is LiquidWithAlcohol alcohol)
+        if (productDto is LiquidWithAlcohol alcohol)
         {
             if (alcohol.AlcoholPercentage < 0 || alcohol.AlcoholPercentage > 100)
                 throw new ArgumentException("Invalid alcohol percentage");
         }
     }
 
-    public void RegisterSale(int productId, int quantity)
+    public async Task RegisterSaleAsync(int productId, int quantity)
     {
         if (quantity <= 0)
             throw new ArgumentException("Invalid quantity");
-        
-        var product = _repository.GetProduct(productId);
+
+        var product = await _uow.Products.GetByIdAsync(productId);
 
         if (product == null)
-            throw new NullReferenceException("Product not found");
+            throw new InvalidOperationException("Product not found");
 
         if (product.StockQuantity < quantity)
             throw new InvalidOperationException("Not enough stock");
 
-        var newTotalStock = product.StockQuantity -= quantity;
-        _repository.UpdateStock(productId, newTotalStock);
+        product.StockQuantity -= quantity;
+        await _uow.SaveChangesAsync();
     }
 
-    public void RegisterIncomingStock(int productId, int newQuantity)
+    public async Task RegisterIncomingStockAsync(int productId, int newQuantity)
     {
         if (newQuantity < 0)
             throw new ArgumentException("Invalid quantity");
 
-        var product = _repository.GetProduct(productId);
+        var product = await _uow.Products.GetByIdAsync(productId);
 
         if (product == null)
-            throw new ArgumentException("Product not found");
+            throw new InvalidOperationException("Product not found");
 
-        var newTotalStock = product.StockQuantity += newQuantity;
-        _repository.UpdateStock(productId, newTotalStock);
+        product.StockQuantity += newQuantity;
+        await _uow.SaveChangesAsync();
     }
 
-    public void UpdateProduct(Product updatedProduct)
+    public async Task UpdateProductAsync(ProductDto dto)
     {
-        if (updatedProduct == null)
-        {
-            throw new ArgumentNullException(nameof(updatedProduct));
-        }
-
-        ValidateProduct(updatedProduct);
         
-        var existingProduct = _repository.GetProduct(updatedProduct.Id);
+        ValidateProduct(dto);
+
+        var existingProduct = await _uow.Products.GetByIdAsync(dto.Id);
         if (existingProduct == null)
         {
-            throw new ArgumentNullException("existingProduct", "Product not found");
+            throw new InvalidOperationException("Product not found");
         }
-        _repository.Update(updatedProduct);
+
+        ProductMapper.MapToEntity(dto, existingProduct);
+
+        await _uow.SaveChangesAsync();
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<ProductDto?> GetProductAsync(int id)
     {
-        return _repository.GetAllProducts();
+        var product = await _uow.Products.GetByIdAsync(id);
+        if (product == null)
+        {
+            throw new InvalidOperationException("Product not found");
+        }
+
+        return ProductMapper.Map(product);
     }
 
-    public void UpdateMaxStock(int productId, int newMaxStock)
+    public async Task<List<ProductDto>> GetAllProductsAsync()
+    {
+        var products = await _uow.Products.GetAllAsync();
+        return products.Select(ProductMapper.Map).ToList();
+    }
+
+    public async Task UpdateMaxStockAsync(int productId, int newMaxStock)
     {
         if (newMaxStock < 0)
         {
             throw new ArgumentException("Invalid stock");
         }
 
-        if (productId < 0)
+        var product = await _uow.Products.GetByIdAsync(productId);
+
+        if (product == null)
         {
-            throw new ArgumentException("Invalid productId");
+            throw new InvalidOperationException("Product not found");
         }
-        _repository.UpdateMaxStock(productId, newMaxStock);
+
+        product.MaxStockQuantity = newMaxStock;
+
+        await _uow.SaveChangesAsync();
     }
-    public void UpdateMinStock(int productId, int newMinStock)
+
+    public async Task UpdateMinStock(int productId, int newMinStock)
     {
         if (newMinStock < 0)
         {
             throw new ArgumentException("Invalid stock");
         }
 
-        if (productId < 0)
+        var product = await _uow.Products.GetByIdAsync(productId);
+
+        if (product == null)
         {
-            throw new ArgumentException("Invalid productId");
+            throw new InvalidOperationException("Product not found");
         }
-        _repository.UpdateMaxStock(productId, newMinStock);
+
+        product.MinStockQuantity = newMinStock;
+        await _uow.SaveChangesAsync();
     }
 }

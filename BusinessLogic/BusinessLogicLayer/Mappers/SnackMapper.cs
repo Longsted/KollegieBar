@@ -1,7 +1,7 @@
 ﻿using DataEntity = Data.Model;
 using DTO = DataTransferObject.Model;
 
-namespace Data.Mappers
+namespace BusinessLogic.Mappers
 {
     internal static class SnackMapper
     {
