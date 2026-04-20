@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420081319_ChangeModelSale")]
+    partial class ChangeModelSale
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +43,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<double>("SalesPrice")
+                        .HasColumnType("double precision");
+
                     b.HasKey("Id");
 
                     b.ToTable("Drinks");
@@ -56,9 +62,6 @@ namespace Data.Migrations
                     b.Property<int>("DrinkId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("LiquidId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("LiquidProductId")
                         .HasColumnType("integer");
 
@@ -69,7 +72,7 @@ namespace Data.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.HasIndex("LiquidId");
+                    b.HasIndex("LiquidProductId");
 
                     b.ToTable("DrinkIngredients");
                 });
@@ -87,8 +90,8 @@ namespace Data.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("character varying(13)");
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)");
 
                     b.Property<int>("MaxStockQuantity")
                         .HasColumnType("integer");
@@ -194,30 +197,56 @@ namespace Data.Migrations
                     b.HasDiscriminator().HasValue("Consumables");
                 });
 
-            modelBuilder.Entity("Data.Model.Liquid", b =>
+            modelBuilder.Entity("Data.Model.LiquidProduct", b =>
                 {
                     b.HasBaseType("Data.Model.Product");
 
-                    b.Property<double>("AlcoholPercentage")
-                        .HasColumnType("double precision");
+                    b.Property<decimal>("Pant")
+                        .HasColumnType("numeric");
 
-                    b.Property<double>("Pant")
-                        .HasColumnType("double precision");
-
-                    b.Property<bool>("SugarFree")
-                        .HasColumnType("boolean");
+                    b.Property<decimal>("SalesPrice")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("VolumeCl")
                         .HasColumnType("integer");
 
-                    b.HasDiscriminator().HasValue("Liquid");
+                    b.HasDiscriminator().HasValue("LiquidProduct");
                 });
 
             modelBuilder.Entity("Data.Model.Snack", b =>
                 {
                     b.HasBaseType("Data.Model.Product");
 
+                    b.Property<decimal>("SalesPrice")
+                        .HasColumnType("numeric");
+
+                    b.ToTable("Products", t =>
+                        {
+                            t.Property("SalesPrice")
+                                .HasColumnName("Snack_SalesPrice");
+                        });
+
                     b.HasDiscriminator().HasValue("Snack");
+                });
+
+            modelBuilder.Entity("Data.Model.LiquidWithAlcohol", b =>
+                {
+                    b.HasBaseType("Data.Model.LiquidProduct");
+
+                    b.Property<double>("AlcoholPercentage")
+                        .HasColumnType("double precision");
+
+                    b.HasDiscriminator().HasValue("LiquidWithAlcohol");
+                });
+
+            modelBuilder.Entity("Data.Model.LiquidWithoutAlcohol", b =>
+                {
+                    b.HasBaseType("Data.Model.LiquidProduct");
+
+                    b.Property<bool>("SugarFree")
+                        .HasColumnType("boolean");
+
+                    b.HasDiscriminator().HasValue("LiquidWithoutAlcohol");
                 });
 
             modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
@@ -228,15 +257,15 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Model.Liquid", "Liquid")
+                    b.HasOne("Data.Model.LiquidProduct", "LiquidProduct")
                         .WithMany()
-                        .HasForeignKey("LiquidId")
+                        .HasForeignKey("LiquidProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Drink");
 
-                    b.Navigation("Liquid");
+                    b.Navigation("LiquidProduct");
                 });
 
             modelBuilder.Entity("Data.Model.Sale", b =>

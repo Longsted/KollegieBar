@@ -11,18 +11,32 @@
         public Guid TransactionId { get; set; }
 
         //Foreign key to Product
-        public int ProductId { get; set; }
-        public ProductDto ProductDto { get; set; }
-        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, int productId)
+        public int? ProductId { get; set; }
+        public ProductDto? Product { get; set; }
+
+        //Foreign key to Drink
+        public int? DrinkId { get; set; }
+        public DrinkDataTransferObject? Drink { get; set; }
+
+        //Constructor for Sale
+        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, ProductDto product)
         {
             SaleId = saleId;
             PriceAtSale = priceAtSale;
             SaleDate = saleDate;
             TransactionId = transactionId;
-            ProductId = productId;
-
+            Product = product;
         }
 
+        //Overloaded constructor for when we want to create a sale for a drink
+        public Sale(int saleId, decimal priceAtSale, DateTime saleDate, Guid transactionId, DrinkDataTransferObject drink)
+        {
+            SaleId = saleId;
+            PriceAtSale = priceAtSale;
+            SaleDate = saleDate;
+            TransactionId = transactionId;
+            Drink = drink;
+        }
 
         public Sale() { }
     }
