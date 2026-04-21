@@ -8,17 +8,14 @@ namespace FrontEnd;
 
 public partial class MainPage : ContentPage
 {
-    private readonly IUserBusinessLogicLayer _userBusinessLogicLayer;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IUserBusinessLogicLayer _iUserBusinessLogicLayer;
 
-    public MainPage(IUserBusinessLogicLayer userBusinessLogicLayer, IServiceProvider serviceProvider)
+    public MainPage(IUserBusinessLogicLayer iUserBusinessLogicLayer)
     {
         InitializeComponent();
 
-        _userBusinessLogicLayer = userBusinessLogicLayer;
-        _serviceProvider = serviceProvider;
+        _iUserBusinessLogicLayer = iUserBusinessLogicLayer;
     }
-
 
     private async void LoginClicked(object sender, EventArgs e)
     {
@@ -26,7 +23,7 @@ public partial class MainPage : ContentPage
 
         string userName = UsernameEntry.Text;
 
-        int check = await _userBusinessLogicLayer.CheckUserAsync(password, userName);
+        int check = await _iUserBusinessLogicLayer.CheckUserAsync(password, userName);
         if (1 == check)
         {
             // 1. Going to the DashBoard nicely

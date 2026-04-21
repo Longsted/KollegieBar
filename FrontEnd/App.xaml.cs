@@ -4,11 +4,11 @@ namespace FrontEnd;
 
 public partial class App : Application
 {
-    public App(IServiceProvider serviceProvider)
+    public App(IServiceProvider iServiceProvider)
     {
         InitializeComponent();
 
-        MainPage = serviceProvider.GetRequiredService<MainPage>();
+        MainPage = iServiceProvider.GetRequiredService<MainPage>();
     }
 
     //protected override Window CreateWindow(IActivationState? activationState)

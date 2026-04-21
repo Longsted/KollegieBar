@@ -10,13 +10,10 @@ namespace BusinessLogic.Mappers
         {
             return product switch
             {
-                DataEntity.LiquidWithAlcohol liquidWithAlcohol => LiquidWithAlcoholMapper.Map(liquidWithAlcohol),
-                DataEntity.LiquidWithoutAlcohol liquidWithoutAlcohol => LiquidWithoutAlcoholMapper.Map(liquidWithoutAlcohol),
+                DataEntity.Liquid liquid => LiquidMapper.Map(liquid),
                 DataEntity.Snack snack => SnackMapper.Map(snack),
                 DataEntity.Consumables consumables => ConsumablesMapper.Map(consumables),
-                _ => throw new NotImplementedException(
-                    $"Mapping not implemented for {product.GetType()}"
-                )
+                _ => throw new NotImplementedException($"Mapping ikke implementeret for {product.GetType()}")
             };
         }
 
@@ -25,8 +22,7 @@ namespace BusinessLogic.Mappers
         {
             return productDataTransferObject switch
             {
-                DTO.LiquidWithAlcohol liquidWithAlcohol => LiquidWithAlcoholMapper.Map(liquidWithAlcohol),
-                DTO.LiquidWithoutAlcohol liquidWithoutAlcohol => LiquidWithoutAlcoholMapper.Map(liquidWithoutAlcohol),
+                DTO.LiquidDataTransferObject liquid => LiquidMapper.Map(liquid),
                 DTO.SnackDataTransferObject snack => SnackMapper.Map(snack),
                 DTO.ConsumablesDataTransferObject consumables => ConsumablesMapper.Map(consumables),
                 _ => throw new NotImplementedException(
