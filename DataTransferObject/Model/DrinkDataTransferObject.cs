@@ -1,8 +1,6 @@
-﻿using DataTransferObject.Model;
+﻿namespace DataTransferObject.Model;
 
-namespace DataTransferObject.Model;
-
-public class Drink
+public class DrinkDataTransferObject
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -12,11 +10,11 @@ public class Drink
 
     public bool IsAlcoholic { get; set; }
 
-    public List<DrinkIngredient> Ingredients { get; set; } = new();
+    public List<DrinkIngredientDataTransferObject> Ingredients { get; set; } = new();
 
-    public Drink() { }
+    public DrinkDataTransferObject() { }
 
-    public Drink(string name, double costPrice, double salesPrice, bool isAlcoholic)
+    public DrinkDataTransferObject(string name, double costPrice, double salesPrice, bool isAlcoholic)
     {
         Name = name;
         CostPrice = costPrice;

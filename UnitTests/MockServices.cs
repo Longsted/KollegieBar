@@ -4,17 +4,17 @@ namespace UnitTests
 {
     public class SalesStatisticsService
     {
-        private readonly List<ProductDto> _salesData;
+        private readonly List<ProductDataTransferObject> _salesData;
 
-        public SalesStatisticsService(List<ProductDto> salesData)
+        public SalesStatisticsService(List<ProductDataTransferObject> salesData)
         {
             _salesData = salesData;
         }
 
-        public List<ProductDto> GetStatistics(UserDto userDto)
+        public List<ProductDataTransferObject> GetStatistics(UserDataTransferObject userDataTransferObject)
         {
-            if (userDto?.Role != UserRole.BoardMember)
-                return new List<ProductDto>();
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
+                return new List<ProductDataTransferObject>();
 
             return _salesData;
         }
@@ -22,19 +22,19 @@ namespace UnitTests
 
     public class LowInventoryService
     {
-        private readonly List<ProductDto> _products;
+        private readonly List<ProductDataTransferObject> _products;
         private readonly int _threshold;
 
-        public LowInventoryService(List<ProductDto> products, int threshold)
+        public LowInventoryService(List<ProductDataTransferObject> products, int threshold)
         {
             _products = products;
             _threshold = threshold;
         }
 
-        public List<ProductDto> GetLowInventory(UserDto userDto)
+        public List<ProductDataTransferObject> GetLowInventory(UserDataTransferObject userDataTransferObject)
         {
-            if (userDto?.Role != UserRole.BoardMember)
-                return new List<ProductDto>();
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
+                return new List<ProductDataTransferObject>();
 
             return _products
                 .Where(p => p.StockQuantity <= _threshold)
@@ -44,15 +44,15 @@ namespace UnitTests
 
     public class ProductEditingService
     {
-        public bool EditProduct(UserDto userDto, ProductDto productDto, string newName, int newStock,
+        public bool EditProduct(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, string newName, int newStock,
             decimal newPrice)
         {
-            if (userDto?.Role != UserRole.BoardMember)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
-            productDto.Name = newName;
-            productDto.StockQuantity = newStock;
-            productDto.CostPrice = newPrice;
+            productDataTransferObject.Name = newName;
+            productDataTransferObject.StockQuantity = newStock;
+            productDataTransferObject.CostPrice = newPrice;
 
             return true;
         }
@@ -60,21 +60,21 @@ namespace UnitTests
 
     public class ProductDeletionService
     {
-        public bool DeleteProduct(UserDto userDto, List<ProductDto> products, ProductDto productDtoToDelete)
+        public bool DeleteProduct(UserDataTransferObject userDataTransferObject, List<ProductDataTransferObject> products, ProductDataTransferObject productDataTransferObjectToDelete)
         {
-            if (userDto?.Role != UserRole.BoardMember)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
-            return products.Remove(productDtoToDelete);
+            return products.Remove(productDataTransferObjectToDelete);
         }
     }
 
     public class ProductCategoryService
     {
-        public Dictionary<string, List<ProductDto>> GetProductsByCategory(UserDto userDto, List<ProductDto> products)
+        public Dictionary<string, List<ProductDataTransferObject>> GetProductsByCategory(UserDataTransferObject userDataTransferObject, List<ProductDataTransferObject> products)
         {
-            if (userDto?.Role != UserRole.BoardMember)
-                return new Dictionary<string, List<ProductDto>>();
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
+                return new Dictionary<string, List<ProductDataTransferObject>>();
 
             return products
                 .GroupBy(p => p.GetType().Name) // Her får vi "Snack", "LiquidWithAlcohol" osv.
@@ -84,12 +84,12 @@ namespace UnitTests
 
     public class DrinkCustomizationService
     {
-        public bool CustomizeDrink(UserDto userDto, Drink drink, double newPrice)
+        public bool CustomizeDrink(UserDataTransferObject userDataTransferObject, DrinkDataTransferObject drinkDataTransferObject, double newPrice)
         {
-            if (userDto?.Role != UserRole.Bartender)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.Bartender)
                 return false;
 
-            drink.CostPrice = newPrice;
+            drinkDataTransferObject.CostPrice = newPrice;
 
             return true;
         }
@@ -97,18 +97,18 @@ namespace UnitTests
 
     public class WasteRegistrationService
     {
-        public bool RegisterWaste(UserDto userDto, ProductDto productDto, int amountLost)
+        public bool RegisterWaste(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int amountLost)
         {
-            if (userDto?.Role != UserRole.Bartender)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.Bartender)
                 return false;
 
             if (amountLost <= 0)
                 return false;
 
-            productDto.StockQuantity -= amountLost;
+            productDataTransferObject.StockQuantity -= amountLost;
 
-            if (productDto.StockQuantity < 0)
-                productDto.StockQuantity = 0;
+            if (productDataTransferObject.StockQuantity < 0)
+                productDataTransferObject.StockQuantity = 0;
 
             return true;
         }
@@ -125,30 +125,30 @@ namespace UnitTests
             MinStockQuantity = initialLimit;
         }
 
-        public bool UpdateMaxStock(UserDto userDto, ProductDto productDto, int newMaxStock)
+        public bool UpdateMaxStock(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int newMaxStock)
         {
-            if (userDto?.Role != UserRole.BoardMember)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
             MaxStockQuantity = newMaxStock;
             
             // Adjust product stock if above new max
-            if (productDto.StockQuantity > MaxStockQuantity)
-                productDto.StockQuantity = MaxStockQuantity;
+            if (productDataTransferObject.StockQuantity > MaxStockQuantity)
+                productDataTransferObject.StockQuantity = MaxStockQuantity;
 
             return true;
         }
 
-        public bool UpdateMinStock(UserDto userDto, ProductDto productDto, int newMinStock)
+        public bool UpdateMinStock(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int newMinStock)
         {
-            if (userDto?.Role != UserRole.BoardMember)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
             MinStockQuantity = newMinStock;
 
             // Adjust product stock if below new min
-            if (productDto.StockQuantity < MinStockQuantity)
-                productDto.StockQuantity = MinStockQuantity;
+            if (productDataTransferObject.StockQuantity < MinStockQuantity)
+                productDataTransferObject.StockQuantity = MinStockQuantity;
 
             return true;
         }
@@ -158,9 +158,9 @@ namespace UnitTests
     {
         public decimal TotalPantIncome { get; private set; }
 
-        public bool RegisterPant(UserDto userDto, decimal pantAmount)
+        public bool RegisterPant(UserDataTransferObject userDataTransferObject, decimal pantAmount)
         {
-            if (userDto?.Role != UserRole.BoardMember)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
             if (pantAmount <= 0)
@@ -170,9 +170,9 @@ namespace UnitTests
             return true;
         }
 
-        public bool ResetPant(UserDto userDto)
+        public bool ResetPant(UserDataTransferObject userDataTransferObject)
         {
-            if (userDto?.Role != UserRole.BoardMember)
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
             TotalPantIncome = 0;
@@ -182,21 +182,21 @@ namespace UnitTests
 
     public class LoginService
     {
-        private readonly Dictionary<string, UserRole> _accounts;
+        private readonly Dictionary<string, UserRoleDataTransferObject> _accounts;
 
-        public LoginService(Dictionary<string, UserRole> accounts)
+        public LoginService(Dictionary<string, UserRoleDataTransferObject> accounts)
         {
             _accounts = accounts;
         }
 
-        public UserDto Login(string username)
+        public UserDataTransferObject Login(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 return null;
 
             if (_accounts.TryGetValue(username, out var role))
             {
-                return new UserDto { Role = role };
+                return new UserDataTransferObject { RoleDataTransferObject = role };
             }
 
             return null;

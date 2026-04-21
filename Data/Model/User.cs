@@ -9,7 +9,6 @@ namespace Data.Model
 
        public User()
        {
-           
        }
 
        public User(int id, string userName, string password, UserRole role)
@@ -19,7 +18,6 @@ namespace Data.Model
            Password = password;
            Role = role;
        }
-       
    } 
 }
 

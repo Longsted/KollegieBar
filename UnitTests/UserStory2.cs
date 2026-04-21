@@ -10,12 +10,12 @@ namespace UnitTests
         [Fact]
         public void GetStatistics_ReturnsData_WhenBoardMemberIsLoggedIn()
         {
-            var user = new UserDto { Role = UserRole.BoardMember };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
 
-            var salesData = new List<ProductDto>
+            var salesData = new List<ProductDataTransferObject>
             {
-                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10 },
-                new LiquidWithAlcohol { Name = "Cider", StockQuantity = 5 }
+                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 10 },
+                new LiquidDataTransferObject { Name = "Cider", StockQuantity = 5 }
             };
 
             var service = new SalesStatisticsService(salesData);
@@ -28,12 +28,12 @@ namespace UnitTests
         [Fact]
         public void GetStatistics_ReturnsEmpty_WhenUserIsNotLoggedIn()
         {
-            var user = new UserDto { Role = UserRole.Bartender };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
 
-            var salesData = new List<ProductDto>
+            var salesData = new List<ProductDataTransferObject>
             {
-                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10 },
-                new LiquidWithAlcohol { Name = "Cider", StockQuantity = 5 }
+                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 10 },
+                new LiquidDataTransferObject { Name = "Cider", StockQuantity = 5 }
             };
 
             var service = new SalesStatisticsService(salesData);

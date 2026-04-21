@@ -5,14 +5,12 @@ namespace UnitTests
 {
     public class UserStory6
     {
-
         // Tests that a board member can edit an existing product and the system updates it.
-
         [Fact]
         public void BoardMember_ShouldBeAbleTo_EditProductInformation()
         {
-            var user = new UserDto { Role = UserRole.BoardMember };
-            var product = new LiquidWithAlcohol
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
+            var product = new LiquidDataTransferObject
             {
                 Name = "Old Beer",
                 StockQuantity = 10,
@@ -40,8 +38,8 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_EditProductInformation()
         {
-            var user = new UserDto { Role = UserRole.Bartender }; // Not a board member
-            var product = new LiquidWithAlcohol
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender }; // Not a board member
+            var product = new LiquidDataTransferObject
             {
                 Name = "Beer",
                 StockQuantity = 10,

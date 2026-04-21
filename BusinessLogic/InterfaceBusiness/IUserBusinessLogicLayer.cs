@@ -4,9 +4,9 @@ namespace BusinessLogic.InterfaceBusiness;
 
 public interface IUserBusinessLogicLayer
 {
-    Task<UserDto?> GetUserByIdAsync(int userId);
+    Task<UserDataTransferObject?> GetUserByIdAsync(int userId);
     
-    Task<List<UserDto>> GetUsersAsync();
+    Task<List<UserDataTransferObject>> GetUsersAsync();
 
     Task<int> CheckUserAsync(string password, string username);
 }

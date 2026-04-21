@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.BusinessLogicLayer;
+using BusinessLogic.InterfaceBusiness;
 using Data.Context;
 using Data.Repositories;
 using Data.UnitOfWork;
@@ -30,8 +31,8 @@ public static class MauiProgram
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-        builder.Services.AddScoped<UserBusinessLogicLayer>();
-        builder.Services.AddScoped<ProductBusinessLogicLayer>();
+        builder.Services.AddScoped<IUserBusinessLogicLayer, UserBusinessLogicLayer>();
+        builder.Services.AddScoped<IProductBusinessLogicLayer, ProductBusinessLogicLayer>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<CreateProductPage>();

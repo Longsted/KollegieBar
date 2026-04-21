@@ -2,25 +2,25 @@ namespace BusinessLogic.Mappers
 {
     internal class UserMapper
     {
-        public static DataTransferObject.Model.UserDto Map(Data.Model.User user)
+        public static DataTransferObject.Model.UserDataTransferObject Map(Data.Model.User user)
         {
-            return new DataTransferObject.Model.UserDto
+            return new DataTransferObject.Model.UserDataTransferObject
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 Password = user.Password,
-                Role = (DataTransferObject.Model.UserRole)user.Role
+                RoleDataTransferObject = (DataTransferObject.Model.UserRoleDataTransferObject)user.Role
             };
         }
 
-        public static Data.Model.User Map(DataTransferObject.Model.UserDto userDto)
+        public static Data.Model.User Map(DataTransferObject.Model.UserDataTransferObject userDataTransferObject)
         {
             return new Data.Model.User
             {
-                Id = userDto.Id,
-                UserName = userDto.UserName,
-                Password = userDto.Password,
-                Role = (Data.Model.UserRole)userDto.Role
+                Id = userDataTransferObject.Id,
+                UserName = userDataTransferObject.UserName,
+                Password = userDataTransferObject.Password,
+                Role = (Data.Model.UserRole)userDataTransferObject.RoleDataTransferObject
             };
         }
     }
