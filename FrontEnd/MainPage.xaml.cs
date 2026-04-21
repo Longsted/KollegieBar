@@ -24,20 +24,19 @@ public partial class MainPage : ContentPage
         string userName = UsernameEntry.Text;
 
         int check = await _iUserBusinessLogicLayer.CheckUserAsync(password, userName);
-        if (1 == check)
+        switch(check)
         {
-            // 1. Going to the DashBoard nicely
-            Application.Current.MainPage = new AppShell(1);
-        }
-        else if (2 == check)
-        {
-            Application.Current.MainPage = new AppShell(2);
-            await Shell.Current.GoToAsync("//BarOverview");
-        }
-        else if (0 == check)
-        {
-            await DisplayAlert("Error", "Username or Password is incorrect", "OK");
-            return;
+            case 1: 
+                Application.Current.MainPage = new AppShell(1); 
+                break;
+            case 2:
+                Application.Current.MainPage = new AppShell(2);
+                await Shell.Current.GoToAsync("//BarOverview");
+                break;
+                
+            default:
+                await DisplayAlert("Error", "Username or Password is incorrect", "OK");
+                break;
         }
 
     }
