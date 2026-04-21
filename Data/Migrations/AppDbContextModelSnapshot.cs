@@ -198,12 +198,12 @@ namespace Data.Migrations
                 {
                     b.HasBaseType("Data.Model.Product");
 
-                    b.Property<int>("Pant")
-                        .HasColumnType("integer");
-                    
                     b.Property<double>("AlcoholPercentage")
                         .HasColumnType("double precision");
-                    
+
+                    b.Property<int>("Pant")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("SugarFree")
                         .HasColumnType("boolean");
 
