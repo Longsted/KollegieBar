@@ -16,7 +16,7 @@ public interface IProductBusinessLogicLayer
     
     Task DeleteProductAsync(int id);
     
-    Task RegisterSaleAsync(List<(int productId,int quantity)> items);
+    Task RegisterSaleAsync(List<int> productIds);
     
     Task RegisterIncomingStockAsync(int productId, int quantity);
 
