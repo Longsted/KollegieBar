@@ -13,7 +13,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     {
         _unitOfWork = unitOfWork;
     }
-    
+
 
     public async Task CreateProductAsync(ProductDto product)
     {
@@ -57,22 +57,74 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         }
     }
 
-    public async Task RegisterSaleAsync(int productId, int quantity)
+    public async Task RegisterSaleAsync(List<(int productId, int quantity)> items)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("Invalid quantity");
+        var transactionId = new Guid();
+        var now = DateTime.UtcNow;
 
-        var product = await _unitOfWork.Products.GetByIdAsync(productId);
+        foreach (var item in items)
+        {
+            var product = await _unitOfWork.Products.GetByIdAsync(item.productId);
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product not found");
+            }
 
-        if (product == null)
-            throw new InvalidOperationException("Product not found");
+            switch ( product)
+            {
+                case DataTransferObject.Model alcohol :
+                    
+                    
+            }
+        }
 
-        if (product.StockQuantity < quantity)
-            throw new InvalidOperationException("Not enough stock");
-
-        product.StockQuantity -= quantity;
+       
         await _unitOfWork.SaveChangesAsync();
     }
+
+    private void HandleSnackSale(Data.Model.Snack snack, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentException("Invalid quantity");
+        }
+
+        if (snack.StockQuantity < quantity)
+        {
+            throw new InvalidOperationException("Not enough stock");
+        }
+        snack.StockQuantity -= quantity;
+    }
+
+    private void HandleAlcoholSale(DataTransferObject.Model.LiquidProductDto alcohol, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentException("Invalid quantity");
+        }
+
+        var removeClFromBottle = quantity * 20;
+        if (alcohol.VolumeCl < removeClFromBottle && alcohol.StockQuantity == 0)
+        {
+            throw new InvalidOperationException("Not enough stock");
+        }
+        
+        alcohol.VolumeCl -= removeClFromBottle;
+    }
+
+    private List<Sale> CreateSales(ProductDto product, int quantity, Guid transactionId, DateTime now)
+    {
+        var sales = new List<Sale>();
+
+        for (int i = 0; i < quantity; i++)
+        {
+            var sale = new Sale(product.CostPrice, now, transactionId, product.Id);
+            sales.Add(sale);
+        }
+
+        return sales;
+    }
+
 
     public async Task RegisterIncomingStockAsync(int productId, int newQuantity)
     {
@@ -90,7 +142,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
     public async Task UpdateProductAsync(ProductDto product)
     {
-        
         ValidateProduct(product);
 
         var existingProduct = await _unitOfWork.Products.GetByIdAsync(product.Id);
