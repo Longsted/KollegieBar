@@ -42,6 +42,20 @@ public class AppDbContext : DbContext
                 Role = UserRole.Bartender
             }
         );
+        modelBuilder.Entity<LiquidWithAlcohol>().HasData(
+    new LiquidWithAlcohol("Ceres Top", 5.50m, 100, 33, 20.00m, 4.6)
+    {
+        Id = 3 
+    },
+    new LiquidWithAlcohol("Albani øl", 6.00m, 150, 33, 22.00m, 4.6)
+    {
+        Id = 4
+    },
+    new LiquidWithAlcohol("Shaker Sport", 12.00m, 80, 33, 35.00m, 4.5)
+    {
+        Id = 5
+    }
+);
 
         base.OnModelCreating(modelBuilder);
     }

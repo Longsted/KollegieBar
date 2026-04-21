@@ -17,6 +17,7 @@ public partial class MainPage : ContentPage
 
         _userBusinessLogicLayer = userBusinessLogicLayer;
         _serviceProvider = serviceProvider;
+        Console.WriteLine("hej fra main");
     }
 
 
