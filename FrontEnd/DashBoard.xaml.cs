@@ -2,30 +2,31 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using BusinessLogic.BusinessLogicLayer;
+
+using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
 
 namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-    public DashBoard(ProductBusinessLogicLayer productBusinessLogicLayer, IServiceProvider provider)
+    public DashBoard(IProductBusinessLogicLayer IproductBusinessLogicLayer, IServiceProvider provider)
     {
         InitializeComponent();
-        BindingContext = new DashboardViewModel(productBusinessLogicLayer);
+        BindingContext = new DashboardViewModel(IproductBusinessLogicLayer);
     }
 }
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-    private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+    private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
 
-    public ObservableCollection<ProductDto> Products { get; set; }
+    public ObservableCollection<ProductDataTransferObject> Products { get; set; }
 
-    public DashboardViewModel(ProductBusinessLogicLayer logic)
+    public DashboardViewModel(IProductBusinessLogicLayer logic)
     {
         _productBusinessLogicLayer = logic;
-        Products = new ObservableCollection<ProductDto>();
+        Products = new ObservableCollection<ProductDataTransferObject>();
 
         LoadProducts();
     }
@@ -40,8 +41,8 @@ public class DashboardViewModel : INotifyPropertyChanged
         }
     }
 
-    private ProductDto _selectedProduct;
-    public ProductDto SelectedProduct
+    private ProductDataTransferObject _selectedProduct;
+    public ProductDataTransferObject SelectedProduct
     {
         get => _selectedProduct;
         set

@@ -1,4 +1,4 @@
-using BusinessLogic.BusinessLogicLayer;
+using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
 
 namespace FrontEnd;
@@ -6,9 +6,9 @@ namespace FrontEnd;
 public partial class CreateProductPage : ContentPage
 {
     private string _selectedTab = "Snack";
-    private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+    private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
     
-    public CreateProductPage(ProductBusinessLogicLayer productBusinessLogicLayer)
+    public CreateProductPage(IProductBusinessLogicLayer productBusinessLogicLayer)
     {
         InitializeComponent();
         

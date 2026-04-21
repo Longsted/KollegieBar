@@ -6,6 +6,7 @@ public interface IUnitOfWork
 {
     IProductRepository Products { get; }
     IUserRepository Users { get; }
+    ISalesRepository Sales { get; }
 
     Task SaveChangesAsync();
 }

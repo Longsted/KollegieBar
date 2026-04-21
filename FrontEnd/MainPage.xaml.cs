@@ -11,7 +11,7 @@ public partial class MainPage : ContentPage
     private readonly IUserBusinessLogicLayer _userBusinessLogicLayer;
     private readonly IServiceProvider _serviceProvider;
 
-    public MainPage(UserBusinessLogicLayer userBusinessLogicLayer, IServiceProvider serviceProvider)
+    public MainPage(IUserBusinessLogicLayer userBusinessLogicLayer, IServiceProvider serviceProvider)
     {
         InitializeComponent();
 

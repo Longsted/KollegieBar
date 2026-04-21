@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataTransferObject.Model
 {
-    public enum Pant
+    public enum PantDataTransferObject
     {
         A, B, C, Kasse
     }

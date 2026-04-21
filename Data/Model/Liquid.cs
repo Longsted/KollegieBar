@@ -3,7 +3,7 @@
 public class Liquid : Product
 {
     public int VolumeCl { get; set; }
-    public double Pant { get; set; }
+    public Pant Pant { get; set; }
     public double AlcoholPercentage { get; set; }
     public bool SugarFree { get; set; }
 

@@ -1,9 +1,9 @@
 ﻿namespace DataTransferObject.Model;
 
-public class LiquidDataTransferObject : ProductDto
+public class LiquidDataTransferObject : ProductDataTransferObject
 {
     public int VolumeCl { get; set; }
-    public Pant Pant { get; set; }
+    public PantDataTransferObject PantDataTransferObject { get; set; }
     public double AlcoholPercentage { get; set; }
     public bool SugarFree { get; set; }
 
@@ -11,17 +11,17 @@ public class LiquidDataTransferObject : ProductDto
     {
     }
 
-    public LiquidDataTransferObject(string name, decimal costPrice, int stockQuantity, int volumeCl, Pant pant, double alcoholPercentage) : base(name, costPrice, stockQuantity)
+    public LiquidDataTransferObject(string name, decimal costPrice, int stockQuantity, int volumeCl, PantDataTransferObject pantDataTransferObject, double alcoholPercentage) : base(name, costPrice, stockQuantity)
     {
         VolumeCl = volumeCl;
-        Pant = pant;
+        PantDataTransferObject = pantDataTransferObject;
         AlcoholPercentage = alcoholPercentage;
     }
 
-    public LiquidDataTransferObject(string name, decimal costPrice, int stockQuantity, int volumeCl, Pant pant, bool sugarFree) : base(name, costPrice, stockQuantity)
+    public LiquidDataTransferObject(string name, decimal costPrice, int stockQuantity, int volumeCl, PantDataTransferObject pantDataTransferObject, bool sugarFree) : base(name, costPrice, stockQuantity)
     {
         VolumeCl = volumeCl;
-        Pant = pant;
+        PantDataTransferObject = pantDataTransferObject;
         SugarFree = sugarFree;
     }
 
