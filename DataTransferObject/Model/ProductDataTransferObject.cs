@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public abstract class ProductDto
+public abstract class ProductDataTransferObject
 {
     public int Id { get; set; }
     public string Name { get; set; } 
@@ -11,14 +11,14 @@ public abstract class ProductDto
     public int MinStockQuantity { get; set; }
 
 
-    protected ProductDto(string name, decimal costPrice, int stockQuantity)
+    protected ProductDataTransferObject(string name, decimal costPrice, int stockQuantity)
     {
         Name = name;
         CostPrice = costPrice;
         StockQuantity = stockQuantity;
     }
 
-    protected ProductDto()
+    protected ProductDataTransferObject()
     {
     }
 }

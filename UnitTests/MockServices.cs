@@ -4,17 +4,17 @@ namespace UnitTests
 {
     public class SalesStatisticsService
     {
-        private readonly List<ProductDto> _salesData;
+        private readonly List<ProductDataTransferObject> _salesData;
 
-        public SalesStatisticsService(List<ProductDto> salesData)
+        public SalesStatisticsService(List<ProductDataTransferObject> salesData)
         {
             _salesData = salesData;
         }
 
-        public List<ProductDto> GetStatistics(UserDataTransferObject userDataTransferObject)
+        public List<ProductDataTransferObject> GetStatistics(UserDataTransferObject userDataTransferObject)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
-                return new List<ProductDto>();
+                return new List<ProductDataTransferObject>();
 
             return _salesData;
         }
@@ -22,19 +22,19 @@ namespace UnitTests
 
     public class LowInventoryService
     {
-        private readonly List<ProductDto> _products;
+        private readonly List<ProductDataTransferObject> _products;
         private readonly int _threshold;
 
-        public LowInventoryService(List<ProductDto> products, int threshold)
+        public LowInventoryService(List<ProductDataTransferObject> products, int threshold)
         {
             _products = products;
             _threshold = threshold;
         }
 
-        public List<ProductDto> GetLowInventory(UserDataTransferObject userDataTransferObject)
+        public List<ProductDataTransferObject> GetLowInventory(UserDataTransferObject userDataTransferObject)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
-                return new List<ProductDto>();
+                return new List<ProductDataTransferObject>();
 
             return _products
                 .Where(p => p.StockQuantity <= _threshold)
@@ -44,15 +44,15 @@ namespace UnitTests
 
     public class ProductEditingService
     {
-        public bool EditProduct(UserDataTransferObject userDataTransferObject, ProductDto productDto, string newName, int newStock,
+        public bool EditProduct(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, string newName, int newStock,
             decimal newPrice)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
-            productDto.Name = newName;
-            productDto.StockQuantity = newStock;
-            productDto.CostPrice = newPrice;
+            productDataTransferObject.Name = newName;
+            productDataTransferObject.StockQuantity = newStock;
+            productDataTransferObject.CostPrice = newPrice;
 
             return true;
         }
@@ -60,21 +60,21 @@ namespace UnitTests
 
     public class ProductDeletionService
     {
-        public bool DeleteProduct(UserDataTransferObject userDataTransferObject, List<ProductDto> products, ProductDto productDtoToDelete)
+        public bool DeleteProduct(UserDataTransferObject userDataTransferObject, List<ProductDataTransferObject> products, ProductDataTransferObject productDataTransferObjectToDelete)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
 
-            return products.Remove(productDtoToDelete);
+            return products.Remove(productDataTransferObjectToDelete);
         }
     }
 
     public class ProductCategoryService
     {
-        public Dictionary<string, List<ProductDto>> GetProductsByCategory(UserDataTransferObject userDataTransferObject, List<ProductDto> products)
+        public Dictionary<string, List<ProductDataTransferObject>> GetProductsByCategory(UserDataTransferObject userDataTransferObject, List<ProductDataTransferObject> products)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
-                return new Dictionary<string, List<ProductDto>>();
+                return new Dictionary<string, List<ProductDataTransferObject>>();
 
             return products
                 .GroupBy(p => p.GetType().Name) // Her får vi "Snack", "LiquidWithAlcohol" osv.
@@ -97,7 +97,7 @@ namespace UnitTests
 
     public class WasteRegistrationService
     {
-        public bool RegisterWaste(UserDataTransferObject userDataTransferObject, ProductDto productDto, int amountLost)
+        public bool RegisterWaste(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int amountLost)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.Bartender)
                 return false;
@@ -105,10 +105,10 @@ namespace UnitTests
             if (amountLost <= 0)
                 return false;
 
-            productDto.StockQuantity -= amountLost;
+            productDataTransferObject.StockQuantity -= amountLost;
 
-            if (productDto.StockQuantity < 0)
-                productDto.StockQuantity = 0;
+            if (productDataTransferObject.StockQuantity < 0)
+                productDataTransferObject.StockQuantity = 0;
 
             return true;
         }
@@ -125,7 +125,7 @@ namespace UnitTests
             MinStockQuantity = initialLimit;
         }
 
-        public bool UpdateMaxStock(UserDataTransferObject userDataTransferObject, ProductDto productDto, int newMaxStock)
+        public bool UpdateMaxStock(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int newMaxStock)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
@@ -133,13 +133,13 @@ namespace UnitTests
             MaxStockQuantity = newMaxStock;
             
             // Adjust product stock if above new max
-            if (productDto.StockQuantity > MaxStockQuantity)
-                productDto.StockQuantity = MaxStockQuantity;
+            if (productDataTransferObject.StockQuantity > MaxStockQuantity)
+                productDataTransferObject.StockQuantity = MaxStockQuantity;
 
             return true;
         }
 
-        public bool UpdateMinStock(UserDataTransferObject userDataTransferObject, ProductDto productDto, int newMinStock)
+        public bool UpdateMinStock(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int newMinStock)
         {
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
                 return false;
@@ -147,8 +147,8 @@ namespace UnitTests
             MinStockQuantity = newMinStock;
 
             // Adjust product stock if below new min
-            if (productDto.StockQuantity < MinStockQuantity)
-                productDto.StockQuantity = MinStockQuantity;
+            if (productDataTransferObject.StockQuantity < MinStockQuantity)
+                productDataTransferObject.StockQuantity = MinStockQuantity;
 
             return true;
         }

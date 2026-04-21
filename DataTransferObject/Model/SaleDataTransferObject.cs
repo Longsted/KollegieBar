@@ -1,8 +1,8 @@
 ﻿namespace DataTransferObject.Model
 {
-    public class Sale
+    public class SaleDataTransferObject
     {
-        public int SaleId { get; set; }
+        public int SaleId { get; private set; }
         public decimal PriceAtSale { get; set; }
         public DateTime SaleDate { get; set; }
         public Guid TransactionId { get; set; }
@@ -10,25 +10,29 @@
         public int? ProductId { get; set; }
         public int? DrinkId { get; set; }
 
-        public ProductDto? Product { get; set; }
+        public ProductDataTransferObject? Product { get; set; }
         public DrinkDataTransferObject? Drink { get; set; }
 
-        public Sale() { }
+        public SaleDataTransferObject() { }
 
-        public Sale(decimal priceAtSale, DateTime saleDate, Guid transactionId, int productId)
+        public SaleDataTransferObject(decimal priceAtSale, DateTime saleDate, Guid transactionId, ProductDataTransferObject product)
         {
             PriceAtSale = priceAtSale;
             SaleDate = saleDate;
             TransactionId = transactionId;
-            ProductId = productId;
+
+            Product = product;
+            ProductId = product.Id;
         }
 
-        public Sale(decimal priceAtSale, DateTime saleDate, Guid transactionId, int drinkId, bool isDrink)
+        public SaleDataTransferObject(decimal priceAtSale, DateTime saleDate, Guid transactionId, DrinkDataTransferObject drink)
         {
             PriceAtSale = priceAtSale;
             SaleDate = saleDate;
             TransactionId = transactionId;
-            DrinkId = drinkId;
+
+            Drink = drink;
+            DrinkId = drink.Id;
         }
     }
 }
