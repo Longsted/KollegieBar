@@ -6,17 +6,17 @@ using DataTransferObject.Model;
 
 public interface IProductBusinessLogicLayer
 {
-    Task<ProductDto?> GetProductAsync(int id);
+    Task<ProductDataTransferObject?> GetProductAsync(int id);
     
-    Task<List<ProductDto>> GetAllProductsAsync();
+    Task<List<ProductDataTransferObject>> GetAllProductsAsync();
     
-    Task CreateProductAsync(ProductDto product);
+    Task CreateProductAsync(ProductDataTransferObject product);
     
-    Task UpdateProductAsync(ProductDto product);
+    Task UpdateProductAsync(ProductDataTransferObject product);
     
     Task DeleteProductAsync(int id);
     
-    Task RegisterSaleAsync(int productId, int quantity);
+    Task RegisterSaleAsync(List<(int productId,int quantity)> items);
     
     Task RegisterIncomingStockAsync(int productId, int quantity);
 

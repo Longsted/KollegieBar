@@ -12,7 +12,7 @@ namespace UnitTests
         {
             var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
 
-            var salesData = new List<ProductDto>
+            var salesData = new List<ProductDataTransferObject>
             {
                 new LiquidDataTransferObject { Name = "Beer", StockQuantity = 10 },
                 new LiquidDataTransferObject { Name = "Cider", StockQuantity = 5 }
@@ -30,7 +30,7 @@ namespace UnitTests
         {
             var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
 
-            var salesData = new List<ProductDto>
+            var salesData = new List<ProductDataTransferObject>
             {
                 new LiquidDataTransferObject { Name = "Beer", StockQuantity = 10 },
                 new LiquidDataTransferObject { Name = "Cider", StockQuantity = 5 }

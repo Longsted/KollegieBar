@@ -6,7 +6,7 @@ namespace BusinessLogic.Mappers
     internal static class ProductMapper
     {
         // Entity -> DataTransferObject
-        public static DTO.ProductDto Map(DataEntity.Product product)
+        public static DTO.ProductDataTransferObject Map(DataEntity.Product product)
         {
             return product switch
             {
@@ -18,7 +18,7 @@ namespace BusinessLogic.Mappers
         }
 
         // DataTransferObject -> entity
-        public static DataEntity.Product Map(DTO.ProductDto productDataTransferObject)
+        public static DataEntity.Product Map(DTO.ProductDataTransferObject productDataTransferObject)
         {
             return productDataTransferObject switch
             {
@@ -31,7 +31,7 @@ namespace BusinessLogic.Mappers
             };
         }
        
-        public static void MapToDto(DataEntity.Product entity, DTO.ProductDto dataTransferObject)
+        public static void MapToDto(DataEntity.Product entity, DTO.ProductDataTransferObject dataTransferObject)
         {
             dataTransferObject.Id = entity.Id;
             dataTransferObject.Name = entity.Name;
@@ -39,7 +39,7 @@ namespace BusinessLogic.Mappers
             dataTransferObject.StockQuantity = entity.StockQuantity;
         }
 
-        public static void MapToEntity(DTO.ProductDto dataTransferObject, DataEntity.Product entity)
+        public static void MapToEntity(DTO.ProductDataTransferObject dataTransferObject, DataEntity.Product entity)
         {
             entity.Id = dataTransferObject.Id;
             entity.Name = dataTransferObject.Name;

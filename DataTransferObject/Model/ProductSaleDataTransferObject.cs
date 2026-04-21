@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataTransferObject.Model
 {
-    public class ProductSale
+    public class ProductSaleDataTransferObject
     {
         public string ProductName { get; set; }
         public int ProductID { get; set; }

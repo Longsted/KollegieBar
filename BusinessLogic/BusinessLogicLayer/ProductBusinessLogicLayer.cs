@@ -1,7 +1,9 @@
 ﻿using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
 using BusinessLogic.Mappers;
+using Data.Model;
 using Data.UnitOfWork;
+using Sale = Data.Model.Sale;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
@@ -13,9 +15,9 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     {
         _unitOfWork = unitOfWork;
     }
-    
 
-    public async Task CreateProductAsync(ProductDto product)
+
+    public async Task CreateProductAsync(ProductDataTransferObject product)
     {
         ValidateProduct(product);
 
@@ -39,7 +41,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     }
 
 
-    public void ValidateProduct(ProductDto product)
+    public void ValidateProduct(ProductDataTransferObject product)
     {
         if (string.IsNullOrWhiteSpace(product.Name))
             throw new ArgumentException("Name is required");
@@ -57,22 +59,88 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         }
     }
 
-    public async Task RegisterSaleAsync(int productId, int quantity)
+    public async Task RegisterSaleAsync(List<(int productId, int quantity)> items)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("Invalid quantity");
+        var transactionId = Guid.NewGuid();
+        var now = DateTime.UtcNow;
+        var allSales = new List <Sale>();
+        foreach (var item in items)
+        {
+            var product = await _unitOfWork.Products.GetByIdAsync(item.productId);
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product not found");
+            }
 
-        var product = await _unitOfWork.Products.GetByIdAsync(productId);
+            switch (product)
+            {
+                case Data.Model.Snack snack:
+                    HandleSnackSale(snack, item.quantity);
+                    break;
+                case Data.Model.Liquid liquid:
+                    HandleAlcoholSale(liquid, item.quantity);
+                    break;
+                default:
 
-        if (product == null)
-            throw new InvalidOperationException("Product not found");
+                    throw new NotSupportedException($"unknown type product {product.GetType().Name}");
 
-        if (product.StockQuantity < quantity)
-            throw new InvalidOperationException("Not enough stock");
+            }
 
-        product.StockQuantity -= quantity;
+
+
+            var sales = CreateSales(product, item.quantity, transactionId, now);
+            allSales.AddRange(sales);
+            
+        }
+        await _unitOfWork.Sales.AddRangeAsync(allSales);
         await _unitOfWork.SaveChangesAsync();
     }
+
+    private void HandleSnackSale(Data.Model.Snack snack, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentException("Invalid quantity");
+        }
+
+        if (snack.StockQuantity < quantity)
+        {
+            throw new InvalidOperationException("Not enough stock");
+        }
+
+        snack.StockQuantity -= quantity;
+    }
+
+    private void HandleAlcoholSale(Data.Model.Liquid alcohol, int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentException("Invalid quantity");
+        }
+
+        var removeClFromBottle = quantity * 20;
+        if (alcohol.VolumeCl < removeClFromBottle && alcohol.StockQuantity == 0)
+        {
+            throw new InvalidOperationException("Not enough stock");
+        }
+
+        alcohol.VolumeCl -= removeClFromBottle;
+    }
+
+    private List<Sale> CreateSales(Data.Model.Product product, int quantity, Guid transactionId,
+        DateTime now)
+    {
+        var sales = new List<Sale>();
+
+        for (int i = 0; i < quantity; i++)
+        {
+            var sale = new Sale(product.CostPrice, now, transactionId, product);
+            sales.Add(sale);
+        }
+
+        return sales;
+    }
+
 
     public async Task RegisterIncomingStockAsync(int productId, int newQuantity)
     {
@@ -88,9 +156,8 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task UpdateProductAsync(ProductDto product)
+    public async Task UpdateProductAsync(ProductDataTransferObject product)
     {
-        
         ValidateProduct(product);
 
         var existingProduct = await _unitOfWork.Products.GetByIdAsync(product.Id);
@@ -104,7 +171,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task<ProductDto?> GetProductAsync(int id)
+    public async Task<ProductDataTransferObject?> GetProductAsync(int id)
     {
         var product = await _unitOfWork.Products.GetByIdAsync(id);
         if (product == null)
@@ -115,7 +182,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         return ProductMapper.Map(product);
     }
 
-    public async Task<List<ProductDto>> GetAllProductsAsync()
+    public async Task<List<ProductDataTransferObject>> GetAllProductsAsync()
     {
         var products = await _unitOfWork.Products.GetAllAsync();
         return products.Select(ProductMapper.Map).ToList();
