@@ -22,12 +22,12 @@ public class DashboardViewModel : INotifyPropertyChanged
 {
     private readonly IProductBusinessLogicLayer _iProductBusinessLogicLayer;
 
-    public ObservableCollection<ProductDto> Products { get; set; }
+    public ObservableCollection<ProductDataTransferObject> Products { get; set; }
 
     public DashboardViewModel(IProductBusinessLogicLayer logic)
     {
         _iProductBusinessLogicLayer = logic;
-        Products = new ObservableCollection<ProductDto>();
+        Products = new ObservableCollection<ProductDataTransferObject>();
 
         LoadProducts();
     }
@@ -42,8 +42,8 @@ public class DashboardViewModel : INotifyPropertyChanged
         }
     }
 
-    private ProductDto _selectedProduct;
-    public ProductDto SelectedProduct
+    private ProductDataTransferObject _selectedProduct;
+    public ProductDataTransferObject SelectedProduct
     {
         get => _selectedProduct;
         set
