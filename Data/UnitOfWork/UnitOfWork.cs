@@ -18,7 +18,7 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext;
         Products = new ProductRepository(_dbContext);
         Users = new UserRepository(_dbContext);
-        Sales = new SaleRepository(dbContext);
+        Sales = new SaleRepository(_dbContext);
     }
 
     public async Task SaveChangesAsync()
