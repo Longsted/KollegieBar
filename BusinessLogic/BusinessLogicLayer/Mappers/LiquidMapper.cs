@@ -5,22 +5,38 @@ namespace BusinessLogic.Mappers
 {
     internal static class LiquidMapper
     {
-        public static void MapToDto(DataEntity.Liquid entity, DTO.LiquidDataTransferObject dataTransferObject)
+        public static DTO.LiquidDataTransferObject Map(DataEntity.Liquid entity)
         {
-            // Base (Product)
-            ProductMapper.MapToDto(entity, dataTransferObject);
-
-            // Liquid-specifics
-            dataTransferObject.VolumeCl = entity.VolumeCl;
+            var dto = new DTO.LiquidDataTransferObject();
+            MapToDto(entity, dto);
+            return dto;
         }
 
-        public static void MapToEntity(DTO.LiquidDataTransferObject dataTransferObject, DataEntity.Liquid entity)
+        private static void MapToDto(DataEntity.Liquid entity, DTO.LiquidDataTransferObject dto)
         {
-            // Base (Product)
-            ProductMapper.MapToEntity(dataTransferObject, entity);
+            ProductMapper.MapToDto(entity, dto);
 
-            // Liquid-specifics
-            entity.VolumeCl = dataTransferObject.VolumeCl;
+            dto.VolumeCl = entity.VolumeCl;
+
+            dto.AlcoholPercentage = entity.AlcoholPercentage;
+            dto.SugarFree = entity.SugarFree;
+        }
+
+        public static DataEntity.Liquid Map(DTO.LiquidDataTransferObject dto)
+        {
+            var entity = new DataEntity.Liquid();
+            MapToEntity(dto, entity);
+            return entity;
+        }
+        
+        private static void MapToEntity(DTO.LiquidDataTransferObject dto, DataEntity.Liquid entity)
+        {
+            ProductMapper.MapToEntity(dto, entity);
+
+            entity.VolumeCl = dto.VolumeCl;
+            
+            entity.AlcoholPercentage = dto.AlcoholPercentage; 
+            entity.SugarFree = dto.SugarFree;
         }
     }
 }

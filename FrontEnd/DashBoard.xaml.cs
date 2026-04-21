@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-
+using BusinessLogic.BusinessLogicLayer;
 using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
 
@@ -10,22 +10,23 @@ namespace FrontEnd;
 
 public partial class DashBoard : ContentPage
 {
-    public DashBoard(IProductBusinessLogicLayer IproductBusinessLogicLayer, IServiceProvider provider)
+    public DashBoard(IProductBusinessLogicLayer iProductBusinessLogicLayer)
     {
         InitializeComponent();
-        BindingContext = new DashboardViewModel(IproductBusinessLogicLayer);
+        // Pass the interface to the ViewModel
+        BindingContext = new DashboardViewModel(iProductBusinessLogicLayer);
     }
 }
 
 public class DashboardViewModel : INotifyPropertyChanged
 {
-    private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
+    private readonly IProductBusinessLogicLayer _iProductBusinessLogicLayer;
 
     public ObservableCollection<ProductDataTransferObject> Products { get; set; }
 
     public DashboardViewModel(IProductBusinessLogicLayer logic)
     {
-        _productBusinessLogicLayer = logic;
+        _iProductBusinessLogicLayer = logic;
         Products = new ObservableCollection<ProductDataTransferObject>();
 
         LoadProducts();
@@ -33,7 +34,7 @@ public class DashboardViewModel : INotifyPropertyChanged
 
     private async void LoadProducts()
     {
-        var products = await _productBusinessLogicLayer.GetAllProductsAsync();
+        var products = await _iProductBusinessLogicLayer.GetAllProductsAsync();
 
         foreach (var product in products)
         {
@@ -78,8 +79,7 @@ public class DashboardViewModel : INotifyPropertyChanged
             return;
         }
 
-        await _productBusinessLogicLayer.RegisterIncomingStockAsync(
-            SelectedProduct.Id, Quantity.Value);
+        await _iProductBusinessLogicLayer.RegisterIncomingStockAsync(SelectedProduct.Id, Quantity.Value);
 
         await Shell.Current.DisplayAlert("Success", $"{Quantity} items added to {SelectedProduct.Name}", "OK");
 
