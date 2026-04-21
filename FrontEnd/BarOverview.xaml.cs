@@ -2,13 +2,15 @@ using BusinessLogic.BusinessLogicLayer;
 using Data.Model;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Linq;
 
 namespace FrontEnd;
 
 public partial class BarOverview : ContentPage
 {
 
-	private readonly ProductBusinessLogicLayer _productBusinessLogicLayer;
+	private readonly ProductBusinessLogicLayer _IproductBusinessLogicLayer;
 
     public ObservableCollection<ProductDto> CurrentOrder { get; set; } = new();
     public BarOverview(ProductBusinessLogicLayer productBusinessLogicLayer)
@@ -16,7 +18,7 @@ public partial class BarOverview : ContentPage
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
 
-        _productBusinessLogicLayer = productBusinessLogicLayer;
+        _IproductBusinessLogicLayer = productBusinessLogicLayer;
         LoadProducts();
 
     }
@@ -26,7 +28,7 @@ public partial class BarOverview : ContentPage
         try
         {
             
-            var products = await _productBusinessLogicLayer.GetAllProductsAsync();
+            var products = await _IproductBusinessLogicLayer.GetAllProductsAsync();
 
             ProductCollectionView.ItemsSource = products;
         }
@@ -38,7 +40,7 @@ public partial class BarOverview : ContentPage
     }
 
 
-    private void OnProductClicked(object sender, EventArgs e)
+    private async void OnProductClicked(object sender, EventArgs e)
     {
         var button = sender as Button;
         var product = button?.BindingContext as ProductDto;
@@ -55,12 +57,40 @@ public partial class BarOverview : ContentPage
             Console.WriteLine($"Tilføjet: {product.Name}. Antal varer på bon: {CurrentOrder.Count}");
         }
     }
-    private void UpdateTotalSum()
+    private async void UpdateTotalSum()
     {
-        // Vi bruger LINQ til at lægge alle SalesPrice sammen
         decimal total = CurrentOrder.Sum(p => p.CostPrice);
 
-        // Opdaterer teksten i vores Label
         TotalSumLabel.Text = $"{total:N2} kr.";
+    }
+
+
+    private async void OnCheckoutClicked(object sender, EventArgs e)
+    {
+
+        if (CurrentOrder.Count == 0)
+        {
+            DisplayAlertAsync("Tom vogn", "Add something to the order before you checkout", "cancel");
+
+        }
+        else if (CurrentOrder.Count != 0)
+        {
+
+            var opsummering = CurrentOrder.GroupBy(p => p.Id).Select(g => new {
+                Navn = g.First().Name,
+                Antal = g.Count(),
+                Total = g.Sum(x => x.CostPrice)
+            }) .ToList();
+
+            string tekst = ""; 
+            for (int i = 0; opsummering.Count > i; i++)
+            {
+                tekst += opsummering[i].Navn + " x " + opsummering[i].Antal +"\n";
+            }
+
+
+            await DisplayAlertAsync("Ordre", tekst, "Cancel","OK");
+        }
+
     }
 }

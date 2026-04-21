@@ -157,4 +157,26 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         product.MinStockQuantity = newMinStock;
         await _unitOfWork.SaveChangesAsync();
     }
+
+
+
+
+    // Low
+    // 2 - kasser albani
+    // 2 - kasser tuborg
+    // 6 - shakers
+    // 2 - falsker vodka
+    // Sirup 1 af hver check for volumen
+    // min 1/2 kasse af hver sodavand (pepsi max,faxe,pepsi,faxe free,miranda lemon,normal miranda,grøn sodavand,rød sodavand)
+    // min 4 falsker tonic vand
+    // min 3 kartoner tranebær/apelsin/kakaomælk juice 
+    // min 2 sødmælk
+    // min 1 spraydåse flødeskum
+    // min 1/2 kasse energidrik
+    // min 3 poser snakcs (chips,popcorn, peanuts)
+    //
+    public async Task CheckForLowInventory(int productId)
+    {
+
+    }
 }

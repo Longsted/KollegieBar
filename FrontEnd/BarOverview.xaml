@@ -58,7 +58,7 @@
                             <Grid ColumnDefinitions="*, Auto" Padding="0,5">
                                 <Label Text="{Binding Name}" TextColor="White" FontSize="16" VerticalOptions="Center" />
                                 <Label Grid.Column="1" 
-                                       Text="{Binding SalesPrice, StringFormat='{0} kr.'}" 
+                                       Text="{Binding CostPrice, StringFormat='{0} kr.'}" 
                                        TextColor="#FF79C6" 
                                        FontAttributes="Bold" 
                                        VerticalOptions="Center" />
@@ -84,8 +84,10 @@
                      VerticalOptions="Center" />
                 </Grid>
 
-                <Button Grid.Row="4" 
-                        Text="AFSLUT SALG" 
+                <Button Grid.Row="4"
+                        x:Name="BtnPay"
+                        Text="Checkout" 
+                        Clicked="OnCheckoutClicked"
                         BackgroundColor="#B84A84" 
                         TextColor="White" 
                         FontAttributes="Bold" 
