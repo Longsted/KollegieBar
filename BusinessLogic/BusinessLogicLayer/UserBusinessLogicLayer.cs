@@ -15,7 +15,7 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
         _unitOfWork = repository;
     }
 
-    public async Task<UserDto?> GetUserByIdAsync(int userId)
+    public async Task<UserDataTransferObject?> GetUserByIdAsync(int userId)
     {
         if (userId <= 0)
         {
@@ -32,7 +32,7 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
         return UserMapper.Map(user);
     }
 
-    public async Task<List<UserDto>> GetUsersAsync()
+    public async Task<List<UserDataTransferObject>> GetUsersAsync()
     {
         var users = await _unitOfWork.Users.GetAllAsync();
         return users.Select(UserMapper.Map).ToList();
@@ -99,10 +99,10 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
             return 0;
         }
 
-        return foundUser.Role switch
+        return foundUser.RoleDataTransferObject switch
         {
-            UserRole.BoardMember => 1,
-            UserRole.Bartender => 2,
+            UserRoleDataTransferObject.BoardMember => 1,
+            UserRoleDataTransferObject.Bartender => 2,
             _ => 0
         };
     }

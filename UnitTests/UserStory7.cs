@@ -4,19 +4,18 @@ using Xunit;
 
 namespace UnitTests
 {
-    
     public class UserStory7
     {
         // Tests that a board member can delete a product and it is removed from the database.
         [Fact]
         public void BoardMember_ShouldBeAbleTo_DeleteProduct()
         {
-            var user = new UserDto { Role = UserRole.BoardMember };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
 
-            var products = new List<ProductDto>
+            var products = new List<ProductDataTransferObject>
             {
-                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10, CostPrice = 20m },
-                new Snack { Name = "Chips", StockQuantity = 5, CostPrice = 15m }
+                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 10, CostPrice = 20m },
+                new SnackDataTransferObject { Name = "Chips", StockQuantity = 5, CostPrice = 15m }
             };
 
             var productToDelete = products[0];
@@ -33,11 +32,11 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldNotBeAbleTo_DeleteProduct()
         {
-            var user = new UserDto { Role = UserRole.Bartender };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
 
-            var products = new List<ProductDto>
+            var products = new List<ProductDataTransferObject>
             {
-                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 10, CostPrice = 20m }
+                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 10, CostPrice = 20m }
             };
 
             var productToDelete = products[0];

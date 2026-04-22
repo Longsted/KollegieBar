@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420092208_RestructuredAllModels")]
+    partial class RestructuredAllModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.6")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -120,13 +123,10 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SaleId"));
 
-                    b.Property<int?>("DrinkId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("PriceAtSale")
                         .HasColumnType("numeric");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("SaleDate")
@@ -136,8 +136,6 @@ namespace Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("SaleId");
-
-                    b.HasIndex("DrinkId");
 
                     b.HasIndex("ProductId");
 
@@ -201,8 +199,8 @@ namespace Data.Migrations
                     b.Property<double>("AlcoholPercentage")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("Pant")
-                        .HasColumnType("integer");
+                    b.Property<double>("Pant")
+                        .HasColumnType("double precision");
 
                     b.Property<bool>("SugarFree")
                         .HasColumnType("boolean");
@@ -218,57 +216,6 @@ namespace Data.Migrations
                     b.HasBaseType("Data.Model.Product");
 
                     b.HasDiscriminator().HasValue("Snack");
-                });
-
-            modelBuilder.Entity("Data.Model.LiquidWithAlcohol", b =>
-                {
-                    b.HasBaseType("Data.Model.LiquidProduct");
-
-                    b.Property<double>("AlcoholPercentage")
-                        .HasColumnType("double precision");
-
-                    b.HasDiscriminator().HasValue("LiquidWithAlcohol");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            CostPrice = 5.50m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Ceres Top",
-                            StockQuantity = 100,
-                            Pant = 0m,
-                            SalesPrice = 20.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5999999999999996
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CostPrice = 6.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Albani øl",
-                            StockQuantity = 150,
-                            Pant = 0m,
-                            SalesPrice = 22.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5999999999999996
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CostPrice = 12.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Shaker Sport",
-                            StockQuantity = 80,
-                            Pant = 0m,
-                            SalesPrice = 35.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5
-                        });
                 });
 
             modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
@@ -292,15 +239,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
-                    b.HasOne("Data.Model.Drink", "Drink")
-                        .WithMany()
-                        .HasForeignKey("DrinkId");
-
                     b.HasOne("Data.Model.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Drink");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });

@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260421074610_updatedDTO")]
+    partial class updatedDTO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.6")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -218,57 +221,6 @@ namespace Data.Migrations
                     b.HasBaseType("Data.Model.Product");
 
                     b.HasDiscriminator().HasValue("Snack");
-                });
-
-            modelBuilder.Entity("Data.Model.LiquidWithAlcohol", b =>
-                {
-                    b.HasBaseType("Data.Model.LiquidProduct");
-
-                    b.Property<double>("AlcoholPercentage")
-                        .HasColumnType("double precision");
-
-                    b.HasDiscriminator().HasValue("LiquidWithAlcohol");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            CostPrice = 5.50m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Ceres Top",
-                            StockQuantity = 100,
-                            Pant = 0m,
-                            SalesPrice = 20.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5999999999999996
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CostPrice = 6.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Albani øl",
-                            StockQuantity = 150,
-                            Pant = 0m,
-                            SalesPrice = 22.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5999999999999996
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CostPrice = 12.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Shaker Sport",
-                            StockQuantity = 80,
-                            Pant = 0m,
-                            SalesPrice = 35.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5
-                        });
                 });
 
             modelBuilder.Entity("Data.Model.DrinkIngredient", b =>

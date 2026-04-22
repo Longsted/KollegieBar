@@ -11,14 +11,14 @@ namespace UnitTests
         [Fact]
         public void BoardMember_ShouldReceive_ListOfLowInventoryItems()
         {
-            var user = new UserDto { Role = UserRole.BoardMember };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
 
-            var products = new List<ProductDto>
+            var products = new List<ProductDataTransferObject>
             {
-                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 2, CostPrice = 10 },
-                new LiquidWithAlcohol { Name = "Cider", StockQuantity = 10, CostPrice = 12 },
-                new LiquidWithoutAlcohol { Name = "Soda", StockQuantity = 1, CostPrice = 8 },
-                new Snack { Name = "Chips", StockQuantity = 20, CostPrice = 50 }
+                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 2, CostPrice = 10 },
+                new LiquidDataTransferObject { Name = "Cider", StockQuantity = 10, CostPrice = 12 },
+                new LiquidDataTransferObject { Name = "Soda", StockQuantity = 1, CostPrice = 8 },
+                new SnackDataTransferObject { Name = "Chips", StockQuantity = 20, CostPrice = 50 }
             };
 
             const int threshold = 5;
@@ -40,11 +40,11 @@ namespace UnitTests
         [Fact]
         public void NonBoardMember_ShouldReceive_EmptyList()
         {
-            var user = new UserDto { Role = UserRole.Bartender };
+            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
 
-            var products = new List<ProductDto>
+            var products = new List<ProductDataTransferObject>
                 {
-                new LiquidWithAlcohol { Name = "Beer", StockQuantity = 1, CostPrice = 10 }
+                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 1, CostPrice = 10 }
                 };
 
             var service = new LowInventoryService(products, 5);
@@ -53,6 +53,5 @@ namespace UnitTests
 
             Assert.Empty(result); 
         }
-
     }
 }

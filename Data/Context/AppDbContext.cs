@@ -20,9 +20,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Registrer dine konkrete typer
-        modelBuilder.Entity<Data.Model.LiquidWithAlcohol>();
-        modelBuilder.Entity<Data.Model.LiquidWithoutAlcohol>();
+        modelBuilder.Entity<Data.Model.Liquid>();
         modelBuilder.Entity<Data.Model.Snack>();
         modelBuilder.Entity<Data.Model.Consumables>();
 

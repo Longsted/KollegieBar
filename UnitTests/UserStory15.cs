@@ -5,24 +5,21 @@ using Data.UnitOfWork;
 using Moq;
 using Xunit;
 using EntityUserRole = Data.Model.UserRole;
-using DtoUserRole = DataTransferObject.Model.UserRole;
 
 namespace UnitTests
 {
     public class UserStory15
     {
-        private readonly Mock<IUnitOfWork> _mockUow;
-        private readonly Mock<IUserRepository> _mockUserRepo;
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+        private readonly Mock<IUserRepository> _mockUserRepository;
         private readonly UserBusinessLogicLayer _service;
 
         public UserStory15()
         {
-            _mockUow = new Mock<IUnitOfWork>();
-            _mockUserRepo = new Mock<IUserRepository>();
-
-            _mockUow.Setup(u => u.Users).Returns(_mockUserRepo.Object);
-
-            _service = new UserBusinessLogicLayer(_mockUow.Object);
+            _mockUnitOfWork = new Mock<IUnitOfWork>();
+            _mockUserRepository = new Mock<IUserRepository>();
+            _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Users).Returns(_mockUserRepository.Object);
+            _service = new UserBusinessLogicLayer(_mockUnitOfWork.Object);
         }
 
         [Fact]
@@ -38,7 +35,7 @@ namespace UnitTests
                 }
             };
 
-            _mockUserRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+            _mockUserRepository.Setup(repository => repository.GetAllAsync()).ReturnsAsync(users);
 
             var result = await _service.CheckUserAsync("1234", "board1");
 
@@ -48,7 +45,7 @@ namespace UnitTests
         [Fact]
         public async Task InvalidUser_ShouldNotLogin()
         {
-            _mockUserRepo.Setup(r => r.GetAllAsync())
+            _mockUserRepository.Setup(repository => repository.GetAllAsync())
                 .ReturnsAsync(new List<User>());
 
             var result = await _service.CheckUserAsync("wrong", "user");
