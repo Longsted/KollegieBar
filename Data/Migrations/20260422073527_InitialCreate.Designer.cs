@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260420083541_KevinDevPantToEnum")]
-    partial class KevinDevPantToEnum
+    [Migration("20260422073527_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -43,9 +43,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("SalesPrice")
-                        .HasColumnType("double precision");
-
                     b.HasKey("Id");
 
                     b.ToTable("Drinks");
@@ -62,6 +59,9 @@ namespace Data.Migrations
                     b.Property<int>("DrinkId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("LiquidId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("LiquidProductId")
                         .HasColumnType("integer");
 
@@ -72,7 +72,7 @@ namespace Data.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.HasIndex("LiquidProductId");
+                    b.HasIndex("LiquidId");
 
                     b.ToTable("DrinkIngredients");
                 });
@@ -90,8 +90,8 @@ namespace Data.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("character varying(21)");
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
 
                     b.Property<int>("MaxStockQuantity")
                         .HasColumnType("integer");
@@ -123,10 +123,13 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SaleId"));
 
+                    b.Property<int?>("DrinkId")
+                        .HasColumnType("integer");
+
                     b.Property<decimal>("PriceAtSale")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("SaleDate")
@@ -136,6 +139,8 @@ namespace Data.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("SaleId");
+
+                    b.HasIndex("DrinkId");
 
                     b.HasIndex("ProductId");
 
@@ -192,56 +197,71 @@ namespace Data.Migrations
                     b.HasDiscriminator().HasValue("Consumables");
                 });
 
-            modelBuilder.Entity("Data.Model.LiquidProduct", b =>
+            modelBuilder.Entity("Data.Model.Liquid", b =>
                 {
                     b.HasBaseType("Data.Model.Product");
+
+                    b.Property<double>("AlcoholPercentage")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Pant")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("SalesPrice")
-                        .HasColumnType("numeric");
+                    b.Property<bool>("SugarFree")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("VolumeCl")
                         .HasColumnType("integer");
 
-                    b.HasDiscriminator().HasValue("LiquidProduct");
+                    b.HasDiscriminator().HasValue("Liquid");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            CostPrice = 5.50m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Ceres Top",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 4.5999999999999996,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CostPrice = 6.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Albani øl",
+                            StockQuantity = 150,
+                            AlcoholPercentage = 4.5999999999999996,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CostPrice = 12.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Shaker Sport",
+                            StockQuantity = 80,
+                            AlcoholPercentage = 4.5,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        });
                 });
 
             modelBuilder.Entity("Data.Model.Snack", b =>
                 {
                     b.HasBaseType("Data.Model.Product");
 
-                    b.Property<decimal>("SalesPrice")
-                        .HasColumnType("numeric");
-
-                    b.ToTable("Products", t =>
-                        {
-                            t.Property("SalesPrice")
-                                .HasColumnName("Snack_SalesPrice");
-                        });
-
                     b.HasDiscriminator().HasValue("Snack");
-                });
-
-            modelBuilder.Entity("Data.Model.LiquidWithAlcohol", b =>
-                {
-                    b.HasBaseType("Data.Model.LiquidProduct");
-
-                    b.Property<double>("AlcoholPercentage")
-                        .HasColumnType("double precision");
-
-                    b.HasDiscriminator().HasValue("LiquidWithAlcohol");
-                });
-
-            modelBuilder.Entity("Data.Model.LiquidWithoutAlcohol", b =>
-                {
-                    b.HasBaseType("Data.Model.LiquidProduct");
-
-                    b.Property<bool>("SugarFree")
-                        .HasColumnType("boolean");
-
-                    b.HasDiscriminator().HasValue("LiquidWithoutAlcohol");
                 });
 
             modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
@@ -252,24 +272,28 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Model.LiquidProduct", "LiquidProduct")
+                    b.HasOne("Data.Model.Liquid", "Liquid")
                         .WithMany()
-                        .HasForeignKey("LiquidProductId")
+                        .HasForeignKey("LiquidId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Drink");
 
-                    b.Navigation("LiquidProduct");
+                    b.Navigation("Liquid");
                 });
 
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
+                    b.HasOne("Data.Model.Drink", "Drink")
+                        .WithMany()
+                        .HasForeignKey("DrinkId");
+
                     b.HasOne("Data.Model.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Drink");
 
                     b.Navigation("Product");
                 });
