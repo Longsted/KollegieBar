@@ -12,44 +12,41 @@ namespace UnitTests
 {
     public class UserStory1
     {
-        private readonly ITestOutputHelper _testOutputHelper;
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IProductRepository> _mockProductRepository;
+        private readonly Mock<ISalesRepository> _mockSalesRepository; 
         private readonly IProductBusinessLogicLayer _service;
-        private readonly Mock<ISalesRepository> _mockSalesRepository;
 
         public UserStory1(ITestOutputHelper testOutputHelper)
         {
-            _testOutputHelper = testOutputHelper;
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockProductRepository = new Mock<IProductRepository>();
-            _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Products).Returns(_mockProductRepository.Object);
-            _service = new ProductBusinessLogicLayer(_mockUnitOfWork.Object);
             _mockSalesRepository = new Mock<ISalesRepository>();
+            
+            _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Products).Returns(_mockProductRepository.Object);
+            _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Sales).Returns(_mockSalesRepository.Object);
+
+            _service = new ProductBusinessLogicLayer(_mockUnitOfWork.Object);
         }
 
         [Fact]
         public async Task RegisterSale_ReducesStock()
         {
-            var product1 = new Liquid { Id = 1, Name = "Beer", StockQuantity = 10 };
-            var product2 = new Snack { Id = 2, Name = "Soda", StockQuantity = 5 };
+            var product1 = new Liquid { Id = 1, Name = "Beer", StockQuantity = 10};
+            var product2 = new Liquid { Id = 2, Name = "Vodka", StockQuantity = 10, VolumeCl = 50 };
+            var product3 = new Snack { Id = 3, Name = "Chips", StockQuantity = 5 };
 
             // Set up the mock repository to return specific products based on ID
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(1)).ReturnsAsync(product1);
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(2)).ReturnsAsync(product2);
+            _mockProductRepository.Setup(repository => repository.GetByIdAsync(3)).ReturnsAsync(product3);
             
-            _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Products).Returns(_mockProductRepository.Object);
-            _mockUnitOfWork.Setup(unitOfWork => unitOfWork.Sales).Returns(_mockSalesRepository.Object);
-
-            var items = new List<(int productId, int quantity)>
-            {
-                (1, 2), // Sale: 2 Beers
-                (2, 1)  // Sale: 1 Soda
-            };
+            var productIds = new List<int> { 1, 1, 2, 3 };
             
-            await _service.RegisterSaleAsync(items);
+            await _service.RegisterSaleAsync(productIds);
             
-            Assert.Equal(8, product1.StockQuantity); // 10 - 2
+            Assert.Equal(8, product2.StockQuantity); // 10 - 2
+            Assert.Equal(46, product1.VolumeCl); // 50 - 4
             Assert.Equal(4, product2.StockQuantity); // 5 - 1
             
             _mockUnitOfWork.Verify(unitOfWork => unitOfWork.SaveChangesAsync(), Times.Once);
@@ -59,19 +56,15 @@ namespace UnitTests
         public async Task RegisterSale_ThrowsException_WhenStockIsTooLow()
         {
             var product1 = new Liquid { Id = 1, Name = "Beer", StockQuantity = 1 };
-            var product2 = new Snack { Id = 2, Name = "Cider", StockQuantity = 5 };
+            var product2 = new Snack { Id = 2, Name = "Chips", StockQuantity = 5 };
 
             // Set up the mock repository to return specific products based on ID
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(1)).ReturnsAsync(product1);
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(2)).ReturnsAsync(product2);
 
-            var items = new List<(int productId, int quantity)>
-            {
-                (1, 2), // Sale: 2 Beers
-                (2, 1)  // Sale: 1 Soda
-            };
+            var productIds = new List<int> { 1, 1, 2 };
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _service.RegisterSaleAsync(items));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _service.RegisterSaleAsync(productIds));
 
             _mockUnitOfWork.Verify(unitOfWork => unitOfWork.SaveChangesAsync(), Times.Never);
         }
@@ -86,13 +79,9 @@ namespace UnitTests
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(1)).ReturnsAsync(product1);
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(2)).ReturnsAsync(product2);
 
-            var items = new List<(int productId, int quantity)>
-            {
-                (1, 2), // Sale: 2 Beers
-                (2, 1)  // Sale: 1 Soda
-            };
+            var productIds = new List<int> { 1, 1, 2 };
             
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _service.RegisterSaleAsync(items));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _service.RegisterSaleAsync(productIds));
 
             _mockProductRepository.Verify(repository => repository.GetByIdAsync(It.IsAny<int>()), Times.Once);
         }
@@ -102,11 +91,9 @@ namespace UnitTests
         {
             _mockProductRepository.Setup(repository => repository.GetByIdAsync(999)).ReturnsAsync((Product)null);
             
-            var items = new List<(int productId, int quantity)> 
-            { 
-                (999, 1) 
-            };
-
+            var productIds = new List<int> { 999 };
+            
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _service.RegisterSaleAsync(productIds));
             // Verify that SaveChangesAsync was NEVER called because the operation failed
             _mockUnitOfWork.Verify(unitOfWork => unitOfWork.SaveChangesAsync(), Times.Never);
         }
