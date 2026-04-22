@@ -4,24 +4,48 @@
              x:Class="FrontEnd.BarOverview"
              Title="BarOverview"
              BackgroundColor="#111114">
-    <Grid ColumnDefinitions="*, 350" Padding="20" ColumnSpacing="5">
+    <Grid ColumnDefinitions="Auto,*, 350" Padding="20" ColumnSpacing="5">
+        <VerticalStackLayout Grid.Column="0" Spacing="15" VerticalOptions="Start">
+            <Button Text="Øl" 
+                HeightRequest="80" 
+                BackgroundColor="#18181C" 
+                BorderColor="#B84A84" 
+                BorderWidth="1"
+                TextColor="White"/>
 
-        <Border Grid.Column="0" 
+            <Button Text="Sodavand" 
+                HeightRequest="80" 
+                BackgroundColor="#18181C" 
+                BorderColor="#B84A84" 
+                BorderWidth="1"
+                TextColor="White"/>
+
+            <Button Text="Shots" 
+                HeightRequest="80" 
+                BackgroundColor="#18181C" 
+                BorderColor="#B84A84" 
+                BorderWidth="1"
+                TextColor="White"/>
+        </VerticalStackLayout>
+
+        <Border Grid.Column="1" 
                 Stroke="#B84A84" 
                 StrokeThickness="1" 
                 BackgroundColor="#18181C" 
                 StrokeShape="RoundRectangle 16" 
                 Padding="20">
 
-            <CollectionView x:Name="ProductCollectionView">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="5" 
-                                     HorizontalItemSpacing="15" VerticalItemSpacing="15" />
-                </CollectionView.ItemsLayout>
+            <Grid RowDefinitions="*, Auto, Auto">
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Button Text="{Binding Name}"
+                <CollectionView x:Name="ProductCollectionView" Grid.Row="0">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="5" 
+                                     HorizontalItemSpacing="15" VerticalItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Button Text="{Binding Name}"
                                 FontSize="18"
                                 FontAttributes="Bold"
                                 HeightRequest="120"
@@ -31,12 +55,51 @@
                                 CornerRadius="12"
                                 BorderWidth="1"
                                 Clicked="OnProductClicked" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <BoxView Grid.Row="1" HeightRequest="1" Color="#B84A84" Margin="0,15" />
+
+                <HorizontalStackLayout Grid.Row="2" 
+                               Spacing="10" 
+                               HorizontalOptions="EndAndExpand" 
+                               Margin="0,20,0,0">
+                    
+
+                    <Button Text="Ryd valg" 
+                    BackgroundColor="#444" 
+                    TextColor="White" 
+                    WidthRequest="150"
+                    HeightRequest="50"
+                    CornerRadius="10"
+                    HorizontalOptions="Start"
+                    Clicked="ClearCart"
+                   />
+
+                    <Button Text="Modify" 
+                    BackgroundColor="#B84A84" 
+                    TextColor="White" 
+                    FontAttributes="Bold" 
+                    HeightRequest="60"
+                    WidthRequest="150"
+                    CornerRadius="12" 
+                            />
+
+                    <Button Text="Waste" 
+                    BackgroundColor="#B84A84" 
+                    TextColor="White" 
+                    FontAttributes="Bold" 
+                    HeightRequest="60"
+                    WidthRequest="150"
+                    CornerRadius="12"
+                    Clicked="Waste"
+                            />
+
+                </HorizontalStackLayout>
+            </Grid>
         </Border>
 
-        <Border Grid.Column="1" 
+        <Border Grid.Column="2" 
                 Stroke="#B84A84" 
                 StrokeThickness="1" 
                 BackgroundColor="#18181C" 
@@ -52,7 +115,10 @@
                        HorizontalOptions="Center" 
                        Margin="0,0,0,20" />
 
-                <CollectionView x:Name="ReceiptCollectionView" Grid.Row="1">
+                <CollectionView x:Name="ReceiptCollectionView" 
+                                Grid.Row="1"
+                                SelectionMode="Single" 
+                                SelectionChanged="OnReceiptSelectionChanged">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="*, Auto" Padding="0,5">
