@@ -58,9 +58,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         }
     }
 
-   
-
-
     public async Task RegisterIncomingStockAsync(int productId, int newQuantity)
     {
         if (newQuantity < 0)
@@ -179,6 +176,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
 
 
+
     // Low
     // 2 - kasser albani
     // 2 - kasser tuborg
@@ -197,5 +195,4 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     {
 
     }
-
 }

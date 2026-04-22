@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260420094649_RestructuredAllModelsv2")]
-    partial class RestructuredAllModelsv2
+    [Migration("20260422073527_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.5")
+                .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -204,8 +204,8 @@ namespace Data.Migrations
                     b.Property<double>("AlcoholPercentage")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("Pant")
-                        .HasColumnType("double precision");
+                    b.Property<int>("Pant")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("SugarFree")
                         .HasColumnType("boolean");
@@ -214,6 +214,47 @@ namespace Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Liquid");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            CostPrice = 5.50m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Ceres Top",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 4.5999999999999996,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CostPrice = 6.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Albani øl",
+                            StockQuantity = 150,
+                            AlcoholPercentage = 4.5999999999999996,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CostPrice = 12.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Shaker Sport",
+                            StockQuantity = 80,
+                            AlcoholPercentage = 4.5,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        });
                 });
 
             modelBuilder.Entity("Data.Model.Snack", b =>
