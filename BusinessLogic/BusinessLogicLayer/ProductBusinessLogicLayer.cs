@@ -107,6 +107,39 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         return products.Select(ProductMapper.Map).ToList();
     }
 
+    public async Task RegisterWaste(int productId, int quantity)
+    {
+        if (quantity < 0)
+            throw new ArgumentException("Invalid quantity");
+        var product = await _unitOfWork.Products.GetByIdAsync(productId);
+        if (product == null)
+            throw new InvalidOperationException("Product not found");
+        if (product.StockQuantity < quantity)
+            throw new InvalidOperationException("Not enough stock to register waste");
+        product.StockQuantity -= quantity;
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task RegisterWasteVolume(int productId, int volume)
+    {
+        if (volume < 0)
+            throw new ArgumentException("Invalid quantity");
+
+        var product = await _unitOfWork.Products.GetByIdAsync(productId);
+
+        if (product == null)
+            throw new InvalidOperationException("Product not found");
+
+        if (product is not Data.Model.Liquid liquid)
+            throw new InvalidOperationException("Product is not a liquid");
+
+        if (liquid.VolumeCl < volume)
+            throw new InvalidOperationException("Not enough volume to register waste");
+
+        liquid.VolumeCl -= volume;
+        await _unitOfWork.SaveChangesAsync();
+    }
+
     public async Task UpdateMaxStockAsync(int productId, int newMaxStock)
     {
         if (newMaxStock < 0)
@@ -142,6 +175,27 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
         product.MinStockQuantity = newMinStock;
         await _unitOfWork.SaveChangesAsync();
+    }
+
+
+
+    // Low
+    // 2 - kasser albani
+    // 2 - kasser tuborg
+    // 6 - shakers
+    // 2 - falsker vodka
+    // Sirup 1 af hver check for volumen
+    // min 1/2 kasse af hver sodavand (pepsi max,faxe,pepsi,faxe free,miranda lemon,normal miranda,grøn sodavand,rød sodavand)
+    // min 4 falsker tonic vand
+    // min 3 kartoner tranebær/apelsin/kakaomælk juice 
+    // min 2 sødmælk
+    // min 1 spraydåse flødeskum
+    // min 1/2 kasse energidrik
+    // min 3 poser snakcs (chips,popcorn, peanuts)
+    //
+    public async Task CheckForLowInventory(int productId)
+    {
+
     }
 
 }
