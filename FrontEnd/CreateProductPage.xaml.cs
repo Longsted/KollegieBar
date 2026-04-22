@@ -1,6 +1,7 @@
 using BusinessLogic.BusinessLogicLayer;
 using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
+using System.Linq;
 
 namespace FrontEnd;
 
@@ -18,6 +19,10 @@ public partial class CreateProductPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
+        // Sets the pant enum options from DTO onto the drop down menu
+        PantPicker.ItemsSource = Enum.GetValues(typeof(PantDataTransferObject)).Cast<PantDataTransferObject>().ToList();
+
         UpdateUI();
     }
 
@@ -92,6 +97,7 @@ public partial class CreateProductPage : ContentPage
         AlcoholPercentageEntry.Text = string.Empty;
         IsAlcoholicCheckBox.IsChecked = false;
         SugarFreeCheckBox.IsChecked = false;
+        PantPicker.SelectedItem = null;
         ResultLabel.Text = string.Empty;
     }
     
@@ -140,13 +146,22 @@ public partial class CreateProductPage : ContentPage
                 ClearFields();
                 ResultLabel.Text = $"Snack created: {snackDataTransferObject.Name}";
             }
-            if (_selectedTab == "Liquid")
+            else if (_selectedTab == "Liquid")
             {
                 if (!int.TryParse(LiquidVolumeClEntry.Text, out int volumeCl))
                 {
                     ResultLabel.Text = "Please enter volume.";
                     return;
                 }
+
+                // Ensure pant is selected
+                if (PantPicker.SelectedItem == null)
+                {
+                    ResultLabel.Text = "Please select a pant type.";
+                    return;
+                }
+
+                var selectedPant = (PantDataTransferObject)PantPicker.SelectedItem;
 
                 // Logic for optional alcohol percentage
                 double alcohol = 0;
@@ -157,11 +172,21 @@ public partial class CreateProductPage : ContentPage
 
                 bool sugarFree = SugarFreeCheckBox.IsChecked;
 
-                // Use your constructor - passing 0 if it's a soda
-                var liquid = new LiquidDataTransferObject(name, costPrice, stockQuantity, volumeCl, alcohol)
+                // Create DTO using the overloads that include Pant
+                LiquidDataTransferObject liquid;
+                if (IsAlcoholicCheckBox.IsChecked)
                 {
-                    SugarFree = sugarFree
-                };
+                    // use constructor with pant + alcohol
+                    liquid = new LiquidDataTransferObject(name, costPrice, stockQuantity, volumeCl, selectedPant, alcohol)
+                    {
+                        SugarFree = sugarFree
+                    };
+                }
+                else
+                {
+                    // use constructor with pant + sugarFree
+                    liquid = new LiquidDataTransferObject(name, costPrice, stockQuantity, volumeCl, selectedPant, sugarFree);
+                }
 
                 await _iProductBusinessLogicLayer.CreateProductAsync(liquid);
                 ClearFields();
