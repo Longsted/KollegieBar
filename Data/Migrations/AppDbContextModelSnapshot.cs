@@ -211,23 +211,6 @@ namespace Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasDiscriminator().HasValue("Liquid");
-                });
-
-            modelBuilder.Entity("Data.Model.Snack", b =>
-                {
-                    b.HasBaseType("Data.Model.Product");
-
-                    b.HasDiscriminator().HasValue("Snack");
-                });
-
-            modelBuilder.Entity("Data.Model.LiquidWithAlcohol", b =>
-                {
-                    b.HasBaseType("Data.Model.LiquidProduct");
-
-                    b.Property<double>("AlcoholPercentage")
-                        .HasColumnType("double precision");
-
-                    b.HasDiscriminator().HasValue("LiquidWithAlcohol");
 
                     b.HasData(
                         new
@@ -238,10 +221,10 @@ namespace Data.Migrations
                             MinStockQuantity = 0,
                             Name = "Ceres Top",
                             StockQuantity = 100,
-                            Pant = 0m,
-                            SalesPrice = 20.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5999999999999996
+                            AlcoholPercentage = 4.5999999999999996,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
                         },
                         new
                         {
@@ -251,10 +234,10 @@ namespace Data.Migrations
                             MinStockQuantity = 0,
                             Name = "Albani øl",
                             StockQuantity = 150,
-                            Pant = 0m,
-                            SalesPrice = 22.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5999999999999996
+                            AlcoholPercentage = 4.5999999999999996,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
                         },
                         new
                         {
@@ -264,11 +247,18 @@ namespace Data.Migrations
                             MinStockQuantity = 0,
                             Name = "Shaker Sport",
                             StockQuantity = 80,
-                            Pant = 0m,
-                            SalesPrice = 35.00m,
-                            VolumeCl = 33,
-                            AlcoholPercentage = 4.5
+                            AlcoholPercentage = 4.5,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
                         });
+                });
+
+            modelBuilder.Entity("Data.Model.Snack", b =>
+                {
+                    b.HasBaseType("Data.Model.Product");
+
+                    b.HasDiscriminator().HasValue("Snack");
                 });
 
             modelBuilder.Entity("Data.Model.DrinkIngredient", b =>

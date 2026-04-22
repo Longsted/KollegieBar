@@ -4,21 +4,22 @@ using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Linq;
+using BusinessLogic.InterfaceBusiness;
 
 namespace FrontEnd;
 
 public partial class BarOverview : ContentPage
 {
 
-	private readonly ProductBusinessLogicLayer _IproductBusinessLogicLayer;
+	private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
 
-    public ObservableCollection<ProductDto> CurrentOrder { get; set; } = new();
-    public BarOverview(ProductBusinessLogicLayer productBusinessLogicLayer)
+    public ObservableCollection<ProductDataTransferObject> CurrentOrder { get; set; } = new();
+    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer)
 	{
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
 
-        _IproductBusinessLogicLayer = productBusinessLogicLayer;
+        _productBusinessLogicLayer = productBusinessLogicLayer;
         LoadProducts();
 
     }
@@ -28,7 +29,7 @@ public partial class BarOverview : ContentPage
         try
         {
             
-            var products = await _IproductBusinessLogicLayer.GetAllProductsAsync();
+            var products = await _productBusinessLogicLayer.GetAllProductsAsync();
 
             ProductCollectionView.ItemsSource = products;
         }
@@ -43,7 +44,7 @@ public partial class BarOverview : ContentPage
     private async void OnProductClicked(object sender, EventArgs e)
     {
         var button = sender as Button;
-        var product = button?.BindingContext as ProductDto;
+        var product = button?.BindingContext as ProductDataTransferObject;
 
         if (product != null)
         {
