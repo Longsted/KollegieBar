@@ -6,7 +6,7 @@ namespace DataTransferObject.Model
 {
     public enum PantDataTransferObject
     {
-        A, B, C, Kasse
+        A, B, C, Kasse, None
     }
 }
 

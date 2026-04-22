@@ -54,8 +54,10 @@
                                 FontSize="13" />
                     </Grid>
 
+                    <!-- Name of Product -->
                     <VerticalStackLayout Spacing="14">
 
+                        
                         <Label Text="Name"
                                FontAttributes="Bold"
                                TextColor="#FFD3E6"
@@ -75,7 +77,8 @@
 
                         <Grid ColumnDefinitions="*,*"
                               ColumnSpacing="16">
-
+                            
+                           <!-- Cost Price -->
                             <VerticalStackLayout Grid.Column="0" Spacing="6">
                                 <Label Text="Cost Price"
                                        FontAttributes="Bold"
@@ -94,7 +97,8 @@
                                            PlaceholderColor="#C98AA8" />
                                 </Border>
                             </VerticalStackLayout>
-
+                            
+                            <!-- Quantity -->
                             <VerticalStackLayout Grid.Column="1" Spacing="6">
                                 <Label Text="Stock Quantity"
                                        FontAttributes="Bold"
@@ -124,10 +128,14 @@
                                              Spacing="14"
                                              IsVisible="False">
 
-                            <Grid ColumnDefinitions="*,*"
-                                  ColumnSpacing="16">
+                            <!-- Grid Size -->
+                            <Grid ColumnDefinitions="3*,Auto"
+                                  RowDefinitions="Auto,Auto,Auto"
+                                  ColumnSpacing="16"
+                                  RowSpacing="8">
 
-                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                <!-- Volume -->
+                                <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="6">
                                     <Label Text="Volume (cl)"
                                            FontAttributes="Bold"
                                            TextColor="#FFD3E6"
@@ -146,45 +154,71 @@
                                     </Border>
                                 </VerticalStackLayout>
 
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="End" Spacing="6">
-                                    <HorizontalStackLayout Spacing="10" Padding="0,10">
-                                        <CheckBox x:Name="IsAlcoholicCheckBox"
-                                                  Color="#FF4FA3"
-                                                  CheckedChanged="OnIsAlcoholicChanged" />
-                                        <Label Text="Contains Alcohol"
-                                               VerticalOptions="Center"
-                                               TextColor="#FFD3E6" />
-                                    </HorizontalStackLayout>
+                                <!-- Pant picker -->
+                                <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="6" HorizontalOptions="End">
+                                    <Label Text="Pant Type"
+                                           FontAttributes="Bold"
+                                           TextColor="#FFD3E6"
+                                           FontSize="14" />
+                                    <Border Stroke="#B84A84"
+                                            StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 8"
+                                            BackgroundColor="#111114"
+                                            Padding="6"
+                                            WidthRequest="140"
+                                            HorizontalOptions="End">
+                                        <Picker x:Name="PantPicker"
+                                                TextColor="#F7F2F5"
+                                                TitleColor="#C98AA8"
+                                                BackgroundColor="Transparent"
+                                                WidthRequest="124"
+                                                HorizontalOptions="End" />
+                                    </Border>
                                 </VerticalStackLayout>
+
+                                <!--Is Alcohol Checkbox-->
+                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="10" Padding="0,6">
+                                    <CheckBox x:Name="IsAlcoholicCheckBox"
+                                              Color="#FF4FA3"
+                                              CheckedChanged="OnIsAlcoholicChanged" />
+                                    <Label Text="Contains Alcohol"
+                                           VerticalOptions="Center"
+                                           TextColor="#FFD3E6" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="10" Padding="0,6" HorizontalOptions="Start">
+                                    <CheckBox x:Name="SugarFreeCheckBox" Color="#FF4FA3" />
+                                    <Label Text="Sugar free"
+                                           VerticalOptions="Center"
+                                           TextColor="#FFD3E6" />
+                                </HorizontalStackLayout>
+
+                                <!-- Alcohol % input-->
+                                <VerticalStackLayout x:Name="AlcoholInputContainer"
+                                                     Grid.Row="2"
+                                                     Grid.Column="0"
+                                                     Grid.ColumnSpan="2"
+                                                     Spacing="6"
+                                                     IsVisible="False">
+                                    <Label Text="Alcohol %"
+                                           FontAttributes="Bold"
+                                           TextColor="#FFD3E6"
+                                           FontSize="14" />
+                                    <Border Stroke="#B84A84"
+                                            StrokeThickness="1"
+                                            StrokeShape="RoundRectangle 8"
+                                            BackgroundColor="#111114"
+                                            Padding="12,4">
+                                        <Entry x:Name="AlcoholPercentageEntry"
+                                               Placeholder="Enter alcohol percentage"
+                                               Keyboard="Numeric"
+                                               BackgroundColor="Transparent"
+                                               TextColor="#F7F2F5"
+                                               PlaceholderColor="#C98AA8" />
+                                    </Border>
+                                </VerticalStackLayout>
+
                             </Grid>
-
-                            <VerticalStackLayout x:Name="AlcoholInputContainer"
-                                                 Spacing="6"
-                                                 IsVisible="False">
-                                <Label Text="Alcohol %"
-                                       FontAttributes="Bold"
-                                       TextColor="#FFD3E6"
-                                       FontSize="14" />
-                                <Border Stroke="#B84A84"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 8"
-                                        BackgroundColor="#111114"
-                                        Padding="12,4">
-                                    <Entry x:Name="AlcoholPercentageEntry"
-                                           Placeholder="Enter alcohol percentage"
-                                           Keyboard="Numeric"
-                                           BackgroundColor="Transparent"
-                                           TextColor="#F7F2F5"
-                                           PlaceholderColor="#C98AA8" />
-                                </Border>
-                            </VerticalStackLayout>
-
-                            <HorizontalStackLayout Spacing="10">
-                                <CheckBox x:Name="SugarFreeCheckBox" Color="#FF4FA3" />
-                                <Label Text="Sugar free"
-                                       VerticalOptions="Center"
-                                       TextColor="#FFD3E6" />
-                            </HorizontalStackLayout>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout x:Name="ConsumableFieldsContainer"
