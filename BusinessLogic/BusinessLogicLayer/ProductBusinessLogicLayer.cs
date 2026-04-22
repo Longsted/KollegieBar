@@ -118,7 +118,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
             throw new ArgumentException("Invalid quantity");
         }
 
-        var removeClFromBottle = quantity * 20;
+        var removeClFromBottle = quantity * 2;
         if (alcohol.VolumeCl < removeClFromBottle && alcohol.StockQuantity == 0)
         {
             throw new InvalidOperationException("Not enough stock");
