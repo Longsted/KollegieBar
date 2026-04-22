@@ -1,4 +1,5 @@
-﻿using Data.Model;
+﻿
+using Data.Model;
 
 namespace BusinessLogic.InterfaceBusiness;
 
@@ -15,8 +16,6 @@ public interface IProductBusinessLogicLayer
     Task UpdateProductAsync(ProductDataTransferObject product);
     
     Task DeleteProductAsync(int id);
-    
-    Task RegisterSaleAsync(List<int> productIds);
     
     Task RegisterIncomingStockAsync(int productId, int quantity);
 
