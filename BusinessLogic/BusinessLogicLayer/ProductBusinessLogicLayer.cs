@@ -59,12 +59,16 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         }
     }
 
-    public async Task RegisterSaleAsync(List<(int productId, int quantity)> items)
+    public async Task RegisterSaleAsync(List<int>productIds)
     {
+        var grouped = productIds.GroupBy(id => id).
+            Select(g => new { productId = g.Key,
+                                            quantity = g.Count() });
+        
         var transactionId = Guid.NewGuid();
         var now = DateTime.UtcNow;
         var allSales = new List <Sale>();
-        foreach (var item in items)
+        foreach (var item in grouped)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(item.productId);
             if (product == null)

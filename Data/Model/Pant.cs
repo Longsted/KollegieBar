@@ -6,6 +6,6 @@ namespace Data.Model
 {
     public enum Pant
     {
-        A, B, C, Kasse
+        A, B, C, Kasse, None
     }
 }
