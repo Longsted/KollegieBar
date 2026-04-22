@@ -17,4 +17,8 @@ public class SaleRepository : ISalesRepository
     {
         await _context.Sales.AddRangeAsync(sales);
     }
+    public async Task<Sale?> GetAsync(int id)
+    {
+        return await _context.Sales.FindAsync(id);
+    }
 }
