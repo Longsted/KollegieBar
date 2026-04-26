@@ -1,8 +1,7 @@
 ﻿using BusinessLogic.InterfaceBusiness;
-using DataTransferObject.Model;
 using BusinessLogic.Mappers;
-
 using Data.UnitOfWork;
+using DataTransferObject.Model;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
@@ -104,18 +103,36 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         return products.Select(ProductMapper.Map).ToList();
     }
 
-    public async Task RegisterWaste(int productId, int quantity)
+    //This method is used to register waste of a products, it reduces the stock by 1 for each product id in the list.
+    //Could save the changes to a waste log if needed, but for now it just updates the stock quantity.
+    public async Task RegisterWaste(List<int> productIds)
     {
-        if (quantity < 0)
-            throw new ArgumentException("Invalid quantity");
-        var product = await _unitOfWork.Products.GetByIdAsync(productId);
-        if (product == null)
-            throw new InvalidOperationException("Product not found");
-        if (product.StockQuantity < quantity)
-            throw new InvalidOperationException("Not enough stock to register waste");
-        product.StockQuantity -= quantity;
+        var uniqueIds = productIds.Distinct().ToList();
+        var products = await _unitOfWork.Products.GetWhereAsync(p => uniqueIds.Contains(p.Id));
+
+
+        if (products.Count != uniqueIds.Count)
+        {
+            throw new InvalidOperationException("One or more products were not found.");
+        }
+
+        var wasteCounts = productIds.GroupBy(id => id)
+                                    .ToDictionary(g => g.Key, g => g.Count());
+
+        foreach (var product in products)
+        {
+            int amountToRemove = wasteCounts[product.Id];
+
+            if (product.StockQuantity < amountToRemove)
+            {
+                throw new InvalidOperationException($"Not enough stock for product {product.Id}");
+            }
+
+            product.StockQuantity -= amountToRemove;
+        }
         await _unitOfWork.SaveChangesAsync();
     }
+
 
     public async Task RegisterWasteVolume(int productId, int volume)
     {
