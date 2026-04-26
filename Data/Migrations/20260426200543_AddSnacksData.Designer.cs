@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260426200543_AddSnacksData")]
+    partial class AddSnacksData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,22 +46,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Drinks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            CostPrice = 85.0,
-                            IsAlcoholic = true,
-                            Name = "Sex on the beach"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CostPrice = 95.0,
-                            IsAlcoholic = true,
-                            Name = "Long Island Iced Tea"
-                        });
                 });
 
             modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
@@ -88,40 +75,6 @@ namespace Data.Migrations
                     b.HasIndex("LiquidId");
 
                     b.ToTable("DrinkIngredients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DrinkId = 10,
-                            LiquidId = 20,
-                            LiquidProductId = 20,
-                            VolumeCl = 4
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DrinkId = 10,
-                            LiquidId = 27,
-                            LiquidProductId = 27,
-                            VolumeCl = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DrinkId = 10,
-                            LiquidId = 25,
-                            LiquidProductId = 25,
-                            VolumeCl = 6
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DrinkId = 10,
-                            LiquidId = 26,
-                            LiquidProductId = 26,
-                            VolumeCl = 6
-                        });
                 });
 
             modelBuilder.Entity("Data.Model.Product", b =>
@@ -301,58 +254,6 @@ namespace Data.Migrations
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 33
-                        },
-                        new
-                        {
-                            Id = 20,
-                            CostPrice = 150.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Vodka",
-                            StockQuantity = 10,
-                            AlcoholPercentage = 37.5,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 70
-                        },
-                        new
-                        {
-                            Id = 27,
-                            CostPrice = 120.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Peach Schnapps",
-                            StockQuantity = 5,
-                            AlcoholPercentage = 18.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 70
-                        },
-                        new
-                        {
-                            Id = 25,
-                            CostPrice = 15.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Appelsinjuice",
-                            StockQuantity = 20,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CostPrice = 18.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Tranebærjuice",
-                            StockQuantity = 20,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
                         });
                 });
 

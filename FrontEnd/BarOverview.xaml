@@ -6,26 +6,29 @@
              BackgroundColor="#111114">
     <Grid ColumnDefinitions="Auto,*, 350" Padding="20" ColumnSpacing="5">
         <VerticalStackLayout Grid.Column="0" Spacing="15" VerticalOptions="Start">
-            <Button Text="Øl" 
+            <Button Text="Flasker" 
                 HeightRequest="80" 
                 BackgroundColor="#18181C" 
                 BorderColor="#B84A84" 
                 BorderWidth="1"
-                TextColor="White"/>
+                TextColor="White"
+                    Clicked="ShowBot"/>
 
-            <Button Text="Sodavand" 
+            <Button Text="Drinks" 
                 HeightRequest="80" 
                 BackgroundColor="#18181C" 
                 BorderColor="#B84A84" 
                 BorderWidth="1"
-                TextColor="White"/>
+                TextColor="White"
+                    Clicked="ShowDrinks"/>
 
-            <Button Text="Shots" 
+            <Button Text="Snacks" 
                 HeightRequest="80" 
                 BackgroundColor="#18181C" 
                 BorderColor="#B84A84" 
                 BorderWidth="1"
-                TextColor="White"/>
+                TextColor="White"
+                Clicked="ShowSnacks"/>
         </VerticalStackLayout>
 
         <Border Grid.Column="1" 

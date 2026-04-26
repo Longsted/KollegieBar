@@ -1,5 +1,4 @@
 using BusinessLogic.BusinessLogicLayer;
-using Data.Model;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -15,6 +14,12 @@ public partial class BarOverview : ContentPage
 	private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
 
     public ObservableCollection<ProductDataTransferObject> CurrentOrder { get; set; } = new();
+
+    //public List<ProductDataTransferObject> Snacks { get; set; } = new();
+
+    private List<ProductDataTransferObject> _allProducts = new();
+
+
     public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer)
 	{
         InitializeComponent();
@@ -30,10 +35,13 @@ public partial class BarOverview : ContentPage
     {
         try
         {
-            
             var products = await _productBusinessLogicLayer.GetAllProductsAsync();
 
+            _allProducts = products.ToList();
+
             ProductCollectionView.ItemsSource = products;
+
+          
         }
         catch (Exception ex)
         {
@@ -50,14 +58,9 @@ public partial class BarOverview : ContentPage
 
         if (product != null)
         {
-            // Vi tilføjer til den globale "CurrentOrder" i stedet for en lokal liste
             CurrentOrder.Add(product);
-
             UpdateTotalSum();
-
-
-            // Valgfrit: Console.WriteLine for at se det i din log
-            Console.WriteLine($"Tilføjet: {product.Name}. Antal varer på bon: {CurrentOrder.Count}");
+            //Console.WriteLine($"Tilføjet: {product.Name}. Antal varer på bon: {CurrentOrder.Count}");
         }
     }
     private async void UpdateTotalSum()
@@ -73,7 +76,7 @@ public partial class BarOverview : ContentPage
 
         if (CurrentOrder.Count == 0)
         {
-            DisplayAlertAsync("Tom vogn", "Add something to the order before you checkout", "cancel");
+            DisplayAlertAsync("Emty cart", "Add something to the order before you checkout", "cancel");
 
         }
         else if (CurrentOrder.Count != 0)
@@ -81,19 +84,24 @@ public partial class BarOverview : ContentPage
             
 
             var opsummering = CurrentOrder.GroupBy(p => p.Id).Select(g => new {
-                Navn = g.First().Name,
                 Antal = g.Count(),
+                Navn = g.First().Name,
                 Total = g.Sum(x => x.CostPrice)
             }) .ToList();
+
+            
 
             string tekst = ""; 
             for (int i = 0; opsummering.Count > i; i++)
             {
-                tekst += opsummering[i].Navn + " x " + opsummering[i].Antal +"\n";
+                
+                tekst += opsummering[i].Antal + " x " + opsummering[i].Navn +"\n";
             }
             List<int> productIds = CurrentOrder.Select(p => p.Id).ToList();
 
            // await _productBusinessLogicLayer.RegisterSaleAsync(productIds);
+
+            
 
 
             bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel","OK");
@@ -121,15 +129,17 @@ public partial class BarOverview : ContentPage
         DisplayAlertAsync("IKke så meget pis", "Det virker", "cáncel");
         
     }
+
+    // This method is is so the bartender can remove a item on the currentOrderList 
     private async void OnReceiptSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // 1. Hent det valgte objekt
+        
         var selectedItem = e.CurrentSelection.FirstOrDefault() as ProductDataTransferObject;
 
         if (selectedItem == null)
             return;
 
-        // 2. Gør noget (f.eks. spørg om varen skal fjernes)
+        
         bool answer = await DisplayAlert("Remove Product", $"Remove {selectedItem.Name}?", "No", "Yes");
 
         if (!answer)
@@ -141,7 +151,39 @@ public partial class BarOverview : ContentPage
     }
 
 
-    //Helping methods that just clears thw cart and setting the total to zero
+    public async void ShowSnacks(object sender, EventArgs e)
+    {
+
+        // Vi filtrerer på om objekt-typen er SnackDataTransferObject
+        var snacksOnly = _allProducts
+            .Where(p => p is DataTransferObject.Model.SnackDataTransferObject)
+            .ToList();
+
+        ProductCollectionView.ItemsSource = snacksOnly;
+        
+    }
+
+    private async void ShowBot(object sender, EventArgs e)
+    {
+        var bottlesOnly = _allProducts
+            .Where(p => p is DataTransferObject.Model.LiquidDataTransferObject)
+            .ToList();
+
+        ProductCollectionView.ItemsSource = bottlesOnly;
+    }
+    private async void ShowDrinks(object sender, EventArgs e)
+    {
+        var drnkOnly = _allProducts
+            .Where(p => p is DataTransferObject.Model.DrinkDataTransferObject)
+            .ToList();
+
+        ProductCollectionView.ItemsSource = drnkOnly;
+    }
+
+
+
+
+    //Helping methods that just clears th cart and setting the total to zero
     private async void HelperMethodsToClearCartAndTotal()
     {
         CurrentOrder.Clear();
