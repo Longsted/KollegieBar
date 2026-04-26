@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Linq;
 using BusinessLogic.InterfaceBusiness;
+using System.Runtime.CompilerServices;
 
 namespace FrontEnd;
 
@@ -18,6 +19,7 @@ public partial class BarOverview : ContentPage
 	{
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
+
 
         _productBusinessLogicLayer = productBusinessLogicLayer;
         LoadProducts();
@@ -76,6 +78,7 @@ public partial class BarOverview : ContentPage
         }
         else if (CurrentOrder.Count != 0)
         {
+            
 
             var opsummering = CurrentOrder.GroupBy(p => p.Id).Select(g => new {
                 Navn = g.First().Name,
@@ -88,10 +91,61 @@ public partial class BarOverview : ContentPage
             {
                 tekst += opsummering[i].Navn + " x " + opsummering[i].Antal +"\n";
             }
+            List<int> productIds = CurrentOrder.Select(p => p.Id).ToList();
+
+           // await _productBusinessLogicLayer.RegisterSaleAsync(productIds);
 
 
-            await DisplayAlertAsync("Ordre", tekst, "Cancel","OK");
+            bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel","OK");
+
+            if (!answer)
+            {
+                HelperMethodsToClearCartAndTotal();
+            }
         }
 
     }
+
+    private async void ClearCart(object sender, EventArgs e)
+    {
+        HelperMethodsToClearCartAndTotal();
+    }
+
+    private async void Waste(object sender, EventArgs e)
+    {
+
+        // _productBusinessLogicLayer.RegisterWaste();
+
+        HelperMethodsToClearCartAndTotal();
+
+        DisplayAlertAsync("IKke så meget pis", "Det virker", "cáncel");
+        
+    }
+    private async void OnReceiptSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // 1. Hent det valgte objekt
+        var selectedItem = e.CurrentSelection.FirstOrDefault() as ProductDataTransferObject;
+
+        if (selectedItem == null)
+            return;
+
+        // 2. Gør noget (f.eks. spørg om varen skal fjernes)
+        bool answer = await DisplayAlert("Remove Product", $"Remove {selectedItem.Name}?", "No", "Yes");
+
+        if (!answer)
+        {
+            CurrentOrder.Remove(selectedItem);
+            UpdateTotalSum(); 
+        }
+        ((CollectionView)sender).SelectedItem = null;
+    }
+
+
+    //Helping methods that just clears thw cart and setting the total to zero
+    private async void HelperMethodsToClearCartAndTotal()
+    {
+        CurrentOrder.Clear();
+        TotalSumLabel.Text = "";
+    }
+
 }
