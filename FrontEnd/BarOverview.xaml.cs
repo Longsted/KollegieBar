@@ -179,6 +179,10 @@ public partial class BarOverview : ContentPage
 
         ProductCollectionView.ItemsSource = drnkOnly;
     }
+    private async void ShowAll(object sender, EventArgs e)
+    {
+        ProductCollectionView.ItemsSource = _allProducts;
+    }
 
 
 

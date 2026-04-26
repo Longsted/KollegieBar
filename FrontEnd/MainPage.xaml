@@ -24,7 +24,8 @@
                    IsPassword="True"
                    MinimumWidthRequest="250"
                    MaximumWidthRequest="500"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center"
+                   Completed="LoginClicked"/>
 
             <Button x:Name="loginButton"
                     Text="Login"
