@@ -89,6 +89,11 @@ namespace UnitTests
             if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.Bartender)
                 return false;
 
+            if (newPrice < 0)
+            {
+                return false;
+            }
+
             drinkDataTransferObject.CostPrice = newPrice;
 
             return true;
