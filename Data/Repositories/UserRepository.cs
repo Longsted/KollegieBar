@@ -19,10 +19,7 @@ public class UserRepository : IUserRepository
     {
         var user = _context.Users.Find(id);
 
-        if (id <= 0)
-        {
-            throw new InvalidOperationException("Id must be greater than zero.");
-        }
+       
 
         return await _context.Users.FindAsync(user);
     }
@@ -31,25 +28,5 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.ToListAsync();
     }
-
-    public async Task AddAsync(User user)
-    {
-        await _context.Users.AddAsync(user);
-    }
-
-    public Task DeleteAsync(User user)
-    {
-        if (user == null)
-        {
-            throw new InvalidOperationException("User cannot be null.");
-        }
-
-        _context.Users.Remove(user);
-        return Task.CompletedTask;
-    }
-
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
+    
 }
