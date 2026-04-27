@@ -12,7 +12,7 @@ namespace BusinessLogic.Mappers
                 Id = entity.Id,
                 DrinkId = entity.DrinkId,
                 LiquidProductId = entity.LiquidProductId,
-                VolumeCl = entity.VolumeCl,
+               
 
                 // only if liquid is loaded
                 LiquidDataTransferObject = entity.Liquid != null
@@ -28,7 +28,7 @@ namespace BusinessLogic.Mappers
                 Id = dto.Id,
                 DrinkId = dto.DrinkId,
                 LiquidProductId = dto.LiquidProductId,
-                VolumeCl = dto.VolumeCl
+               
             };
         }
     }

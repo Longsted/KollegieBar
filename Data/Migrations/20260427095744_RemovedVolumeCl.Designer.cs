@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260427093621_RemovedVolumeCl")]
+    [Migration("20260427095744_RemovedVolumeCl")]
     partial class RemovedVolumeCl
     {
         /// <inheritdoc />
@@ -81,9 +81,6 @@ namespace Data.Migrations
                     b.Property<int>("LiquidProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("VolumeCl")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DrinkId");
@@ -98,32 +95,28 @@ namespace Data.Migrations
                             Id = 1,
                             DrinkId = 10,
                             LiquidId = 20,
-                            LiquidProductId = 20,
-                            VolumeCl = 4
+                            LiquidProductId = 20
                         },
                         new
                         {
                             Id = 2,
                             DrinkId = 10,
                             LiquidId = 27,
-                            LiquidProductId = 27,
-                            VolumeCl = 2
+                            LiquidProductId = 27
                         },
                         new
                         {
                             Id = 3,
                             DrinkId = 10,
                             LiquidId = 25,
-                            LiquidProductId = 25,
-                            VolumeCl = 6
+                            LiquidProductId = 25
                         },
                         new
                         {
                             Id = 4,
                             DrinkId = 10,
                             LiquidId = 26,
-                            LiquidProductId = 26,
-                            VolumeCl = 6
+                            LiquidProductId = 26
                         });
                 });
 
