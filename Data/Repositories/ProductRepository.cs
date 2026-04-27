@@ -17,9 +17,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<Product?> GetByIdAsync(int id)
     {
-        if (id <= 0)
-            throw new ArgumentException("Invalid product Id");
-
+        
         return await _context.Products.FindAsync(id);
     }
 
@@ -45,11 +43,7 @@ public class ProductRepository : IProductRepository
         return Task.CompletedTask;
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
-    }
-
+ 
     public async Task<List<Product>> GetWhereAsync(Expression<Func<Product, bool>> predicate)
     {
         return await _context.Products.Where(predicate).ToListAsync();

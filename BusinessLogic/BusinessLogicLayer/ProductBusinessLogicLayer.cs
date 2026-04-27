@@ -134,25 +134,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     }
 
 
-    public async Task RegisterWasteVolume(int productId, int volume)
-    {
-        if (volume < 0)
-            throw new ArgumentException("Invalid quantity");
-
-        var product = await _unitOfWork.Products.GetByIdAsync(productId);
-
-        if (product == null)
-            throw new InvalidOperationException("Product not found");
-
-        if (product is not Data.Model.Liquid liquid)
-            throw new InvalidOperationException("Product is not a liquid");
-
-        if (liquid.VolumeCl < volume)
-            throw new InvalidOperationException("Not enough volume to register waste");
-
-        liquid.VolumeCl -= volume;
-        await _unitOfWork.SaveChangesAsync();
-    }
 
     public async Task UpdateMaxStockAsync(int productId, int newMaxStock)
     {

@@ -10,9 +10,9 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public UserBusinessLogicLayer(IUnitOfWork repository)
+    public UserBusinessLogicLayer(IUnitOfWork unitOfWork)
     {
-        _unitOfWork = repository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<UserDataTransferObject?> GetUserByIdAsync(int userId)
