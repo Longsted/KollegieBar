@@ -30,13 +30,15 @@ namespace BusinessLogic.Mappers
                 )
             };
         }
-       
+
         public static void MapToDto(DataEntity.Product entity, DTO.ProductDataTransferObject dataTransferObject)
         {
             dataTransferObject.Id = entity.Id;
             dataTransferObject.Name = entity.Name;
             dataTransferObject.CostPrice = entity.CostPrice;
             dataTransferObject.StockQuantity = entity.StockQuantity;
+            dataTransferObject.MinStockQuantity = entity.MinStockQuantity;
+            dataTransferObject.MaxStockQuantity = entity.MaxStockQuantity;
         }
 
         public static void MapToEntity(DTO.ProductDataTransferObject dataTransferObject, DataEntity.Product entity)
