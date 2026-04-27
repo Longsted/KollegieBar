@@ -22,7 +22,7 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="12">
+                        <Grid Padding="12" BackgroundColor="Transparent">
 
                             <Label Text="{Binding Name}"
                                    FontSize="16"
@@ -31,6 +31,13 @@
 
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup Name="CommonStates">
+
+                                    <!-- Normal/unselected style -->
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
 
                                     <!-- Selected style -->
                                     <VisualState Name="Selected">
