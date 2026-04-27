@@ -179,28 +179,4 @@ namespace UnitTests
             return true;
         }
     }
-
-    public class LoginService
-    {
-        private readonly Dictionary<string, UserRoleDataTransferObject> _accounts;
-
-        public LoginService(Dictionary<string, UserRoleDataTransferObject> accounts)
-        {
-            _accounts = accounts;
-        }
-
-        public UserDataTransferObject Login(string username)
-        {
-            if (string.IsNullOrWhiteSpace(username))
-                return null;
-
-            if (_accounts.TryGetValue(username, out var role))
-            {
-                return new UserDataTransferObject { RoleDataTransferObject = role };
-            }
-
-            return null;
-
-        }
-    }
 }

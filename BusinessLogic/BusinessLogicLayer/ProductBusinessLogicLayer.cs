@@ -133,7 +133,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
-
     public async Task RegisterWasteVolume(int productId, int volume)
     {
         if (volume < 0)
