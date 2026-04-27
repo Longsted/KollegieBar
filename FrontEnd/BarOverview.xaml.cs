@@ -59,16 +59,16 @@ public partial class BarOverview : ContentPage
         if (product != null)
         {
             CurrentOrder.Add(product);
-            UpdateTotalSum();
+            // UpdateTotalSum();
             //Console.WriteLine($"Tilføjet: {product.Name}. Antal varer på bon: {CurrentOrder.Count}");
         }
     }
-    private async void UpdateTotalSum()
-    {
-        decimal total = CurrentOrder.Sum(p => p.CostPrice);
-
-        TotalSumLabel.Text = $"{total:N2} kr.";
-    }
+    // private async void UpdateTotalSum()
+    // {
+    //     decimal total = CurrentOrder.Sum(p => p.CostPrice);
+    //
+    //     TotalSumLabel.Text = $"{total:N2} kr.";
+    // }
 
 
     private async void OnCheckoutClicked(object sender, EventArgs e)
@@ -145,7 +145,7 @@ public partial class BarOverview : ContentPage
         if (!answer)
         {
             CurrentOrder.Remove(selectedItem);
-            UpdateTotalSum(); 
+            // UpdateTotalSum(); 
         }
         ((CollectionView)sender).SelectedItem = null;
     }

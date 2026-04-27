@@ -13,9 +13,8 @@ public class DrinkIngredient
 
     public DrinkIngredient() { }
 
-    public DrinkIngredient(int liquidProductId, int volumeCl)
+    public DrinkIngredient(int liquidProductId)
     {
         LiquidProductId = liquidProductId;
-        VolumeCl = volumeCl;
     }
 }
