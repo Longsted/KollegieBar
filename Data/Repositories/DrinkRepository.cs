@@ -18,14 +18,15 @@ public class DrinkRepository : IDrinkRepository
     {
         return await _context.Drinks
             .Include(d => d.Ingredients)
+                .ThenInclude(i => i.Liquid) 
             .ToListAsync();
     }
 
     public async Task<Drink?> GetByIdAsync(int id)
     {
-        
         return await _context.Drinks
             .Include(d => d.Ingredients)
+                .ThenInclude(i => i.Liquid) 
             .FirstOrDefaultAsync(d => d.Id == id);
     }
 
@@ -46,5 +47,15 @@ public class DrinkRepository : IDrinkRepository
     {
         _context.Drinks.Update(drink);
         return Task.CompletedTask;
+    }
+
+
+    public async Task<List<Drink>> GetDrinksWithIngredientsAsync(List<int> drinkIds)
+    {
+        return await _context.Drinks
+            .Include(d => d.Ingredients)
+                .ThenInclude(i => i.Liquid)
+            .Where(d => drinkIds.Contains(d.Id))
+            .ToListAsync();
     }
 }

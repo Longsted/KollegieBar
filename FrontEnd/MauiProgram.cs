@@ -31,7 +31,9 @@ public static class MauiProgram
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<ISalesRepository, SaleRepository>();
+        builder.Services.AddScoped<IDrinkRepository, DrinkRepository>();
 
+        builder.Services.AddScoped<IDrinksBusinessLogicLayer, DrinksBusinessLayer>();
         builder.Services.AddScoped<IUserBusinessLogicLayer, UserBusinessLogicLayer>();
         builder.Services.AddScoped<IProductBusinessLogicLayer, ProductBusinessLogicLayer>();
         builder.Services.AddScoped<ISalesBusinessLayer, SalesBusinessLayer>();

@@ -39,50 +39,61 @@ public class SalesBusinessLayer : ISalesBusinessLayer
     /// <exception cref="ArgumentException">
     /// Thrown if quantity is invalid (≤ 0).
     /// </exception>
-    public async Task RegisterSaleAsync(List<int> productIds)
+    public async Task RegisterSaleAsync(List<int> productIds, List<int> drinkIds)
     {
-        var grouped = productIds.GroupBy(id => id).Select(g => new
-        {
-            productId = g.Key,
-            quantity = g.Count()
-        });
-
         var transactionId = Guid.NewGuid();
         var now = DateTime.UtcNow;
         var allSales = new List<Sale>();
-        foreach (var item in grouped)
+
+        // 1. Gruppér ID'erne så vi ikke looper unødvendigt
+        var productGroups = productIds.GroupBy(id => id).ToDictionary(g => g.Key, g => g.Count());
+        var drinkGroups = drinkIds.GroupBy(id => id).ToDictionary(g => g.Key, g => g.Count());
+
+        // 2. Håndtér direkte salg (Sodavand, Øl, Snacks)
+        if (productGroups.Any())
         {
-            var product = await _unitOfWork.Products.GetByIdAsync(item.productId);
-            if (product == null)
-            {
-                throw new InvalidOperationException("Product not found");
-            }
-            
-            if (product.GetType() == typeof(Drink))
-            {
-                //TODO handle drink sale here
-            }
-            else
-            {
-                switch (product)
-                {
-                    case Data.Model.Snack snack:
-                        HandleSnackSale(snack, item.quantity);
-                        break;
-                    case Data.Model.Liquid liquid:
-                        HandleLiquidSale(liquid, item.quantity);
-                        break;
+            // Vi henter alle produkter på én gang (Bulk fetch)
+            var products = await _unitOfWork.Products.GetWhereAsync(p => productGroups.Keys.Contains(p.Id));
 
-                    default:
+            foreach (var product in products)
+            {
+                int qty = productGroups[product.Id];
 
-                        throw new NotSupportedException($"unknown type product {product.GetType().Name}");
-                }
+                // Trækker direkte fra lageret (Hele enheder)
+                product.StockQuantity -= qty;
+
+                // Opretter salgslinjer
+                allSales.AddRange(CreateSales(product, qty, transactionId, now));
             }
-
-            var sales = CreateSales(product, item.quantity, transactionId, now);
-            allSales.AddRange(sales);
         }
 
+        // 3. Håndtér Drinks (Og deres sodavand/mixere med pant)
+        if (drinkGroups.Any())
+        {
+            // Her bruger vi den nye repository metode med ThenInclude
+            var drinks = await _unitOfWork.Drinks.GetDrinksWithIngredientsAsync(drinkGroups.Keys.ToList());
+
+            foreach (var drink in drinks)
+            {
+                int drinkQty = drinkGroups[drink.Id];
+
+                foreach (var ingredient in drink.Ingredients)
+                {
+                    // Tjek om ingrediensen er en væske, og om den har pant (f.eks. en sodavand)
+                    // Pga. ThenInclude er ingredient.Liquid ikke længere null
+                    if (ingredient.Liquid != null && ingredient.Liquid.Pant != null)
+                    {
+                        // Trækker 1 stk. mixer pr. drink (da I kører i hele flasker)
+                        ingredient.Liquid.StockQuantity -= drinkQty;
+                    }
+                }
+
+                // Opretter salgslinjer for selve drinken
+                allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
+            }
+        }
+
+        // 4. Gem alt i én samlet database-transaktion
         await _unitOfWork.Sales.AddRangeAsync(allSales);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -155,6 +166,17 @@ public class SalesBusinessLayer : ISalesBusinessLayer
 
         return sales;
     }
+
+    private List<Sale> CreateSalesForDrink(Data.Model.Drink drink, int quantity, Guid transactionId, DateTime now)
+{
+    var sales = new List<Sale>();
+    for (int i = 0; i < quantity; i++)
+    {
+        var sale = new Sale((decimal)drink.CostPrice, now, transactionId, drink); 
+        sales.Add(sale);
+    }
+    return sales;
+}
 
     public async Task AddIngredient(int saleid, DrinkIngredient ingredient)
     {

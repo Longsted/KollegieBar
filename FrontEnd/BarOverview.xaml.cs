@@ -15,6 +15,8 @@ public partial class BarOverview : ContentPage
 
     private readonly ISalesBusinessLayer _salesBusinessLayer;
 
+    private readonly IDrinksBusinessLogicLayer _drinksBusinessLogic;
+
     public ObservableCollection<ProductDataTransferObject> CurrentOrder { get; set; } = new();
 
     //public List<ProductDataTransferObject> Snacks { get; set; } = new();
@@ -22,7 +24,7 @@ public partial class BarOverview : ContentPage
     private List<ProductDataTransferObject> _allProducts = new();
 
 
-    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer, ISalesBusinessLayer SalesBusinessLayer)
+    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer, ISalesBusinessLayer SalesBusinessLayer, IDrinksBusinessLogicLayer drinksBusiness)
 	{
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
@@ -30,6 +32,7 @@ public partial class BarOverview : ContentPage
 
         _productBusinessLogicLayer = productBusinessLogicLayer;
         _salesBusinessLayer = SalesBusinessLayer;
+        _drinksBusinessLogic = drinksBusiness;  
         LoadProducts();
 
     }
@@ -100,18 +103,18 @@ public partial class BarOverview : ContentPage
                 
                 tekst += opsummering[i].Antal + " x " + opsummering[i].Navn +"\n";
             }
-            List<int> productIds = CurrentOrder.Select(p => p.Id).ToList();
+            var productIds = CurrentOrder.Where(item => item is ProductDataTransferObject).Select(p => p.Id).ToList();
+            var drinkIds = CurrentOrder.Where(item => item is DrinkDataTransferObject).Select(d => d.Id).ToList();
 
             bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel", "OK");
 
             try
             {
-                await _salesBusinessLayer.RegisterSaleAsync(productIds);
-
+                await _salesBusinessLayer.RegisterSaleAsync(productIds, drinkIds);
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Failed to register waste: {ex.Message}", "OK");
+                await DisplayAlert("Error", $"Failed to register order: {ex.Message}", "OK");
                 return;
             }
 
