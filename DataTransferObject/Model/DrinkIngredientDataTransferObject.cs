@@ -12,13 +12,11 @@ public class DrinkIngredientDataTransferObject
     public int LiquidProductId { get; set; }
     public LiquidDataTransferObject LiquidDataTransferObject { get; set; }
 
-    public int VolumeCl { get; set; }
 
     public DrinkIngredientDataTransferObject() { }
 
     public DrinkIngredientDataTransferObject(int liquidProductId, int volumeCl)
     {
         LiquidProductId = liquidProductId;
-        VolumeCl = volumeCl;
     }
 }

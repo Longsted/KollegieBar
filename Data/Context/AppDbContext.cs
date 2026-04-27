@@ -73,10 +73,10 @@ public class AppDbContext : DbContext
         // 3. Seed DrinkIngredients - HER ER FIXET
         // Vi tilføjer både LiquidProductId og LiquidId for at stoppe fejlen
         modelBuilder.Entity<DrinkIngredient>().HasData(
-            new { Id = 1, DrinkId = 10, LiquidProductId = 20, LiquidId = 20, VolumeCl = 4 },
-            new { Id = 2, DrinkId = 10, LiquidProductId = 27, LiquidId = 27, VolumeCl = 2 },
-            new { Id = 3, DrinkId = 10, LiquidProductId = 25, LiquidId = 25, VolumeCl = 6 },
-            new { Id = 4, DrinkId = 10, LiquidProductId = 26, LiquidId = 26, VolumeCl = 6 }
+            new { Id = 1, DrinkId = 10, LiquidProductId = 20, LiquidId = 20},
+            new { Id = 2, DrinkId = 10, LiquidProductId = 27, LiquidId = 27},
+            new { Id = 3, DrinkId = 10, LiquidProductId = 25, LiquidId = 25},
+            new { Id = 4, DrinkId = 10, LiquidProductId = 26, LiquidId = 26}
         );
 
         base.OnModelCreating(modelBuilder);
