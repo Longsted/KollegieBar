@@ -52,7 +52,8 @@
                            TextColor="#F7F2F5"
                            BackgroundColor="Transparent"
                            MinimumWidthRequest="250"
-                           MaximumWidthRequest="400" />
+                           MaximumWidthRequest="400"
+                           Completed="LoginClicked"/>
                 </Border>
                 
                 <Button x:Name="loginButton"
