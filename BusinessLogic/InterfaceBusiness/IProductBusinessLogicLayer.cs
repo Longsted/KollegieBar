@@ -18,8 +18,6 @@ public interface IProductBusinessLogicLayer
 
     Task RegisterWaste(List<int> productIds);
 
-    Task RegisterWasteVolume(int productId, int volume);
-
     Task UpdateMaxStockAsync(int productId, int newMaxStock);
 
     Task UpdateMinStock(int productId, int newMinStock);
