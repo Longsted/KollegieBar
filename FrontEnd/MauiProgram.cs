@@ -30,9 +30,12 @@ public static class MauiProgram
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<ISalesRepository, SaleRepository>();
 
         builder.Services.AddScoped<IUserBusinessLogicLayer, UserBusinessLogicLayer>();
         builder.Services.AddScoped<IProductBusinessLogicLayer, ProductBusinessLogicLayer>();
+        builder.Services.AddScoped<ISalesBusinessLayer, SalesBusinessLayer>();
+
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<CreateProductPage>();

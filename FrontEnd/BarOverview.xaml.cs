@@ -13,6 +13,8 @@ public partial class BarOverview : ContentPage
 
 	private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
 
+    private readonly ISalesBusinessLayer _salesBusinessLayer;
+
     public ObservableCollection<ProductDataTransferObject> CurrentOrder { get; set; } = new();
 
     //public List<ProductDataTransferObject> Snacks { get; set; } = new();
@@ -20,13 +22,14 @@ public partial class BarOverview : ContentPage
     private List<ProductDataTransferObject> _allProducts = new();
 
 
-    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer)
+    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer, ISalesBusinessLayer SalesBusinessLayer)
 	{
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
 
 
         _productBusinessLogicLayer = productBusinessLogicLayer;
+        _salesBusinessLayer = SalesBusinessLayer;
         LoadProducts();
 
     }
@@ -99,12 +102,19 @@ public partial class BarOverview : ContentPage
             }
             List<int> productIds = CurrentOrder.Select(p => p.Id).ToList();
 
-           // await _productBusinessLogicLayer.RegisterSaleAsync(productIds);
+            bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel", "OK");
 
-            
+            try
+            {
+                await _salesBusinessLayer.RegisterSaleAsync(productIds);
 
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to register waste: {ex.Message}", "OK");
+                return;
+            }
 
-            bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel","OK");
 
             if (!answer)
             {

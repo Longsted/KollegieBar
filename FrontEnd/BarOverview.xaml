@@ -84,18 +84,21 @@
                     HeightRequest="50"
                     CornerRadius="10"
                     HorizontalOptions="Start"
-                    Clicked="ClearCart"
-                   />
-
+                    Clicked="ClearCart"/>
                     <Button Text="Modify" 
                     BackgroundColor="#B84A84" 
                     TextColor="White" 
                     FontAttributes="Bold" 
                     HeightRequest="60"
                     WidthRequest="150"
-                    CornerRadius="12" 
-                            />
-
+                    CornerRadius="12"/>
+                    <Button Text="Add Drink" 
+                    BackgroundColor="#B84A84" 
+                    TextColor="White" 
+                    FontAttributes="Bold" 
+                    HeightRequest="60"
+                    WidthRequest="150"
+                    CornerRadius="12" />
                     <Button Text="Waste" 
                     BackgroundColor="#B84A84" 
                     TextColor="White" 
@@ -103,8 +106,7 @@
                     HeightRequest="60"
                     WidthRequest="150"
                     CornerRadius="12"
-                    Clicked="Waste"
-                            />
+                    Clicked="Waste"/>
 
                 </HorizontalStackLayout>
             </Grid>
