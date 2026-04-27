@@ -13,6 +13,5 @@ public interface IProductRepository
 
     Task DeleteAsync(Product product);
 
-    Task SaveChangesAsync();
     Task<List<Product>> GetWhereAsync(Expression<Func<Product, bool>> predicate);
 }
