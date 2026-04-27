@@ -17,6 +17,10 @@ public partial class MainPage : ContentPage
         _iUserBusinessLogicLayer = iUserBusinessLogicLayer;
     }
 
+    private void OnUsernameCompleted(object sender, EventArgs e)
+    {
+        PasswordEntry.Focus(); 
+    }
     private async void LoginClicked(object sender, EventArgs e)
     {
         string password = PasswordEntry.Text;
