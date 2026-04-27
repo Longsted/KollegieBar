@@ -68,10 +68,6 @@ public class AppDbContext : DbContext
         new { Id = 11, Name = "Long Island Iced Tea", CostPrice = 95.00, IsAlcoholic = true }
     );
 
-        
-
-        // 3. Seed DrinkIngredients - HER ER FIXET
-        // Vi tilføjer både LiquidProductId og LiquidId for at stoppe fejlen
         modelBuilder.Entity<DrinkIngredient>().HasData(
             new { Id = 1, DrinkId = 10, LiquidProductId = 20, LiquidId = 20},
             new { Id = 2, DrinkId = 10, LiquidProductId = 27, LiquidId = 27},

@@ -45,32 +45,32 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         var now = DateTime.UtcNow;
         var allSales = new List<Sale>();
 
-        // 1. Gruppér ID'erne så vi ikke looper unødvendigt
+       
         var productGroups = productIds.GroupBy(id => id).ToDictionary(g => g.Key, g => g.Count());
         var drinkGroups = drinkIds.GroupBy(id => id).ToDictionary(g => g.Key, g => g.Count());
 
-        // 2. Håndtér direkte salg (Sodavand, Øl, Snacks)
+        
         if (productGroups.Any())
         {
-            // Vi henter alle produkter på én gang (Bulk fetch)
+            
             var products = await _unitOfWork.Products.GetWhereAsync(p => productGroups.Keys.Contains(p.Id));
 
             foreach (var product in products)
             {
                 int qty = productGroups[product.Id];
 
-                // Trækker direkte fra lageret (Hele enheder)
+                
                 product.StockQuantity -= qty;
 
-                // Opretter salgslinjer
+                
                 allSales.AddRange(CreateSales(product, qty, transactionId, now));
             }
         }
 
-        // 3. Håndtér Drinks (Og deres sodavand/mixere med pant)
+        
         if (drinkGroups.Any())
         {
-            // Her bruger vi den nye repository metode med ThenInclude
+            
             var drinks = await _unitOfWork.Drinks.GetDrinksWithIngredientsAsync(drinkGroups.Keys.ToList());
 
             foreach (var drink in drinks)
@@ -79,21 +79,18 @@ public class SalesBusinessLayer : ISalesBusinessLayer
 
                 foreach (var ingredient in drink.Ingredients)
                 {
-                    // Tjek om ingrediensen er en væske, og om den har pant (f.eks. en sodavand)
-                    // Pga. ThenInclude er ingredient.Liquid ikke længere null
+                    
                     if (ingredient.Liquid != null && ingredient.Liquid.Pant != null)
                     {
-                        // Trækker 1 stk. mixer pr. drink (da I kører i hele flasker)
                         ingredient.Liquid.StockQuantity -= drinkQty;
                     }
                 }
 
-                // Opretter salgslinjer for selve drinken
                 allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
             }
         }
 
-        // 4. Gem alt i én samlet database-transaktion
+        
         await _unitOfWork.Sales.AddRangeAsync(allSales);
         await _unitOfWork.SaveChangesAsync();
     }
