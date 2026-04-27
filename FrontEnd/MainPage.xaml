@@ -1,49 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FrontEnd.MainPage">
+             x:Class="FrontEnd.MainPage"
+             BackgroundColor="#0F0F12">
 
-    <Grid ColumnDefinitions="*, *">
-        <VerticalStackLayout Grid.Column="0" 
-                             Spacing="15" 
-                             HorizontalOptions="Center" 
-                             VerticalOptions="Center">
-            
-            <Label Text="Velkommen til Dambaren"
-                   Style="{StaticResource Headline}"
-                   HorizontalTextAlignment="Center" />
+    <Grid ColumnDefinitions="*, *" Padding="40">
+        
+        <Border Grid.Column="0"
+                Stroke="#B84A84"
+                StrokeThickness="1"
+                BackgroundColor="#18181C"
+                StrokeShape="RoundRectangle 16"
+                Padding="30"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
 
-            <Entry x:Name="UsernameEntry" 
-                   Placeholder="Username" 
-                   MinimumWidthRequest="250"
-                   MaximumWidthRequest="500"
-                   HorizontalOptions="Center" />
+            <VerticalStackLayout Spacing="20"
+                                 HorizontalOptions="Center">
 
-            <Entry x:Name="PasswordEntry"
-                   Placeholder="Password" 
-                   IsPassword="True"
-                   MinimumWidthRequest="250"
-                   MaximumWidthRequest="500"
-                   HorizontalOptions="Center"
-                   Completed="LoginClicked"/>
+                <Label Text="Welcome to the Dambar"
+                       TextColor="#FFD3E6"
+                       FontSize="26"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center" />
+                
+                <Border Stroke="#B84A84"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#111114"
+                        Padding="12,4">
 
-            <Button x:Name="loginButton"
-                    Text="Login"
-                    BackgroundColor="HotPink"
-                    MaximumWidthRequest="200"
-                    Clicked="LoginClicked"
-                    />
-        </VerticalStackLayout>
+                    <Entry x:Name="UsernameEntry"
+                           Placeholder="Username"
+                           PlaceholderColor="#C98AA8"
+                           TextColor="#F7F2F5"
+                           BackgroundColor="Transparent"
+                           MinimumWidthRequest="250"
+                           MaximumWidthRequest="400" />
+                </Border>
+                
+                <Border Stroke="#B84A84"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#111114"
+                        Padding="12,4">
 
-        <VerticalStackLayout Grid.Column="1" 
-                             HorizontalOptions="Center" 
+                    <Entry x:Name="PasswordEntry"
+                           Placeholder="Password"
+                           PlaceholderColor="#C98AA8"
+                           IsPassword="True"
+                           TextColor="#F7F2F5"
+                           BackgroundColor="Transparent"
+                           MinimumWidthRequest="250"
+                           MaximumWidthRequest="400" />
+                </Border>
+                
+                <Button x:Name="loginButton"
+                        Text="Login"
+                        BackgroundColor="#FF4FA3"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="10"
+                        HeightRequest="50"
+                        WidthRequest="180"
+                        BorderColor="#FF79C6"
+                        BorderWidth="1.5"
+                        Clicked="LoginClicked" />
+
+            </VerticalStackLayout>
+        </Border>
+        
+        <VerticalStackLayout Grid.Column="1"
+                             HorizontalOptions="Center"
                              VerticalOptions="Center">
 
             <Image Source="dambaren.png"
-                   BackgroundColor="Transparent"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   Aspect="AspectFit" />
+                   Aspect="AspectFit"
+                   HeightRequest="300"
+                   HorizontalOptions="Center" />
+
         </VerticalStackLayout>
 
     </Grid>
