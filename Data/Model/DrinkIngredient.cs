@@ -9,13 +9,11 @@ public class DrinkIngredient
     public Drink Drink { get; set; }
     public int LiquidProductId { get; set; }
     public Liquid Liquid { get; set; }
-    public int VolumeCl { get; set; }
 
     public DrinkIngredient() { }
 
-    public DrinkIngredient(int liquidProductId, int volumeCl)
+    public DrinkIngredient(int liquidProductId)
     {
         LiquidProductId = liquidProductId;
-        VolumeCl = volumeCl;
     }
 }

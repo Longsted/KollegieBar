@@ -137,7 +137,6 @@
                             <Grid ColumnDefinitions="*, Auto" Padding="0,5">
                                 <Label Text="{Binding Name}" TextColor="White" FontSize="16" VerticalOptions="Center" />
                                 <Label Grid.Column="1" 
-                                       Text="{Binding CostPrice, StringFormat='{0} kr.'}" 
                                        TextColor="#FF79C6" 
                                        FontAttributes="Bold" 
                                        VerticalOptions="Center" />
