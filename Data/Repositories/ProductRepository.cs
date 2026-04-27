@@ -2,6 +2,7 @@
 using Data.Interfaces;
 using Data.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Data.Repositories;
 
@@ -31,7 +32,7 @@ public class ProductRepository : IProductRepository
     {
         await _context.Products.AddAsync(product);
     }
-    
+
 
     public Task DeleteAsync(Product product)
     {
@@ -40,12 +41,17 @@ public class ProductRepository : IProductRepository
         {
             throw new InvalidOperationException("Product not found");
         }
-         _context.Products.Remove(product);
+        _context.Products.Remove(product);
         return Task.CompletedTask;
     }
 
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Product>> GetWhereAsync(Expression<Func<Product, bool>> predicate)
+    {
+        return await _context.Products.Where(predicate).ToListAsync();
     }
 }

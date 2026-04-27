@@ -1,9 +1,7 @@
 ﻿using BusinessLogic.InterfaceBusiness;
-using DataTransferObject.Model;
 using BusinessLogic.Mappers;
-using Data.Model;
 using Data.UnitOfWork;
-using Sale = Data.Model.Sale;
+using DataTransferObject.Model;
 
 namespace BusinessLogic.BusinessLogicLayer;
 
@@ -59,93 +57,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         }
     }
 
-    public async Task RegisterSaleAsync(List<int>productIds)
-    {
-        var grouped = productIds.GroupBy(id => id).
-            Select(g => new { productId = g.Key,
-                                            quantity = g.Count() });
-        
-        var transactionId = Guid.NewGuid();
-        var now = DateTime.UtcNow;
-        var allSales = new List <Sale>();
-        foreach (var item in grouped)
-        {
-            var product = await _unitOfWork.Products.GetByIdAsync(item.productId);
-            if (product == null)
-            {
-                throw new InvalidOperationException("Product not found");
-            }
-
-            switch (product)
-            {
-                case Data.Model.Snack snack:
-                    HandleSnackSale(snack, item.quantity);
-                    break;
-                case Data.Model.Liquid liquid:
-                    HandleAlcoholSale(liquid, item.quantity);
-                    break;
-                default:
-
-                    throw new NotSupportedException($"unknown type product {product.GetType().Name}");
-
-            }
-
-
-
-            var sales = CreateSales(product, item.quantity, transactionId, now);
-            allSales.AddRange(sales);
-            
-        }
-        await _unitOfWork.Sales.AddRangeAsync(allSales);
-        await _unitOfWork.SaveChangesAsync();
-    }
-
-    private void HandleSnackSale(Data.Model.Snack snack, int quantity)
-    {
-        if (quantity <= 0)
-        {
-            throw new ArgumentException("Invalid quantity");
-        }
-
-        if (snack.StockQuantity < quantity)
-        {
-            throw new InvalidOperationException("Not enough stock");
-        }
-
-        snack.StockQuantity -= quantity;
-    }
-
-    private void HandleAlcoholSale(Data.Model.Liquid alcohol, int quantity)
-    {
-        if (quantity <= 0)
-        {
-            throw new ArgumentException("Invalid quantity");
-        }
-
-        var removeClFromBottle = quantity * 2;
-        if (alcohol.VolumeCl < removeClFromBottle && alcohol.StockQuantity == 0)
-        {
-            throw new InvalidOperationException("Not enough stock");
-        }
-
-        alcohol.VolumeCl -= removeClFromBottle;
-    }
-
-    private List<Sale> CreateSales(Data.Model.Product product, int quantity, Guid transactionId,
-        DateTime now)
-    {
-        var sales = new List<Sale>();
-
-        for (int i = 0; i < quantity; i++)
-        {
-            var sale = new Sale(product.CostPrice, now, transactionId, product);
-            sales.Add(sale);
-        }
-
-        return sales;
-    }
-
-
     public async Task RegisterIncomingStockAsync(int productId, int newQuantity)
     {
         if (newQuantity < 0)
@@ -192,16 +103,33 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         return products.Select(ProductMapper.Map).ToList();
     }
 
-    public async Task RegisterWaste(int productId, int quantity)
+    //This method is used to register waste of a products, it reduces the stock by 1 for each product id in the list.
+    //Could save the changes to a waste log if needed, but for now it just updates the stock quantity.
+    public async Task RegisterWaste(List<int> productIds)
     {
-        if (quantity < 0)
-            throw new ArgumentException("Invalid quantity");
-        var product = await _unitOfWork.Products.GetByIdAsync(productId);
-        if (product == null)
-            throw new InvalidOperationException("Product not found");
-        if (product.StockQuantity < quantity)
-            throw new InvalidOperationException("Not enough stock to register waste");
-        product.StockQuantity -= quantity;
+        var uniqueIds = productIds.Distinct().ToList();
+        var products = await _unitOfWork.Products.GetWhereAsync(p => uniqueIds.Contains(p.Id));
+
+
+        if (products.Count != uniqueIds.Count)
+        {
+            throw new InvalidOperationException("One or more products were not found.");
+        }
+
+        var wasteCounts = productIds.GroupBy(id => id)
+                                    .ToDictionary(g => g.Key, g => g.Count());
+
+        foreach (var product in products)
+        {
+            int amountToRemove = wasteCounts[product.Id];
+
+            if (product.StockQuantity < amountToRemove)
+            {
+                throw new InvalidOperationException($"Not enough stock for product {product.Id}");
+            }
+
+            product.StockQuantity -= amountToRemove;
+        }
         await _unitOfWork.SaveChangesAsync();
     }
 
