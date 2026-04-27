@@ -119,15 +119,36 @@ public partial class BarOverview : ContentPage
         HelperMethodsToClearCartAndTotal();
     }
 
+    // This method registers the selected items as wasted instead of sold.
     private async void Waste(object sender, EventArgs e)
     {
+        if (CurrentOrder.Count == 0)
+        {
+            await DisplayAlert("Empty", "No items to register as waste.", "OK");
+            return;
+        }
 
-        // _productBusinessLogicLayer.RegisterWaste();
+        bool confirm = await DisplayAlert("Register Waste", "Register waste for items on the receipt?", "Yes", "Cancel");
+        if (!confirm)
+            return;
+
+        var productIds = CurrentOrder.Select(p => p.Id).ToList();
+
+        try
+        {
+            await _productBusinessLogicLayer.RegisterWaste(productIds);
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to register waste: {ex.Message}", "OK");
+            return;
+        }
 
         HelperMethodsToClearCartAndTotal();
 
-        DisplayAlertAsync("IKke så meget pis", "Det virker", "cáncel");
-        
+        await DisplayAlert("Success", "Waste registered.", "OK");
+
+        LoadProducts();
     }
 
     // This method is is so the bartender can remove a item on the currentOrderList 
