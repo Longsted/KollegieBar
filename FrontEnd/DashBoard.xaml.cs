@@ -1,10 +1,10 @@
+using BusinessLogic.BusinessLogicLayer;
+using BusinessLogic.InterfaceBusiness;
+using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using BusinessLogic.BusinessLogicLayer;
-using BusinessLogic.InterfaceBusiness;
-using DataTransferObject.Model;
 
 namespace FrontEnd;
 
@@ -89,4 +89,15 @@ public class DashboardViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-}
+
+    //public ICommand EditProductCommand => new Command(async () =>
+    //{
+    //    if (SelectedProduct == null)
+    //    {
+    //        await Shell.Current.DisplayAlert("Error", "Please select a product first", "OK");
+    //        return;
+    //    }
+    //    // Navigate to the EditProductPopup, passing the selected product
+    //    var result = await new EditProductPopup(SelectedProduct).ShowAsync();
+
+//}
