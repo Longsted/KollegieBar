@@ -6,7 +6,7 @@ public interface IDrinkRepository
 {
     Task<List<Drink>> GetAllAsync();
     
-    Task<Drink> GetByIdAsync(int id);
+    Task<Drink?> GetByIdAsync(int id);
     
     Task AddAsync(Drink drink);
     

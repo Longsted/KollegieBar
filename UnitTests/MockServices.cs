@@ -82,24 +82,6 @@ namespace UnitTests
         }
     }
 
-    public class DrinkCustomizationService
-    {
-        public bool CustomizeDrink(UserDataTransferObject userDataTransferObject, DrinkDataTransferObject drinkDataTransferObject, double newPrice)
-        {
-            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.Bartender)
-                return false;
-
-            if (newPrice < 0)
-            {
-                return false;
-            }
-
-            drinkDataTransferObject.CostPrice = newPrice;
-
-            return true;
-        }
-    }
-
     public class WasteRegistrationService
     {
         public bool RegisterWaste(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int amountLost)
