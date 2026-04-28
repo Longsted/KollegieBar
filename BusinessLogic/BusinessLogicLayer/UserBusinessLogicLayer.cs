@@ -38,55 +38,7 @@ public class UserBusinessLogicLayer :  IUserBusinessLogicLayer
         return users.Select(UserMapper.Map).ToList();
     }
 
-    // public void AddUser(UserDto userDto)
-    // {
-    //     if (userDto == null)
-    //     {
-    //         throw new NullReferenceException();
-    //     }
-    //
-    //     _userRepository.AddAsync(userDto);
-    // }
-    //
-    // public void DeleteUser(int userId)
-    // {
-    //     if (userId <= 0)
-    //     {
-    //         throw new IndexOutOfRangeException();
-    //     }
-    //
-    //     _userRepository.DeleteAsync(userId);
-    // }
-
-    // public async Task UpdateUserAsync(UserDto userDto)
-    // {
-    //     if (userDto == null)
-    //     {
-    //         throw new NullReferenceException();
-    //     }
-    //
-    //     if (userDto.Id <= 0)
-    //     {
-    //         throw new IndexOutOfRangeException();
-    //     }
-    //     var existingUser = await _userRepository.GetByIdAsync(userDto.Id);
-    //
-    //     if (existingUser == null)
-    //     {
-    //         throw new InvalidOperationException("User not found");
-    //     }
-    //     UserMapper
-    // }
-
-    // public UserDto CreateUser(UserDto userDto)
-    // {
-    //     if (userDto == null)
-    //     {
-    //         throw new NullReferenceException();
-    //     }
-    //
-    //     return _userRepository.CreateUser(userDto);
-    // }
+    
 
     public async Task<int> CheckUserAsync(string password, string username)
     {

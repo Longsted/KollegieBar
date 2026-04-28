@@ -48,10 +48,10 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
     public async Task CreateDrinkAsync(DrinkDataTransferObject drink)
     {
         ValidateDrink(drink);
-
+        //Extract unique ingredient for validation
         var drinkIngredientId = drink.Ingredients.Select(index => index.LiquidProductId).Distinct().ToList();
 
-
+        // fetch all required liquids in one query 
         var liquids = await _unitOfWork.Products.GetWhereAsync(products => drinkIngredientId.Contains(products.Id));
 
         if (liquids.Count != drinkIngredientId.Count)
@@ -70,13 +70,11 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
     {
         ValidateDrinkUpdate(drink);
 
-        if (drink.Ingredients != null &&
-            drink.Ingredients.Any())
+        if (drink.Ingredients != null && drink.Ingredients.Any())
         {
             throw new InvalidOperationException("Handle drink ingredients through add/remove methods");
         }
-
-
+        
         var existingDrink = await _unitOfWork.Drinks.GetByIdAsync(drink.Id);
 
         if (existingDrink == null)
@@ -91,14 +89,12 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
 
     public async Task AddDrinkIngredient(int drinkId, int liquidProductId)
     {
-        var drink =
-            await GetDrinkOrThrow(drinkId);
+        var drink = await GetDrinkOrThrow(drinkId);
 
 
         await GetLiquidOrThrow(liquidProductId);
 
-        bool exists = drink.Ingredients
-            .Any(i => i.LiquidProductId == liquidProductId);
+        bool exists = drink.Ingredients.Any(index => index.LiquidProductId == liquidProductId);
 
         if (exists)
             throw new InvalidOperationException(
@@ -116,7 +112,7 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
 
         var ingredient = GetIngredientOrThrow(drink, ingredientId);
 
-        // optional: ensure empty recipe cannot happen
+        //ensures empty recipe cannot happen
         if (drink.Ingredients.Count == 1)
             throw new InvalidOperationException(
                 "A drink must contain at least one ingredient"
@@ -176,7 +172,7 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
     private DrinkIngredient GetIngredientOrThrow(Drink drink, int ingredientId)
     {
         var ingredient = drink.Ingredients
-            .FirstOrDefault(i => i.Id == ingredientId
+            .FirstOrDefault(drinkingredient => drinkingredient.Id == ingredientId
             );
 
         if (ingredient == null)
@@ -228,10 +224,11 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
             }
         }
 
-        // no dublicate ingredients
+        // group ingredients by liquidProductId and detect
+        // whether the same ingredient has been added more than once
         bool duplicates = drink.Ingredients
-            .GroupBy(i => i.LiquidProductId)
-            .Any(g => g.Count() > 1);
+            .GroupBy(drinkingredient => drinkingredient.LiquidProductId)
+            .Any(grouping => grouping.Count() > 1);
 
         if (duplicates)
         {
