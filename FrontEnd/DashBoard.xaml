@@ -6,9 +6,9 @@
              BackgroundColor="#0F0F12"
              Shell.NavBarIsVisible="True">
 
-    <Grid ColumnDefinitions="300, *" Padding="40" ColumnSpacing="40">
+    <Grid ColumnDefinitions="300,*" Padding="40" ColumnSpacing="40">
 
-        <!-- LEFT SIDE (Product List + Filters) -->
+        <!-- LEFT SIDE -->
         <Border Grid.Column="0"
                 Stroke="#B84A84"
                 StrokeThickness="1"
@@ -16,63 +16,56 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="10">
 
-            <VerticalStackLayout Spacing="12">
+            <Grid RowDefinitions="Auto,*" RowSpacing="12">
 
-                <!-- Filter / Sort row -->
-                <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                <!-- Filters -->
+                <Grid Grid.Row="0" ColumnDefinitions="*,*" ColumnSpacing="12">
                     <Picker ItemsSource="{Binding Categories}"
                             SelectedItem="{Binding SelectedCategory}"
                             Title="Category"
-                            TextColor="#FFD3E6" />
+                            TextColor="#FFD3E6"/>
 
                     <Picker Grid.Column="1"
                             ItemsSource="{Binding SortOptions}"
                             SelectedItem="{Binding SelectedSortOption}"
                             Title="Sort by"
-                            TextColor="#FFD3E6" />
+                            TextColor="#FFD3E6"/>
                 </Grid>
 
-                <!-- Product list -->
-                <CollectionView ItemsSource="{Binding Products}"
+                <!-- Scrollable product list -->
+                <CollectionView Grid.Row="1"
+                                ItemsSource="{Binding Products}"
                                 SelectionMode="Single"
+                                ItemsUpdatingScrollMode="KeepScrollOffset"
                                 SelectedItem="{Binding SelectedProduct, Mode=TwoWay}">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <!-- Two columns: name on left, quantity on right -->
-                            <Grid Padding="12" ColumnDefinitions="*, Auto" BackgroundColor="Transparent">
+                            <Grid Padding="12" ColumnDefinitions="*,Auto">
 
                                 <Label Grid.Column="0"
                                        Text="{Binding Name}"
                                        FontSize="16"
-                                       TextColor="#FFD3E6"
-                                       VerticalOptions="Center" />
+                                       TextColor="#FFD3E6"/>
 
                                 <Label Grid.Column="1"
                                        Text="{Binding StockQuantity}"
                                        FontSize="14"
                                        TextColor="#C98AA8"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="End"
-                                       Margin="12,0,0,0" />
+                                       HorizontalOptions="End"/>
 
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup Name="CommonStates">
-
-                                        <!-- Normal (explicitly reset unselected state) -->
                                         <VisualState Name="Normal">
                                             <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="Transparent" />
+                                                <Setter Property="BackgroundColor" Value="Transparent"/>
                                             </VisualState.Setters>
                                         </VisualState>
-
-                                        <!-- Selected style -->
                                         <VisualState Name="Selected">
                                             <VisualState.Setters>
-                                                <Setter Property="BackgroundColor" Value="#FF4FA3" />
+                                                <Setter Property="BackgroundColor" Value="#FF4FA3"/>
                                             </VisualState.Setters>
                                         </VisualState>
-
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
 
@@ -81,10 +74,11 @@
                     </CollectionView.ItemTemplate>
 
                 </CollectionView>
-            </VerticalStackLayout>
+
+            </Grid>
         </Border>
 
-        <!-- RIGHT SIDE (Details) -->
+        <!-- RIGHT SIDE (unchanged) -->
         <Border Grid.Column="1"
                 Stroke="#B84A84"
                 StrokeThickness="1"
@@ -92,17 +86,15 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="30">
 
-            <Grid RowDefinitions="Auto, Auto, Auto"
-                  ColumnDefinitions="200, *"
+            <Grid RowDefinitions="Auto,Auto,Auto"
+                  ColumnDefinitions="200,*"
                   RowSpacing="25"
                   ColumnSpacing="20">
 
-                <!-- Selected product -->
                 <Label Grid.Row="0" Grid.Column="0"
                        Text="Selected product:"
                        TextColor="#FFD3E6"
-                       FontSize="16"
-                       VerticalOptions="Center" />
+                       FontSize="16"/>
 
                 <Border Grid.Row="0" Grid.Column="1"
                         Stroke="#B84A84"
@@ -118,12 +110,10 @@
                            FontSize="16"/>
                 </Border>
 
-                <!-- Quantity -->
                 <Label Grid.Row="1" Grid.Column="0"
                        Text="Quantity:"
                        TextColor="#FFD3E6"
-                       FontSize="16"
-                       VerticalOptions="Center" />
+                       FontSize="16"/>
 
                 <Border Grid.Row="1" Grid.Column="1"
                         Stroke="#B84A84"
@@ -141,7 +131,6 @@
                            FontSize="16"/>
                 </Border>
 
-                <!-- Button -->
                 <Button Grid.Row="2" Grid.Column="1"
                         Text="Add quantity"
                         BackgroundColor="#FF4FA3"
@@ -159,5 +148,4 @@
         </Border>
 
     </Grid>
-
 </ContentPage>

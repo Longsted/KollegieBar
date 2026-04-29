@@ -4,184 +4,154 @@
              x:Class="FrontEnd.BarOverview"
              Title="BarOverview"
              BackgroundColor="#111114">
-    <Grid ColumnDefinitions="Auto,*, 350" Padding="20" ColumnSpacing="5">
+
+    <Grid ColumnDefinitions="Auto,*,350" Padding="20" ColumnSpacing="5">
+
+        <!-- LEFT MENU -->
         <VerticalStackLayout Grid.Column="0" Spacing="15" VerticalOptions="Start">
-            <Button Text="Flasker" 
-                HeightRequest="80" 
-                BackgroundColor="#18181C" 
-                BorderColor="#B84A84" 
-                BorderWidth="1"
-                TextColor="White"
+            <Button Text="Flasker" HeightRequest="80" BackgroundColor="#18181C"
+                    BorderColor="#B84A84" BorderWidth="1" TextColor="White"
                     Clicked="ShowBot"/>
 
-            <Button Text="Drinks" 
-                HeightRequest="80" 
-                BackgroundColor="#18181C" 
-                BorderColor="#B84A84" 
-                BorderWidth="1"
-                TextColor="White"
-                Clicked="ShowDrinks"/>
-            
-            <Button Text="Mocktail" 
-               HeightRequest="80" 
-               BackgroundColor="#18181C" 
-               BorderColor="#B84A84" 
-               BorderWidth="1"
-               TextColor="White"
-               Clicked="ShowMockTails"/>
+            <Button Text="Drinks" HeightRequest="80" BackgroundColor="#18181C"
+                    BorderColor="#B84A84" BorderWidth="1" TextColor="White"
+                    Clicked="ShowDrinks"/>
 
-            <Button Text="Snacks" 
-                HeightRequest="80" 
-                BackgroundColor="#18181C" 
-                BorderColor="#B84A84" 
-                BorderWidth="1"
-                TextColor="White"
-                Clicked="ShowSnacks"/>
+            <Button Text="Mocktail" HeightRequest="80" BackgroundColor="#18181C"
+                    BorderColor="#B84A84" BorderWidth="1" TextColor="White"
+                    Clicked="ShowMockTails"/>
 
-            <Button Text="EVERYTHING" 
-             HeightRequest="80" 
-             BackgroundColor="#18181C" 
-             BorderColor="#B84A84" 
-             BorderWidth="1"
-             TextColor="White"
-             Clicked="ShowAll"/>
+            <Button Text="Snacks" HeightRequest="80" BackgroundColor="#18181C"
+                    BorderColor="#B84A84" BorderWidth="1" TextColor="White"
+                    Clicked="ShowSnacks"/>
+
+            <Button Text="EVERYTHING" HeightRequest="80" BackgroundColor="#18181C"
+                    BorderColor="#B84A84" BorderWidth="1" TextColor="White"
+                    Clicked="ShowAll"/>
         </VerticalStackLayout>
 
-        <Border Grid.Column="1" 
-                Stroke="#B84A84" 
-                StrokeThickness="1" 
-                BackgroundColor="#18181C" 
-                StrokeShape="RoundRectangle 16" 
+        <!-- MIDDLE COLUMN -->
+        <Border Grid.Column="1"
+                Stroke="#B84A84"
+                StrokeThickness="1"
+                BackgroundColor="#18181C"
+                StrokeShape="RoundRectangle 16"
                 Padding="20">
 
-            <Grid RowDefinitions="*, Auto, Auto">
+            <Grid RowDefinitions="*,Auto" RowSpacing="15">
 
-                <CollectionView x:Name="ProductCollectionView" Grid.Row="0">
+                <!-- Scrollable product list -->
+                <CollectionView x:Name="ProductCollectionView"
+                                Grid.Row="0"
+                                ItemsUpdatingScrollMode="KeepScrollOffset">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="5" 
-                                     HorizontalItemSpacing="15" VerticalItemSpacing="15" />
+                        <GridItemsLayout Orientation="Vertical" Span="5"
+                                         HorizontalItemSpacing="15"
+                                         VerticalItemSpacing="15" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Button Text="{Binding Name}"
-                                FontSize="18"
-                                FontAttributes="Bold"
-                                HeightRequest="120"
-                                BackgroundColor="#111114"
-                                TextColor="White"
-                                BorderColor="#FF79C6"
-                                CornerRadius="12"
-                                BorderWidth="1"
-                                Clicked="OnProductClicked" />
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    HeightRequest="120"
+                                    BackgroundColor="#111114"
+                                    TextColor="White"
+                                    BorderColor="#FF79C6"
+                                    CornerRadius="12"
+                                    BorderWidth="1"
+                                    Clicked="OnProductClicked"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <BoxView Grid.Row="1" HeightRequest="1" Color="#B84A84" Margin="0,15" />
 
-                <HorizontalStackLayout Grid.Row="2" 
-                               Spacing="10" 
-                               HorizontalOptions="EndAndExpand" 
-                               Margin="0,20,0,0">
-                    
+                <!-- Bottom buttons -->
+                <HorizontalStackLayout Grid.Row="1"
+                                       Spacing="10"
+                                       HorizontalOptions="EndAndExpand">
 
-                    <Button Text="Ryd valg" 
-                    BackgroundColor="#444" 
-                    TextColor="White" 
-                    WidthRequest="150"
-                    HeightRequest="50"
-                    CornerRadius="10"
-                    HorizontalOptions="Start"
-                    Clicked="ClearCart"/>
-                    <Button Text="Modify" 
-                    BackgroundColor="#B84A84" 
-                    TextColor="White" 
-                    FontAttributes="Bold" 
-                    HeightRequest="60"
-                    WidthRequest="150"
-                    CornerRadius="12"/>
-                    <Button Text="Add Drink" 
-                    BackgroundColor="#B84A84" 
-                    TextColor="White" 
-                    FontAttributes="Bold" 
-                    HeightRequest="60"
-                    WidthRequest="150"
-                    CornerRadius="12" />
-                    <Button Text="Waste" 
-                    BackgroundColor="#B84A84" 
-                    TextColor="White" 
-                    FontAttributes="Bold" 
-                    HeightRequest="60"
-                    WidthRequest="150"
-                    CornerRadius="12"
-                    Clicked="Waste"/>
+                    <Button Text="Ryd valg" BackgroundColor="#444"
+                            TextColor="White" WidthRequest="150"
+                            HeightRequest="50" CornerRadius="10"
+                            Clicked="ClearCart"/>
 
+                    <Button Text="Modify" BackgroundColor="#B84A84"
+                            TextColor="White" FontAttributes="Bold"
+                            HeightRequest="60" WidthRequest="150"
+                            CornerRadius="12"/>
+
+                    <Button Text="Add Drink" BackgroundColor="#B84A84"
+                            TextColor="White" FontAttributes="Bold"
+                            HeightRequest="60" WidthRequest="150"
+                            CornerRadius="12"/>
+
+                    <Button Text="Waste" BackgroundColor="#B84A84"
+                            TextColor="White" FontAttributes="Bold"
+                            HeightRequest="60" WidthRequest="150"
+                            CornerRadius="12"
+                            Clicked="Waste"/>
                 </HorizontalStackLayout>
+
             </Grid>
         </Border>
 
-        <Border Grid.Column="2" 
-                Stroke="#B84A84" 
-                StrokeThickness="1" 
-                BackgroundColor="#18181C" 
-                StrokeShape="RoundRectangle 16" 
+        <!-- RIGHT COLUMN -->
+        <Border Grid.Column="2"
+                Stroke="#B84A84"
+                StrokeThickness="1"
+                BackgroundColor="#18181C"
+                StrokeShape="RoundRectangle 16"
                 Padding="20">
 
-            <Grid RowDefinitions="Auto, *, Auto, Auto,Auto">
-                <Label Grid.Row="0" 
-                       Text="AKTIV ORDRE" 
-                       TextColor="#FF79C6" 
-                       FontSize="22" 
-                       FontAttributes="Bold" 
-                       HorizontalOptions="Center" 
-                       Margin="0,0,0,20" />
+            <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" RowSpacing="15">
 
-                <CollectionView x:Name="ReceiptCollectionView" 
+                <Label Grid.Row="0"
+                       Text="AKTIV ORDRE"
+                       TextColor="#FF79C6"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+
+                <!-- Scrollable receipt -->
+                <CollectionView x:Name="ReceiptCollectionView"
                                 Grid.Row="1"
-                                SelectionMode="Single" 
+                                SelectionMode="Single"
+                                ItemsUpdatingScrollMode="KeepScrollOffset"
                                 SelectionChanged="OnReceiptSelectionChanged">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="*, Auto" Padding="0,5">
-                                <Label Text="{Binding Name}" TextColor="White" FontSize="16" VerticalOptions="Center" />
-                                <Label Grid.Column="1" 
-                                       TextColor="#FF79C6" 
-                                       FontAttributes="Bold" 
-                                       VerticalOptions="Center" />
+                            <Grid ColumnDefinitions="*,Auto" Padding="0,5">
+                                <Label Text="{Binding Name}" TextColor="White" FontSize="16"/>
+                                <Label Grid.Column="1" TextColor="#FF79C6"
+                                       FontAttributes="Bold"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <BoxView Grid.Row="2" HeightRequest="1" Color="#B84A84" Margin="0,15" />
-
-                <Grid Grid.Row="3" ColumnDefinitions="*, Auto" Margin="0,15,0,5">
-                    <Label Text="TOTAL" 
-                     TextColor="White" 
-                     FontSize="18" 
-                     FontAttributes="Bold" 
-                     VerticalOptions="Center" />
-                    <Label x:Name="TotalSumLabel" 
-                     Grid.Column="1" 
-                     Text="0,00 kr." 
-                     TextColor="#FF79C6" 
-                     FontSize="22" 
-                     FontAttributes="Bold" 
-                     VerticalOptions="Center" />
+                <Grid Grid.Row="3" ColumnDefinitions="*,Auto">
+                    <Label Text="TOTAL" TextColor="White"
+                           FontSize="18" FontAttributes="Bold"/>
+                    <Label x:Name="TotalSumLabel"
+                           Grid.Column="1"
+                           Text="0,00 kr."
+                           TextColor="#FF79C6"
+                           FontSize="22"
+                           FontAttributes="Bold"/>
                 </Grid>
 
                 <Button Grid.Row="4"
                         x:Name="BtnPay"
-                        Text="Checkout" 
+                        Text="Checkout"
                         Clicked="OnCheckoutClicked"
-                        BackgroundColor="#B84A84" 
-                        TextColor="White" 
-                        FontAttributes="Bold" 
-                        HeightRequest="60" 
-                        CornerRadius="12" />
+                        BackgroundColor="#B84A84"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HeightRequest="60"
+                        CornerRadius="12"/>
             </Grid>
         </Border>
+
     </Grid>
 </ContentPage>
-
-
