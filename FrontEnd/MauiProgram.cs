@@ -48,6 +48,13 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        return builder.Build();
+        var app = builder.Build();
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();    
+            db.Database.Migrate();
+        }
+        return app;
+        // return builder.Build();
     }
 }
