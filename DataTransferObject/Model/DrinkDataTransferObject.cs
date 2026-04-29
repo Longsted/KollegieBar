@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public class DrinkDataTransferObject
+public class DrinkDataTransferObject : ICartItem
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

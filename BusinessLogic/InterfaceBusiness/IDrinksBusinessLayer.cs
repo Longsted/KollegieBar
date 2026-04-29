@@ -1,4 +1,5 @@
-﻿using DataTransferObject.Model;
+﻿using Data.Model;
+using DataTransferObject.Model;
 
 namespace BusinessLogic.InterfaceBusiness;
 
@@ -7,6 +8,8 @@ public interface IDrinksBusinessLogicLayer
     Task CreateDrinkAsync(DrinkDataTransferObject drink);
 
     Task UpdateDrinkAsync(DrinkDataTransferObject drink);
+
+    Task<List<Drink>> GetDrinksWithIngredientsAsync(List<int> drinkIds);
 
     Task DeleteDrinkAsync(int id);
 
