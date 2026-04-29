@@ -1,32 +1,78 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FrontEnd.EditProductPopup">
-    
-    <StackLayout>
-        <Label Text="Min stock:"
-               FontAttributes="Bold"
+             xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             x:Class="FrontEnd.EditProductPopup"
+               BackgroundColor="Black" >
+
+    <VerticalStackLayout Spacing="25" Padding="30" WidthRequest="450">
+
+        <Label FontAttributes="Bold"
+               x:Name="TitleLabel"
+               FontSize="22"
                TextColor="#FFD3E6"
-               FontSize="14" />
-    
-        <Entry x:Name="MinStockEntry"
-               Placeholder="Enter minimum stock"
-               Keyboard="Numeric"
-               BackgroundColor="Transparent"
-               TextColor="#F7F2F5"
-               PlaceholderColor="#C98AA8" />
+               HorizontalOptions="Center" />
 
-        <Label Text="Max stock:"
-               FontAttributes="Bold"
-               TextColor="#FFD3E6"
-               FontSize="14" />
+        <Grid ColumnDefinitions="Auto, *, Auto, *" ColumnSpacing="15" VerticalOptions="Center">
 
-        <Entry x:Name="MaxStockEntry"
-               Placeholder="Enter maximum stock"
-               Keyboard="Numeric"
-               BackgroundColor="Transparent"
-               TextColor="#F7F2F5"
-               PlaceholderColor="#C98AA8" />
-    </StackLayout>
+            <Label Grid.Column="0" 
+                   Text="Min stock:"
+                   FontAttributes="Bold"
+                   TextColor="#FFD3E6"
+                   FontSize="14" 
+                   VerticalOptions="Center" />
 
-</ContentView>
+            <Border Grid.Column="1"
+                    Stroke="#B84A84"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    BackgroundColor="#111114"
+                    Padding="10,4">
+
+                <Entry x:Name="MinStockEntry"
+                       Keyboard="Numeric"
+                       BackgroundColor="Transparent"
+                       TextColor="#F7F2F5" />
+
+            </Border>
+
+            <Label Grid.Column="2" 
+                   Text="Max stock:"
+                   FontAttributes="Bold"
+                   TextColor="#FFD3E6"
+                   FontSize="14" 
+                   VerticalOptions="Center" />
+
+            <Border Grid.Column="3"
+                    Stroke="#B84A84"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8"
+                    BackgroundColor="#111114"
+                    Padding="10,4">
+
+                <Entry x:Name="MaxStockEntry"
+                       Keyboard="Numeric"
+                       BackgroundColor="Transparent"
+                       TextColor="#F7F2F5" />
+            </Border>
+        </Grid>
+
+        <Grid ColumnDefinitions="*, *" ColumnSpacing="20" Margin="0,10,0,0">
+            <Button Grid.Column="0" 
+                    Text="Cancel" 
+                    BackgroundColor="#FF4FA3"
+                    BorderColor="#FF79C6"
+                    TextColor="White"
+                    Clicked="OnCancelClicked" />
+
+            <Button Grid.Column="1" 
+                    Text="Save" 
+                    BackgroundColor="#FF4FA3" 
+                    BorderColor="#FF79C6"
+                    TextColor="White"
+                    FontAttributes="Bold" 
+                    Clicked="OnSaveClicked" />
+        </Grid>
+
+    </VerticalStackLayout>
+</toolkit:Popup>

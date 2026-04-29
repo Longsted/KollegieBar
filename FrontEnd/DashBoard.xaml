@@ -107,7 +107,11 @@
                 </Border>
 
                 <!-- Button -->
-                <Button Grid.Row="2" Grid.Column="1"
+                <HorizontalStackLayout Grid.Row="2" Grid.Column="1"
+                                     Spacing="15"
+                                     VerticalOptions="Start">
+
+                    <Button Grid.Row="2" Grid.Column="1"
                         Text="Add quantity"
                         BackgroundColor="#FF4FA3"
                         TextColor="White"
@@ -120,7 +124,7 @@
                         FontAttributes="Bold"
                         Command="{Binding AddQuantityCommand}"/>
 
-                <Button Grid.Row="2" Grid.Column="2"
+                    <Button Grid.Row="2" Grid.Column="2"
                         Text="Edit Product"
                         BackgroundColor="#FF4FA3"
                         TextColor="White"
@@ -132,6 +136,7 @@
                         BorderWidth="1.5"
                         FontAttributes="Bold"
                         Command="{Binding EditProductCommand}"/>
+                </HorizontalStackLayout>
 
             </Grid>
         </Border>

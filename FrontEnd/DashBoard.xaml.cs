@@ -1,5 +1,5 @@
-using BusinessLogic.BusinessLogicLayer;
 using BusinessLogic.InterfaceBusiness;
+using CommunityToolkit.Maui.Extensions;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -90,14 +90,22 @@ public class DashboardViewModel : INotifyPropertyChanged
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-    //public ICommand EditProductCommand => new Command(async () =>
-    //{
-    //    if (SelectedProduct == null)
-    //    {
-    //        await Shell.Current.DisplayAlert("Error", "Please select a product first", "OK");
-    //        return;
-    //    }
-    //    // Navigate to the EditProductPopup, passing the selected product
-    //    var result = await new EditProductPopup(SelectedProduct).ShowAsync();
+    public ICommand EditProductCommand => new Command(async () =>
+    {
+        if (SelectedProduct == null)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", "Please select a product first", "OK");
+            return;
+        }
 
-//}
+        var product = SelectedProduct;
+        var popup = new EditProductPopup(product);
+        var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+
+        if (popup.IsSaved)
+        {
+            //await _iProductBusinessLogicLayer.UpdateProductAsync(product);
+        }
+    });
+
+}
