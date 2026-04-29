@@ -2,17 +2,14 @@
 using DataTransferObject.Model;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Data.Context;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Data.Model.User> Users { get; set; }
-    public DbSet<Data.Model.Product> Products { get; set; }
-    public DbSet<Data.Model.Sale> Sales { get; set; }
-    public DbSet<Data.Model.Drink> Drinks { get; set; }
-    public DbSet<Data.Model.DrinkIngredient> DrinkIngredients { get; set; }
-
+    public DbSet<User> Users { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Sale> Sales { get; set; }
+    public DbSet<Drink> Drinks { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -21,27 +18,24 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Data.Model.Liquid>();
-        modelBuilder.Entity<Data.Model.Snack>();
-        modelBuilder.Entity<Data.Model.Consumables>();
+        // Register product subtypes
+        modelBuilder.Entity<Liquid>();
+        modelBuilder.Entity<Snack>();
+        modelBuilder.Entity<Consumables>();
 
-        //seed users
-        modelBuilder.Entity<Data.Model.User>().HasData(
-            new Data.Model.User
-            {
-                Id = 1,
-                UserName = "Admin",
-                Password = "1234",
-                Role = UserRole.BoardMember
-            }, new Data.Model.User
-            {
-                Id = 2,
-                UserName = "bar",
-                Password = "1234",
-                Role = UserRole.Bartender
-            }
+        // Many-to-many Drink <-> Liquid
+        modelBuilder.Entity<Drink>()
+            .HasMany(d => d.Ingredients)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("DrinkLiquid"));
+
+        // Seed users
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 1, UserName = "Admin", Password = "1234", Role = UserRole.BoardMember },
+            new User { Id = 2, UserName = "bar", Password = "1234", Role = UserRole.Bartender }
         );
-        
+
+        // Seed snacks
         modelBuilder.Entity<Snack>().HasData(
     new Snack("Popcorn", 10.00m, 50)
     {
@@ -199,6 +193,9 @@ public class AppDbContext : DbContext
     new { Id = 111, DrinkId = 94, LiquidProductId = 80, LiquidId = 80 }
 );
 
+        // No DrinkIngredient seeding anymore
+
         base.OnModelCreating(modelBuilder);
     }
 }
+ 

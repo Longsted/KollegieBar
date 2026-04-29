@@ -2,7 +2,6 @@
 using Data.Model;
 using Data.UnitOfWork;
 using DataTransferObject.Model;
-using Microsoft.VisualBasic.CompilerServices;
 using Sale = Data.Model.Sale;
 
 namespace BusinessLogic.BusinessLogicLayer;
@@ -95,63 +94,45 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
-    private void HandleSnackSale(Data.Model.Snack snack, int quantity)
+
+    private void HandleSnackSale(Snack snack, int quantity)
     {
         if (quantity <= 0)
-        {
             throw new ArgumentException("Invalid quantity");
-        }
 
         if (snack.StockQuantity < quantity)
-        {
             throw new InvalidOperationException("Not enough stock");
-        }
 
         snack.StockQuantity -= quantity;
     }
 
     /// <summary>
-    /// Handles volume reduction for liquid (alcohol) products.
-    /// 
-    /// Calculates how many centiliters to remove based on quantity sold.
-    /// Assumes each sale corresponds to 20 cl.
+    /// Handles stock reduction for liquid products.
     /// </summary>
-    /// <param name="liquid">The liquid product to update.</param>
-    /// <param name="quantity">The quantity sold.</param>
-    /// <exception cref="ArgumentException">If quantity is invalid.</exception>
-    /// <exception cref="InvalidOperationException">If there is not enough volume available.</exception>
-    private void HandleLiquidSale(Data.Model.Liquid liquid, int quantity)
+    private void HandleLiquidSale(Liquid liquid, int quantity)
     {
         if (quantity <= 0)
-        {
             throw new ArgumentException("Invalid quantity");
-        }
 
         if (liquid.AlcoholPercentage >= 16)
         {
             if (liquid.StockQuantity == 0)
-            {
                 throw new InvalidOperationException("Not enough stock");
-            }
         }
         else
         {
+            if (liquid.StockQuantity < quantity)
+                throw new InvalidOperationException("Not enough stock");
+
             liquid.StockQuantity -= quantity;
         }
     }
 
     /// <summary>
     /// Creates a list of Sale entities for a given product and quantity.
-    /// 
     /// Each unit sold results in a separate Sale record, all sharing the same transaction ID.
     /// </summary>
-    /// <param name="product">The product being sold.</param>
-    /// <param name="quantity">Number of units sold.</param>
-    /// <param name="transactionId">Unique identifier for the transaction.</param>
-    /// <param name="now">Timestamp of the sale.</param>
-    /// <returns>A list of Sale entities.</returns>
-    private List<Sale> CreateSales(Data.Model.Product product, int quantity, Guid transactionId,
-        DateTime now)
+    private List<Sale> CreateSales(Product product, int quantity, Guid transactionId, DateTime now)
     {
         var sales = new List<Sale>();
 
@@ -177,42 +158,26 @@ public class SalesBusinessLayer : ISalesBusinessLayer
 
     public async Task AddIngredient(int saleid, DrinkIngredient ingredient)
     {
-        if (ingredient == null)
-            throw new ArgumentNullException(nameof(ingredient));
+        var drink = await GetDrinkOrThrow(saleId);
+        var liquid = await GetLiquidOrThrow(liquidId);
 
+        var existing = drink.Ingredients.FirstOrDefault(l => l.Id == liquidId);
+        if (existing != null)
+            throw new InvalidOperationException("Ingredient already exists");
 
-        var drink = await GetDrinkOrThrow(saleid);
-
-        var existing = drink.Ingredients
-            .FirstOrDefault(i => i.LiquidProductId == ingredient.LiquidProductId);
-        
-            drink.Ingredients.Add(ingredient);
-        
+        drink.Ingredients.Add(liquid);
 
         await _unitOfWork.SaveChangesAsync();
     }
 
-    // public async Task AdjustIngredientAmount(int saleid, int ingredientId, int amount)
-    // {
-    //     var drink = await GetDrinkOrThrow(saleid);
-    //
-    //     var existing = GetIngredientOrThrow(drink, ingredientId);
-    //
-    //     existing.VolumeCl += amount;
-    //
-    //     if (existing.VolumeCl <= 0)
-    //     {
-    //         drink.Ingredients.Remove(existing);
-    //     }
-    //
-    //     await _unitOfWork.SaveChangesAsync();
-    // }
-
-    public async Task RemoveIngredient(int saleid, int ingredientId)
+    /// <summary>
+    /// Removes a liquid ingredient from the drink associated with a sale.
+    /// </summary>
+    public async Task RemoveIngredient(int saleId, int liquidId)
     {
-        var drink = await GetDrinkOrThrow(saleid);
+        var drink = await GetDrinkOrThrow(saleId);
 
-        var ingredientToRemove = GetIngredientOrThrow(drink, ingredientId);
+        var ingredientToRemove = GetIngredientOrThrow(drink, liquidId);
 
         drink.Ingredients.Remove(ingredientToRemove);
 
@@ -225,7 +190,6 @@ public class SalesBusinessLayer : ISalesBusinessLayer
             throw new ArgumentOutOfRangeException(nameof(saleId));
 
         var sale = await _unitOfWork.Sales.GetAsync(saleId);
-
         if (sale == null)
             throw new InvalidOperationException("Sale not found");
 
@@ -235,12 +199,24 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         return sale.Drink;
     }
 
-    private DrinkIngredient GetIngredientOrThrow(Drink drink, int ingredientId)
+    private async Task<Liquid> GetLiquidOrThrow(int liquidId)
     {
-        var ingredient = drink.Ingredients
-            .FirstOrDefault(i => i.Id == ingredientId);
+        if (liquidId <= 0)
+            throw new ArgumentOutOfRangeException(nameof(liquidId));
 
+        var product = await _unitOfWork.Products.GetByIdAsync(liquidId);
+        if (product == null)
+            throw new InvalidOperationException("Liquid not found");
 
+        if (product is not Liquid liquid)
+            throw new InvalidOperationException("Product is not a liquid");
+
+        return liquid;
+    }
+
+    private Liquid GetIngredientOrThrow(Drink drink, int liquidId)
+    {
+        var ingredient = drink.Ingredients.FirstOrDefault(l => l.Id == liquidId);
         if (ingredient == null)
             throw new InvalidOperationException("Ingredient not found");
 

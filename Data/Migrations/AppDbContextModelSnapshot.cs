@@ -619,6 +619,21 @@ namespace Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DrinkLiquid", b =>
+                {
+                    b.Property<int>("DrinkId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IngredientsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DrinkId", "IngredientsId");
+
+                    b.HasIndex("IngredientsId");
+
+                    b.ToTable("DrinkLiquid", (string)null);
+                });
+
             modelBuilder.Entity("Data.Model.Consumables", b =>
                 {
                     b.HasBaseType("Data.Model.Product");
@@ -1041,25 +1056,6 @@ namespace Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
-                {
-                    b.HasOne("Data.Model.Drink", "Drink")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("DrinkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Model.Liquid", "Liquid")
-                        .WithMany()
-                        .HasForeignKey("LiquidId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Drink");
-
-                    b.Navigation("Liquid");
-                });
-
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
                     b.HasOne("Data.Model.Drink", "Drink")
@@ -1075,9 +1071,19 @@ namespace Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Data.Model.Drink", b =>
+            modelBuilder.Entity("DrinkLiquid", b =>
                 {
-                    b.Navigation("Ingredients");
+                    b.HasOne("Data.Model.Drink", null)
+                        .WithMany()
+                        .HasForeignKey("DrinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Model.Liquid", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
