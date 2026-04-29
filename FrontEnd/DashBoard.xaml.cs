@@ -1,12 +1,10 @@
+using BusinessLogic.InterfaceBusiness;
+using CommunityToolkit.Maui.Extensions;
+using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using BusinessLogic.InterfaceBusiness;
-using DataTransferObject.Model;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace FrontEnd;
 
@@ -40,7 +38,6 @@ public class DashboardViewModel : INotifyPropertyChanged
         // Setup categories (based on DTO classes)
         Categories.Add("All");
         Categories.Add("Snack");
-        Categories.Add("Drink");
         Categories.Add("Liquid");
         Categories.Add("Consumable"); // fallback group: ProductDataTransferObject but not Snack/Liquid
 
@@ -212,4 +209,23 @@ public class DashboardViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+    public ICommand EditProductCommand => new Command(async () =>
+    {
+        if (SelectedProduct == null)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", "Please select a product first", "OK");
+            return;
+        }
+
+        var product = SelectedProduct;
+        var popup = new EditProductPopup(product);
+        var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+
+        if (popup.IsSaved)
+        {
+            await _iProductBusinessLogicLayer.UpdateProductAsync(product);
+        }
+    });
+
 }
