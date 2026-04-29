@@ -114,7 +114,7 @@ public class AppDbContext : DbContext
 );
 
 
-        modelBuilder.Entity<DrinkIngredient>().HasData(
+        modelBuilder.Entity<Liquid>().HasData(
             new { Id = 1, DrinkId = 10, LiquidProductId = 20, LiquidId = 20},
             new { Id = 2, DrinkId = 10, LiquidProductId = 27, LiquidId = 27},
             new { Id = 3, DrinkId = 10, LiquidProductId = 25, LiquidId = 25},
@@ -169,7 +169,7 @@ public class AppDbContext : DbContext
     new { Id = 56, DrinkId = 70, LiquidProductId = 46, LiquidId = 46 },
     new { Id = 57, DrinkId = 70, LiquidProductId = 39, LiquidId = 39 }
 );
-        modelBuilder.Entity<DrinkIngredient>().HasData(
+        modelBuilder.Entity<Liquid>().HasData(
     // Børnebrandbil: Saftevand (81), Red Soda (48)
     new { Id = 100, DrinkId = 90, LiquidProductId = 81, LiquidId = 81 },
     new { Id = 101, DrinkId = 90, LiquidProductId = 48, LiquidId = 48 },
