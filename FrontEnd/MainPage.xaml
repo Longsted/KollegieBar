@@ -75,7 +75,7 @@
                              HorizontalOptions="Center"
                              VerticalOptions="Center">
 
-            <Image Source="dambaren.png"
+            <Image Source="dambaren_blacked.png"
                    Aspect="AspectFit"
                    HeightRequest="300"
                    HorizontalOptions="Center" />

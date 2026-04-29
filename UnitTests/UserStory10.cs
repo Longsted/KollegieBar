@@ -1,4 +1,9 @@
-﻿using DataTransferObject.Model;
+﻿using System.Linq.Expressions;
+using BusinessLogic.BusinessLogicLayer;
+using Data.Interfaces;
+using Data.Model;
+using Data.UnitOfWork;
+using Moq;
 using Xunit;
 
 namespace UnitTests
@@ -6,46 +11,99 @@ namespace UnitTests
   
     public class UserStory10
     {
-        // Tests that a bartender can register waste and the product stock decreases.
+        
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+        private readonly Mock<IProductRepository> _mockProductRepository;
+        private readonly ProductBusinessLogicLayer _productService;
 
-        [Fact]
-        public void Bartender_ShouldBeAbleTo_RegisterWaste()
+
+        public UserStory10()
         {
-            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
-
-            var product = new LiquidDataTransferObject
+            _mockUnitOfWork = new Mock<IUnitOfWork>();
+            _mockProductRepository = new Mock<IProductRepository>();
+            
+            _mockUnitOfWork.Setup(u => u.Products).Returns(_mockProductRepository.Object);
+            
+            _productService = new ProductBusinessLogicLayer(_mockUnitOfWork.Object);
+        }
+        
+        [Fact]
+        public async Task RegisterWaste_ValidProducts_ReducesStockCorrectly()
+        {
+            var beer = new Liquid
             {
-                Name = "Beer Bottle",
+                Id = 1,
+                Name = "Beer  Bottle",
                 StockQuantity = 10
             };
 
-            var service = new WasteRegistrationService();
-
-            var result = service.RegisterWaste(user, product, amountLost: 2);
-
-            Assert.True(result);
-            Assert.Equal(8, product.StockQuantity); 
-        }
-
-        // Tests that a non-bartender cannot register waste and stock remains unchanged.
-
-        [Fact]
-        public void NonBartender_ShouldNotBeAbleTo_RegisterWaste()
-        {
-            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
-
-            var product = new LiquidDataTransferObject
+            var chips = new Snack
             {
-                Name = "Beer Bottle",
+                Id = 2,
+                Name = "Chips",
+                StockQuantity = 5
+            };
+
+            _mockProductRepository.Setup(r => r
+                .GetWhereAsync(It.IsAny<Expression<Func<Product, bool>>>()))
+                .ReturnsAsync(new List<Product> { beer, chips });
+            
+            var productIds = new List<int> { 1, 1, 2 };
+
+            await _productService.RegisterWaste(productIds);
+            
+            Assert.Equal(8, beer.StockQuantity);
+            Assert.Equal(4, chips.StockQuantity);
+            
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
+        }
+        
+        [Fact]
+        public async Task RegisterWaste_ProductNotFound_ThrowsInvalidOperationException()
+        {
+            var beer = new Liquid
+            {
+                Id = 1,
+                Name = "Beer  Bottle",
                 StockQuantity = 10
             };
 
-            var service = new WasteRegistrationService();
+            _mockProductRepository
+                .Setup(r => r.GetWhereAsync(It.IsAny<Expression<Func<Product, bool>>>()))
+                .ReturnsAsync(new List<Product> { beer });
 
-            var result = service.RegisterWaste(user, product, amountLost: 2);
+            var productIds = new List<int> { 1, 2 };
 
-            Assert.False(result);
-            Assert.Equal(10, product.StockQuantity); 
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                _productService.RegisterWaste(productIds));
+            
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
         }
+        
+        
+        [Fact]
+        public async Task RegisterWaste_InsufficientStock_ThrowsInvalidOperationException()
+        {
+            var beer = new Liquid
+            {
+                Id = 1,
+                Name = "Beer  Bottle",
+                StockQuantity = 1
+            };
+            
+            _mockProductRepository
+                .Setup(r => r.GetWhereAsync(It.IsAny<Expression<Func<Product, bool>>>()))
+                .ReturnsAsync(new List<Product> { beer });
+
+            var productIds = new List<int> { 1, 1};
+            
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                _productService.RegisterWaste(productIds));
+            
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
+        }
+        
+        
     }
+    
 }
