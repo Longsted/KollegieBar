@@ -38,40 +38,58 @@ public class SalesBusinessLayer : ISalesBusinessLayer
     /// <exception cref="ArgumentException">
     /// Thrown if quantity is invalid (≤ 0).
     /// </exception>
-    public async Task RegisterSaleAsync(List<int> productIds)
+    public async Task RegisterSaleAsync(List<int> productIds, List<int> drinkIds)
     {
-        var grouped = productIds
-            .GroupBy(id => id)
-            .Select(g => new { productId = g.Key, quantity = g.Count() });
-
         var transactionId = Guid.NewGuid();
         var now = DateTime.UtcNow;
         var allSales = new List<Sale>();
 
-        foreach (var item in grouped)
+       
+        var productGroups = productIds.GroupBy(id => id).ToDictionary(g => g.Key, g => g.Count());
+        var drinkGroups = drinkIds.GroupBy(id => id).ToDictionary(g => g.Key, g => g.Count());
+
+        
+        if (productGroups.Any())
         {
-            var product = await _unitOfWork.Products.GetByIdAsync(item.productId);
-            if (product == null)
-                throw new InvalidOperationException("Product not found");
+            
+            var products = await _unitOfWork.Products.GetWhereAsync(p => productGroups.Keys.Contains(p.Id));
 
-            switch (product)
+            foreach (var product in products)
             {
-                case Liquid liquid:
-                    HandleLiquidSale(liquid, item.quantity);
-                    break;
+                int qty = productGroups[product.Id];
 
-                case Snack snack:
-                    HandleSnackSale(snack, item.quantity);
-                    break;
+                
+                product.StockQuantity -= qty;
 
-                default:
-                    throw new NotSupportedException($"Unknown product type {product.GetType().Name}");
+                
+                allSales.AddRange(CreateSales(product, qty, transactionId, now));
             }
-
-            var sales = CreateSales(product, item.quantity, transactionId, now);
-            allSales.AddRange(sales);
         }
 
+        
+        if (drinkGroups.Any())
+        {
+            
+            var drinks = await _unitOfWork.Drinks.GetDrinksWithIngredientsAsync(drinkGroups.Keys.ToList());
+
+            foreach (var drink in drinks)
+            {
+                int drinkQty = drinkGroups[drink.Id];
+
+                foreach (var ingredient in drink.Ingredients)
+                {
+                    
+                    if (ingredient.Liquid != null && ingredient.Liquid.Pant != null)
+                    {
+                        ingredient.Liquid.StockQuantity -= drinkQty;
+                    }
+                }
+
+                allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
+            }
+        }
+
+        
         await _unitOfWork.Sales.AddRangeAsync(allSales);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -127,10 +145,18 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         return sales;
     }
 
-    /// <summary>
-    /// Adds a liquid ingredient to the drink associated with a sale.
-    /// </summary>
-    public async Task AddIngredient(int saleId, int liquidId)
+    private List<Sale> CreateSalesForDrink(Data.Model.Drink drink, int quantity, Guid transactionId, DateTime now)
+{
+    var sales = new List<Sale>();
+    for (int i = 0; i < quantity; i++)
+    {
+        var sale = new Sale((decimal)drink.CostPrice, now, transactionId, drink); 
+        sales.Add(sale);
+    }
+    return sales;
+}
+
+    public async Task AddIngredient(int saleid, DrinkIngredient ingredient)
     {
         var drink = await GetDrinkOrThrow(saleId);
         var liquid = await GetLiquidOrThrow(liquidId);

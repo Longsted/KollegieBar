@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260428172654_CockTails")]
+    partial class CockTails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,41 +138,6 @@ namespace Data.Migrations
                             CostPrice = 20.0,
                             IsAlcoholic = true,
                             Name = "Southern & Sprite"
-                        },
-                        new
-                        {
-                            Id = 90,
-                            CostPrice = 20.0,
-                            IsAlcoholic = false,
-                            Name = "Børnebrandbil"
-                        },
-                        new
-                        {
-                            Id = 91,
-                            CostPrice = 20.0,
-                            IsAlcoholic = false,
-                            Name = "Børnechampagnebrus"
-                        },
-                        new
-                        {
-                            Id = 92,
-                            CostPrice = 20.0,
-                            IsAlcoholic = false,
-                            Name = "Børnefilur"
-                        },
-                        new
-                        {
-                            Id = 93,
-                            CostPrice = 20.0,
-                            IsAlcoholic = false,
-                            Name = "Børneastronaut"
-                        },
-                        new
-                        {
-                            Id = 94,
-                            CostPrice = 20.0,
-                            IsAlcoholic = false,
-                            Name = "Safe Sex On The Beach"
                         });
                 });
 
@@ -422,90 +390,6 @@ namespace Data.Migrations
                             DrinkId = 70,
                             LiquidId = 39,
                             LiquidProductId = 39
-                        },
-                        new
-                        {
-                            Id = 100,
-                            DrinkId = 90,
-                            LiquidId = 81,
-                            LiquidProductId = 81
-                        },
-                        new
-                        {
-                            Id = 101,
-                            DrinkId = 90,
-                            LiquidId = 48,
-                            LiquidProductId = 48
-                        },
-                        new
-                        {
-                            Id = 102,
-                            DrinkId = 91,
-                            LiquidId = 81,
-                            LiquidProductId = 81
-                        },
-                        new
-                        {
-                            Id = 103,
-                            DrinkId = 91,
-                            LiquidId = 49,
-                            LiquidProductId = 49
-                        },
-                        new
-                        {
-                            Id = 104,
-                            DrinkId = 92,
-                            LiquidId = 25,
-                            LiquidProductId = 25
-                        },
-                        new
-                        {
-                            Id = 105,
-                            DrinkId = 92,
-                            LiquidId = 48,
-                            LiquidProductId = 48
-                        },
-                        new
-                        {
-                            Id = 106,
-                            DrinkId = 93,
-                            LiquidId = 81,
-                            LiquidProductId = 81
-                        },
-                        new
-                        {
-                            Id = 107,
-                            DrinkId = 93,
-                            LiquidId = 38,
-                            LiquidProductId = 38
-                        },
-                        new
-                        {
-                            Id = 108,
-                            DrinkId = 94,
-                            LiquidId = 25,
-                            LiquidProductId = 25
-                        },
-                        new
-                        {
-                            Id = 109,
-                            DrinkId = 94,
-                            LiquidId = 26,
-                            LiquidProductId = 26
-                        },
-                        new
-                        {
-                            Id = 110,
-                            DrinkId = 94,
-                            LiquidId = 82,
-                            LiquidProductId = 82
-                        },
-                        new
-                        {
-                            Id = 111,
-                            DrinkId = 94,
-                            LiquidId = 80,
-                            LiquidProductId = 80
                         });
                 });
 
@@ -617,21 +501,6 @@ namespace Data.Migrations
                             Role = 0,
                             UserName = "bar"
                         });
-                });
-
-            modelBuilder.Entity("DrinkLiquid", b =>
-                {
-                    b.Property<int>("DrinkId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IngredientsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DrinkId", "IngredientsId");
-
-                    b.HasIndex("IngredientsId");
-
-                    b.ToTable("DrinkLiquid", (string)null);
                 });
 
             modelBuilder.Entity("Data.Model.Consumables", b =>
@@ -748,45 +617,6 @@ namespace Data.Migrations
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Tranebærjuice",
-                            StockQuantity = 20,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 80,
-                            CostPrice = 40.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Grenadine",
-                            StockQuantity = 15,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 50
-                        },
-                        new
-                        {
-                            Id = 81,
-                            CostPrice = 15.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Saftevand (Rød)",
-                            StockQuantity = 50,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 82,
-                            CostPrice = 18.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Ananasjuice",
                             StockQuantity = 20,
                             AlcoholPercentage = 0.0,
                             Pant = 0,
@@ -1056,6 +886,25 @@ namespace Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
+                {
+                    b.HasOne("Data.Model.Drink", "Drink")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("DrinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Model.Liquid", "Liquid")
+                        .WithMany()
+                        .HasForeignKey("LiquidId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drink");
+
+                    b.Navigation("Liquid");
+                });
+
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
                     b.HasOne("Data.Model.Drink", "Drink")
@@ -1071,19 +920,9 @@ namespace Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DrinkLiquid", b =>
+            modelBuilder.Entity("Data.Model.Drink", b =>
                 {
-                    b.HasOne("Data.Model.Drink", null)
-                        .WithMany()
-                        .HasForeignKey("DrinkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Model.Liquid", null)
-                        .WithMany()
-                        .HasForeignKey("IngredientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }

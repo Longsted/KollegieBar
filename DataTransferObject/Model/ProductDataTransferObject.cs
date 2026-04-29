@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public abstract class ProductDataTransferObject
+public abstract class ProductDataTransferObject : ICartItem
 {
     public int Id { get; set; }
     public string Name { get; set; } 

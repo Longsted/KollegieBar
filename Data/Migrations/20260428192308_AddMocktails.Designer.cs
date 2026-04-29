@@ -3,6 +3,7 @@ using System;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260428192308_AddMocktails")]
+    partial class AddMocktails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -619,21 +622,6 @@ namespace Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DrinkLiquid", b =>
-                {
-                    b.Property<int>("DrinkId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IngredientsId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("DrinkId", "IngredientsId");
-
-                    b.HasIndex("IngredientsId");
-
-                    b.ToTable("DrinkLiquid", (string)null);
-                });
-
             modelBuilder.Entity("Data.Model.Consumables", b =>
                 {
                     b.HasBaseType("Data.Model.Product");
@@ -1056,6 +1044,25 @@ namespace Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
+                {
+                    b.HasOne("Data.Model.Drink", "Drink")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("DrinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Model.Liquid", "Liquid")
+                        .WithMany()
+                        .HasForeignKey("LiquidId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Drink");
+
+                    b.Navigation("Liquid");
+                });
+
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
                     b.HasOne("Data.Model.Drink", "Drink")
@@ -1071,19 +1078,9 @@ namespace Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DrinkLiquid", b =>
+            modelBuilder.Entity("Data.Model.Drink", b =>
                 {
-                    b.HasOne("Data.Model.Drink", null)
-                        .WithMany()
-                        .HasForeignKey("DrinkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Model.Liquid", null)
-                        .WithMany()
-                        .HasForeignKey("IngredientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618
         }
