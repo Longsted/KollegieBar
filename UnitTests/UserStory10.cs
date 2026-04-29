@@ -3,7 +3,6 @@ using BusinessLogic.BusinessLogicLayer;
 using Data.Interfaces;
 using Data.Model;
 using Data.UnitOfWork;
-using DataTransferObject.Model;
 using Moq;
 using Xunit;
 
