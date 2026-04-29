@@ -113,16 +113,6 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         return sales;
     }
 
-    private List<Sale> CreateSalesForDrink(Data.Model.Drink drink, int quantity, Guid transactionId, DateTime now)
-{
-    var sales = new List<Sale>();
-    for (int i = 0; i < quantity; i++)
-    {
-        var sale = new Sale((decimal)drink.CostPrice, now, transactionId, drink); 
-        sales.Add(sale);
-    }
-    return sales;
-}
 
     private List<Sale> CreateSalesForDrink(Drink drink, int quantity, Guid transactionId, DateTime now)
     {

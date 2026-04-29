@@ -25,7 +25,6 @@ public class DrinkRepository : IDrinkRepository
     {
         return await _context.Drinks
             .Include(d => d.Ingredients)
-                .ThenInclude(i => i.Liquid) 
             .FirstOrDefaultAsync(d => d.Id == id);
     }
 
