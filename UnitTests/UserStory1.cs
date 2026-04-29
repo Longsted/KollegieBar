@@ -50,7 +50,7 @@ namespace UnitTests
                 Name = "Gin & Tonic",
                 CostPrice = 50,
                 Ingredients = new List<Liquid> {
-                    new Liquid { Id = tonic.Id, Name = tonic.Name, StockQuantity = tonic.StockQuantity, Pant = tonic.Pant }
+                    tonic
                 }
             };
 

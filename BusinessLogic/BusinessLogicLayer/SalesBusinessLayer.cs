@@ -59,6 +59,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
                 // Reduce stock for each liquid ingredient
                 foreach (var liquid in drink.Ingredients)
                 {
+                    
                     if (liquid.StockQuantity < drinkQty)
                         throw new InvalidOperationException($"Not enough stock for ingredient {liquid.Name}");
 

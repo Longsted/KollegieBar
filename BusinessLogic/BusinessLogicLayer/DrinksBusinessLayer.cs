@@ -178,9 +178,6 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
 
     public async Task<List<Drink>> GetDrinksWithIngredientsAsync(List<int> drinkIds)
     {
-        if (drinkIds == null || !drinkIds.Any())
-            return new List<Drink>();
-
         return await _unitOfWork.Drinks.GetDrinksWithIngredientsAsync(drinkIds);
     }
 }
