@@ -40,7 +40,6 @@ public class DashboardViewModel : INotifyPropertyChanged
         // Setup categories (based on DTO classes)
         Categories.Add("All");
         Categories.Add("Snack");
-        Categories.Add("Drink");
         Categories.Add("Liquid");
         Categories.Add("Consumable"); // fallback group: ProductDataTransferObject but not Snack/Liquid
 
