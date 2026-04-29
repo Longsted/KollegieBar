@@ -8,7 +8,7 @@
 
     <Grid ColumnDefinitions="300, *" Padding="40" ColumnSpacing="40">
 
-        <!-- LEFT SIDE (Product List) -->
+        <!-- LEFT SIDE (Product List + Filters) -->
         <Border Grid.Column="0"
                 Stroke="#B84A84"
                 StrokeThickness="1"
@@ -16,37 +16,72 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="10">
 
-            <CollectionView ItemsSource="{Binding Products}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedProduct}">
+            <VerticalStackLayout Spacing="12">
 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="12">
+                <!-- Filter / Sort row -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="12">
+                    <Picker ItemsSource="{Binding Categories}"
+                            SelectedItem="{Binding SelectedCategory}"
+                            Title="Category"
+                            TextColor="#FFD3E6" />
 
-                            <Label Text="{Binding Name}"
-                                   FontSize="16"
-                                   TextColor="#FFD3E6"
-                                   VerticalOptions="Center" />
+                    <Picker Grid.Column="1"
+                            ItemsSource="{Binding SortOptions}"
+                            SelectedItem="{Binding SelectedSortOption}"
+                            Title="Sort by"
+                            TextColor="#FFD3E6" />
+                </Grid>
 
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup Name="CommonStates">
+                <!-- Product list -->
+                <CollectionView ItemsSource="{Binding Products}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedProduct, Mode=TwoWay}">
 
-                                    <!-- Selected style -->
-                                    <VisualState Name="Selected">
-                                        <VisualState.Setters>
-                                            <Setter Property="BackgroundColor" Value="#FF4FA3" />
-                                        </VisualState.Setters>
-                                    </VisualState>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Two columns: name on left, quantity on right -->
+                            <Grid Padding="12" ColumnDefinitions="*, Auto" BackgroundColor="Transparent">
 
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
+                                <Label Grid.Column="0"
+                                       Text="{Binding Name}"
+                                       FontSize="16"
+                                       TextColor="#FFD3E6"
+                                       VerticalOptions="Center" />
 
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
+                                <Label Grid.Column="1"
+                                       Text="{Binding StockQuantity}"
+                                       FontSize="14"
+                                       TextColor="#C98AA8"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       Margin="12,0,0,0" />
 
-            </CollectionView>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+
+                                        <!-- Normal (explicitly reset unselected state) -->
+                                        <VisualState Name="Normal">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="Transparent" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+
+                                        <!-- Selected style -->
+                                        <VisualState Name="Selected">
+                                            <VisualState.Setters>
+                                                <Setter Property="BackgroundColor" Value="#FF4FA3" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+            </VerticalStackLayout>
         </Border>
 
         <!-- RIGHT SIDE (Details) -->

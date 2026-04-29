@@ -39,8 +39,8 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     }
 
 
-    public void ValidateProduct(ProductDataTransferObject product)
-    {
+    private void ValidateProduct(ProductDataTransferObject product)
+    {       
         if (string.IsNullOrWhiteSpace(product.Name))
             throw new ArgumentException("Name is required");
 

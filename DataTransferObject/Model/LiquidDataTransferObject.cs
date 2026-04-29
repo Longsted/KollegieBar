@@ -7,6 +7,8 @@ public class LiquidDataTransferObject : ProductDataTransferObject
     public double AlcoholPercentage { get; set; }
     public bool SugarFree { get; set; }
 
+    public bool HasPant => PantDataTransferObject != PantDataTransferObject.None;
+    
     public LiquidDataTransferObject()
     {
     }
@@ -16,6 +18,7 @@ public class LiquidDataTransferObject : ProductDataTransferObject
         VolumeCl = volumeCl;
         PantDataTransferObject = pantDataTransferObject;
         AlcoholPercentage = alcoholPercentage;
+        PantDataTransferObject = pantDataTransferObject;
     }
 
     public LiquidDataTransferObject(string name, decimal costPrice, int stockQuantity, int volumeCl, PantDataTransferObject pantDataTransferObject, bool sugarFree) : base(name, costPrice, stockQuantity)
@@ -23,6 +26,8 @@ public class LiquidDataTransferObject : ProductDataTransferObject
         VolumeCl = volumeCl;
         PantDataTransferObject = pantDataTransferObject;
         SugarFree = sugarFree;
+        PantDataTransferObject = pantDataTransferObject;
+
     }
 
     public LiquidDataTransferObject(string name, decimal costPrice, int stockQuantity, int volumeCl, double alcoholPercentage) : base(name, costPrice, stockQuantity)

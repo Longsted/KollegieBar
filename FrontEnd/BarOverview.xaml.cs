@@ -1,10 +1,12 @@
 using BusinessLogic.BusinessLogicLayer;
+using BusinessLogic.InterfaceBusiness;
+using Data.Model;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Linq;
-using BusinessLogic.InterfaceBusiness;
 using System.Runtime.CompilerServices;
+using System.Text;
+using Windows.ApplicationModel.Chat;
 
 namespace FrontEnd;
 
@@ -13,20 +15,31 @@ public partial class BarOverview : ContentPage
 
 	private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
 
-    public ObservableCollection<ProductDataTransferObject> CurrentOrder { get; set; } = new();
+    private readonly ISalesBusinessLayer _salesBusinessLayer;
+
+    private readonly IDrinksBusinessLogicLayer _drinksBusinessLogic;
+
+    public ObservableCollection<ICartItem> CurrentOrder { get; set; } = new();
+
+    public List<ICartItem> EverythingThatsOnTheMenu { get; set; }
+
 
     //public List<ProductDataTransferObject> Snacks { get; set; } = new();
 
     private List<ProductDataTransferObject> _allProducts = new();
 
+    private List<DrinkDataTransferObject> _allDrinks = new();
 
-    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer)
+
+    public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer, ISalesBusinessLayer SalesBusinessLayer, IDrinksBusinessLogicLayer drinksBusiness)
 	{
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
 
 
         _productBusinessLogicLayer = productBusinessLogicLayer;
+        _salesBusinessLayer = SalesBusinessLayer;
+        _drinksBusinessLogic = drinksBusiness;  
         LoadProducts();
 
     }
@@ -37,11 +50,20 @@ public partial class BarOverview : ContentPage
         {
             var products = await _productBusinessLogicLayer.GetAllProductsAsync();
 
+            var drinks = await _drinksBusinessLogic.GetAllDrinksAsync();
+
             _allProducts = products.ToList();
 
-            ProductCollectionView.ItemsSource = products;
+            _allDrinks = drinks.ToList();
 
-          
+            var alleVare = _allProducts.Cast<ICartItem>()
+                           .Concat(_allDrinks.Cast<ICartItem>())
+                           .ToList();
+            EverythingThatsOnTheMenu = alleVare;
+
+            ProductCollectionView.ItemsSource = EverythingThatsOnTheMenu;
+
+
         }
         catch (Exception ex)
         {
@@ -54,65 +76,69 @@ public partial class BarOverview : ContentPage
     private async void OnProductClicked(object sender, EventArgs e)
     {
         var button = sender as Button;
-        var product = button?.BindingContext as ProductDataTransferObject;
+        var item = button?.BindingContext as ICartItem;
 
-        if (product != null)
+        if (item != null)
         {
-            CurrentOrder.Add(product);
-            UpdateTotalSum();
-            //Console.WriteLine($"Tilføjet: {product.Name}. Antal varer på bon: {CurrentOrder.Count}");
+            CurrentOrder.Add(item);
+            
         }
     }
-    private async void UpdateTotalSum()
-    {
-        decimal total = CurrentOrder.Sum(p => p.CostPrice);
 
-        TotalSumLabel.Text = $"{total:N2} kr.";
-    }
 
 
     private async void OnCheckoutClicked(object sender, EventArgs e)
     {
-
         if (CurrentOrder.Count == 0)
         {
-            DisplayAlertAsync("Emty cart", "Add something to the order before you checkout", "cancel");
-
+            await DisplayAlertAsync("Empty cart", "Add something to the order before you checkout", "cancel");
+            return;
         }
-        else if (CurrentOrder.Count != 0)
-        {
-            
 
-            var opsummering = CurrentOrder.GroupBy(p => p.Id).Select(g => new {
+        // Opsummeringen
+        var opsummering = CurrentOrder.GroupBy(item => new { item.Id, Type = item.GetType() })
+            .Select(g => new {
                 Antal = g.Count(),
-                Navn = g.First().Name,
-                Total = g.Sum(x => x.CostPrice)
-            }) .ToList();
+                Navn = g.First().Name
+            }).ToList();
 
-            
-
-            string tekst = ""; 
-            for (int i = 0; opsummering.Count > i; i++)
-            {
-                
-                tekst += opsummering[i].Antal + " x " + opsummering[i].Navn +"\n";
-            }
-            List<int> productIds = CurrentOrder.Select(p => p.Id).ToList();
-
-           // await _productBusinessLogicLayer.RegisterSaleAsync(productIds);
-
-            
-
-
-            bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel","OK");
-
-            if (!answer)
-            {
-                HelperMethodsToClearCartAndTotal();
-            }
+        string tekst = "";
+        foreach (var linje in opsummering)
+        {
+            tekst += $"{linje.Antal} x {linje.Navn}\n";
         }
 
+        
+        var productIds = CurrentOrder
+            .Where(item => item is ProductDataTransferObject)
+            .Select(p => p.Id)
+            .ToList();
+
+        var drinkIds = CurrentOrder
+            .Where(item => item is DrinkDataTransferObject)
+            .Select(d => d.Id)
+            .ToList();
+
+        bool answer = await DisplayAlertAsync("Ordre", tekst, "Cancel", "OK");
+
+        if (!answer)
+        {
+            try
+            {
+                await _salesBusinessLayer.RegisterSaleAsync(productIds, drinkIds);
+
+                
+                HelperMethodsToClearCartAndTotal();
+                await DisplayAlert("Success", "Order registered successfully", "OK");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Failed to register order: {ex.Message}", "OK");
+            }
+        }
     }
+
+
 
     private async void ClearCart(object sender, EventArgs e)
     {
@@ -155,7 +181,7 @@ public partial class BarOverview : ContentPage
     private async void OnReceiptSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         
-        var selectedItem = e.CurrentSelection.FirstOrDefault() as ProductDataTransferObject;
+        var selectedItem = e.CurrentSelection.FirstOrDefault() as ICartItem;
 
         if (selectedItem == null)
             return;
@@ -166,7 +192,7 @@ public partial class BarOverview : ContentPage
         if (!answer)
         {
             CurrentOrder.Remove(selectedItem);
-            UpdateTotalSum(); 
+            // UpdateTotalSum(); 
         }
         ((CollectionView)sender).SelectedItem = null;
     }
@@ -194,15 +220,23 @@ public partial class BarOverview : ContentPage
     }
     private async void ShowDrinks(object sender, EventArgs e)
     {
-        var drnkOnly = _allProducts
+        var drnkOnly = _allDrinks
             .Where(p => p is DataTransferObject.Model.DrinkDataTransferObject)
+            .ToList();
+
+        ProductCollectionView.ItemsSource = drnkOnly;
+    }
+    private async void ShowMockTails(object sender, EventArgs e)
+    {
+        var drnkOnly = _allDrinks
+            .Where(p => p is DataTransferObject.Model.DrinkDataTransferObject && !p.IsAlcoholic)
             .ToList();
 
         ProductCollectionView.ItemsSource = drnkOnly;
     }
     private async void ShowAll(object sender, EventArgs e)
     {
-        ProductCollectionView.ItemsSource = _allProducts;
+        ProductCollectionView.ItemsSource = EverythingThatsOnTheMenu;
     }
 
 

@@ -12,6 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public IProductRepository Products { get; }
     public IUserRepository Users { get; }
     public ISalesRepository Sales { get; }
+    public IDrinkRepository Drinks { get; }
 
     public UnitOfWork(AppDbContext dbContext)
     {
@@ -19,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
         Products = new ProductRepository(_dbContext);
         Users = new UserRepository(_dbContext);
         Sales = new SaleRepository(_dbContext);
+        Drinks = new DrinkRepository(_dbContext);
     }
 
     public async Task SaveChangesAsync()
