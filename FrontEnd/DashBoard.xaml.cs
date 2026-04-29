@@ -3,13 +3,8 @@ using CommunityToolkit.Maui.Extensions;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using BusinessLogic.InterfaceBusiness;
-using DataTransferObject.Model;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace FrontEnd;
 
@@ -230,7 +225,7 @@ public class DashboardViewModel : INotifyPropertyChanged
 
         if (popup.IsSaved)
         {
-            //await _iProductBusinessLogicLayer.UpdateProductAsync(product);
+            await _iProductBusinessLogicLayer.UpdateProductAsync(product);
         }
     });
 

@@ -47,6 +47,8 @@ namespace BusinessLogic.Mappers
             entity.Name = dataTransferObject.Name;
             entity.CostPrice = dataTransferObject.CostPrice;
             entity.StockQuantity = dataTransferObject.StockQuantity;
+            entity.MinStockQuantity = dataTransferObject.MinStockQuantity;
+            entity.MaxStockQuantity = dataTransferObject.MaxStockQuantity;
         }
     }
 }
