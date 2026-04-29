@@ -15,7 +15,7 @@
 
                 <VerticalStackLayout Spacing="20">
 
-                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                    <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="10">
 
                         <Button x:Name="SnackTabButton"
                                 Grid.Column="0"
@@ -26,7 +26,7 @@
                                 CornerRadius="10"
                                 HeightRequest="48"
                                 BorderColor="#FF79C6"
-                                BorderWidth="1.5"
+                                BorderWidth="1"
                                 FontSize="13" />
 
                         <Button x:Name="LiquidTabButton"
@@ -41,8 +41,20 @@
                                 BorderWidth="1"
                                 FontSize="13" />
 
-                        <Button x:Name="ConsumableTabButton"
+                        <Button x:Name="DrinkTabButton"
                                 Grid.Column="2"
+                                Text="Drink"
+                                Clicked="OnDrinkSelected"
+                                BackgroundColor="#111114"
+                                TextColor="#FFD3E6"
+                                CornerRadius="10"
+                                HeightRequest="48"
+                                BorderColor="#B84A84"
+                                BorderWidth="1"
+                                FontSize="13" />
+
+                        <Button x:Name="ConsumableTabButton"
+                                Grid.Column="3"
                                 Text="Consumables"
                                 Clicked="OnConsumableSelected"
                                 BackgroundColor="#111114"
@@ -56,8 +68,6 @@
 
                     <!-- Name of Product -->
                     <VerticalStackLayout Spacing="14">
-
-                        
                         <Label Text="Name"
                                FontAttributes="Bold"
                                TextColor="#FFD3E6"
@@ -75,188 +85,253 @@
                                    PlaceholderColor="#C98AA8" />
                         </Border>
 
-                        <Grid ColumnDefinitions="*,*"
-                              ColumnSpacing="16">
+                        <VerticalStackLayout x:Name="StandardProductFields" Spacing="14" IsVisible="True">
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="16">
+                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                    <Label Text="Cost Price" FontAttributes="Bold" TextColor="#FFD3E6"
+                                           FontSize="14" />
+                                    <Border Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                                            BackgroundColor="#111114" Padding="12,4">
+                                        <Entry x:Name="CostPriceEntry" Placeholder="Enter cost price"
+                                               Keyboard="Numeric" BackgroundColor="Transparent" TextColor="#F7F2F5"
+                                               PlaceholderColor="#C98AA8" />
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                    <Label Text="Stock Quantity" FontAttributes="Bold" TextColor="#FFD3E6"
+                                           FontSize="14" />
+                                    <Border Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                                            BackgroundColor="#111114" Padding="12,4">
+                                        <Entry x:Name="StockQuantityEntry" Placeholder="Enter stock quantity"
+                                               Keyboard="Numeric" BackgroundColor="Transparent" TextColor="#F7F2F5"
+                                               PlaceholderColor="#C98AA8" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout x:Name="DrinkFieldsContainer" Spacing="14" IsVisible="False">
                             
-                           <!-- Cost Price -->
-                            <VerticalStackLayout Grid.Column="0" Spacing="6">
-                                <Label Text="Cost Price"
-                                       FontAttributes="Bold"
-                                       TextColor="#FFD3E6"
-                                       FontSize="14" />
-                                <Border Stroke="#B84A84"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 8"
-                                        BackgroundColor="#111114"
-                                        Padding="12,4">
-                                    <Entry x:Name="CostPriceEntry"
-                                           Placeholder="Enter cost price"
-                                           Keyboard="Numeric"
-                                           BackgroundColor="Transparent"
-                                           TextColor="#F7F2F5"
-                                           PlaceholderColor="#C98AA8" />
+                            <HorizontalStackLayout Spacing="10" Margin="20,0,0,5">
+                                <CheckBox x:Name="IsAlcoholicFreeCheckBox" Color="#FF4FA3" />
+                                <Label Text="Alcoholfree" VerticalOptions="Center" TextColor="#FFD3E6" />
+                            </HorizontalStackLayout>
+                            
+                            <Grid ColumnDefinitions="*, 60, *" ColumnSpacing="10" RowDefinitions="Auto, 180" RowSpacing="5">
+                            
+                                <VerticalStackLayout Grid.Column="0" Grid.RowSpan="2" Spacing="5">
+                                    <Label Text="Ingredients" FontAttributes="Bold" TextColor="#FFD3E6" />
+                                    <Border Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8" 
+                                            BackgroundColor="#111114" HeightRequest="150">
+                                        <CollectionView x:Name="IngredientsCollectionView" SelectionMode="Single">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Padding="10">
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup Name="CommonStates">
+                                                                <VisualState Name="Normal" />
+                                                                <VisualState Name="Selected">
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor" Value="#B84A84" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                        <Label Text="{Binding Name}" TextColor="#F7F2F5" FontSize="13" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                                    <Button x:Name="AddIngredient" Text="→" WidthRequest="45" HeightRequest="40" Padding="0"
+                                            BackgroundColor="#111114" BorderColor="#B84A84" BorderWidth="1" Clicked="AddIngredient_OnClicked"/>
+                                    <Button x:Name="RemoveIngredient" Text="←" WidthRequest="45" HeightRequest="40" Padding="0"
+                                            BackgroundColor="#111114" BorderColor="#B84A84" BorderWidth="1" Clicked="RemoveIngredient_OnClicked"/>
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="2" Grid.RowSpan="2" Spacing="5">
+                                    <Label Text="Picked Ingredients" FontAttributes="Bold" TextColor="#FFD3E6" />
+                                    <Border Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8" 
+                                            BackgroundColor="#111114" HeightRequest="150">
+                                        <CollectionView x:Name="PickedIngredientsCollectionView" SelectionMode="Single">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Padding="10">
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup Name="CommonStates">
+                                                                <VisualState Name="Normal" />
+                                                                <VisualState Name="Selected">
+                                                                    <VisualState.Setters>
+                                                                        <Setter Property="BackgroundColor" Value="#B84A84" />
+                                                                    </VisualState.Setters>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                        <Label Text="{Binding Name}" TextColor="#F7F2F5" FontSize="13" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="Description" FontAttributes="Bold" TextColor="#FFD3E6" />
+                                <Border Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                                        BackgroundColor="#111114" Padding="12,4">
+                                    <Editor x:Name="DrinkDescriptionEntry" Placeholder="Enter recipe or description..."
+                                            HeightRequest="80" BackgroundColor="Transparent" TextColor="#F7F2F5"
+                                            PlaceholderColor="#C98AA8" />
                                 </Border>
                             </VerticalStackLayout>
-                            
-                            <!-- Quantity -->
-                            <VerticalStackLayout Grid.Column="1" Spacing="6">
-                                <Label Text="Stock Quantity"
-                                       FontAttributes="Bold"
-                                       TextColor="#FFD3E6"
-                                       FontSize="14" />
-                                <Border Stroke="#B84A84"
-                                        StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 8"
-                                        BackgroundColor="#111114"
-                                        Padding="12,4">
-                                    <Entry x:Name="StockQuantityEntry"
-                                           Placeholder="Enter stock quantity"
-                                           Keyboard="Numeric"
-                                           BackgroundColor="Transparent"
-                                           TextColor="#F7F2F5"
-                                           PlaceholderColor="#C98AA8" />
-                                </Border>
-                            </VerticalStackLayout>
-                        </Grid>
+
+                        </VerticalStackLayout>
 
                         <VerticalStackLayout x:Name="SnackFieldsContainer"
                                              Spacing="6"
                                              IsVisible="False">
                         </VerticalStackLayout>
+                    </VerticalStackLayout>
 
-                        <VerticalStackLayout x:Name="LiquidFieldsContainer"
-                                             Spacing="14"
-                                             IsVisible="False">
+                    <VerticalStackLayout x:Name="LiquidFieldsContainer"
+                                         Spacing="14"
+                                         IsVisible="False">
 
-                            <!-- Grid Size -->
-                            <Grid ColumnDefinitions="3*,Auto"
-                                  RowDefinitions="Auto,Auto,Auto"
-                                  ColumnSpacing="16"
-                                  RowSpacing="8">
+                        <!-- Grid Size -->
+                        <Grid ColumnDefinitions="3*,Auto"
+                              RowDefinitions="Auto,Auto,Auto"
+                              ColumnSpacing="16"
+                              RowSpacing="8">
 
-                                <!-- Volume -->
-                                <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="6">
-                                    <Label Text="Volume (cl)"
-                                           FontAttributes="Bold"
-                                           TextColor="#FFD3E6"
-                                           FontSize="14" />
-                                    <Border Stroke="#B84A84"
-                                            StrokeThickness="1"
-                                            StrokeShape="RoundRectangle 8"
-                                            BackgroundColor="#111114"
-                                            Padding="12,4">
-                                        <Entry x:Name="LiquidVolumeClEntry"
-                                               Placeholder="Enter volume in cl"
-                                               Keyboard="Numeric"
-                                               BackgroundColor="Transparent"
-                                               TextColor="#F7F2F5"
-                                               PlaceholderColor="#C98AA8" />
-                                    </Border>
-                                </VerticalStackLayout>
+                            <!-- Volume -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="6">
+                                <Label Text="Volume (cl)"
+                                       FontAttributes="Bold"
+                                       TextColor="#FFD3E6"
+                                       FontSize="14" />
+                                <Border Stroke="#B84A84"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 8"
+                                        BackgroundColor="#111114"
+                                        Padding="12,4"
+                                        HeightRequest="55">
+                                    <Entry x:Name="LiquidVolumeClEntry"
+                                           Placeholder="Enter volume in cl"
+                                           Keyboard="Numeric"
+                                           BackgroundColor="Transparent"
+                                           TextColor="#F7F2F5"
+                                           PlaceholderColor="#C98AA8" />
+                                </Border>
+                            </VerticalStackLayout>
 
-                                <!-- Pant picker -->
-                                <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="6" HorizontalOptions="End">
-                                    <Label Text="Pant Type"
-                                           FontAttributes="Bold"
-                                           TextColor="#FFD3E6"
-                                           FontSize="14" />
-                                    <Border Stroke="#B84A84"
-                                            StrokeThickness="1"
-                                            StrokeShape="RoundRectangle 8"
-                                            BackgroundColor="#111114"
-                                            Padding="6"
-                                            WidthRequest="140"
-                                            HorizontalOptions="End">
-                                        <Picker x:Name="PantPicker"
-                                                TextColor="#F7F2F5"
-                                                TitleColor="#C98AA8"
-                                                BackgroundColor="Transparent"
-                                                WidthRequest="124"
-                                                HorizontalOptions="End" />
-                                    </Border>
-                                </VerticalStackLayout>
+                            <!-- Pant picker -->
+                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="6" HorizontalOptions="End">
+                                <Label Text="Pant Type"
+                                       FontAttributes="Bold"
+                                       TextColor="#FFD3E6"
+                                       FontSize="14" />
+                                <Border Stroke="#B84A84"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 8"
+                                        BackgroundColor="#111114"
+                                        Padding="0"
+                                        WidthRequest="140"
+                                        HeightRequest="55"
+                                        HorizontalOptions="End">
+                                    <Picker x:Name="PantPicker"
+                                            HorizontalTextAlignment="Center"
+                                            TextColor="#F7F2F5"
+                                            BackgroundColor="Transparent"
+                                            WidthRequest="124"/>
+                                </Border>
+                            </VerticalStackLayout>
 
-                                <!--Is Alcohol Checkbox-->
-                                <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="10" Padding="0,6">
-                                    <CheckBox x:Name="IsAlcoholicCheckBox"
-                                              Color="#FF4FA3"
-                                              CheckedChanged="OnIsAlcoholicChanged" />
-                                    <Label Text="Contains Alcohol"
-                                           VerticalOptions="Center"
-                                           TextColor="#FFD3E6" />
-                                </HorizontalStackLayout>
+                            <!--Is Alcohol Checkbox-->
+                            <HorizontalStackLayout Grid.Row="1" Grid.Column="0" Spacing="10" Padding="0,6">
+                                <CheckBox x:Name="IsAlcoholicCheckBox"
+                                          Color="#FF4FA3"
+                                          CheckedChanged="OnIsAlcoholicChanged" />
+                                <Label Text="Contains Alcohol"
+                                       VerticalOptions="Center"
+                                       TextColor="#FFD3E6" />
+                            </HorizontalStackLayout>
 
-                                <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="10" Padding="0,6" HorizontalOptions="Start">
-                                    <CheckBox x:Name="SugarFreeCheckBox" Color="#FF4FA3" />
-                                    <Label Text="Sugar free"
-                                           VerticalOptions="Center"
-                                           TextColor="#FFD3E6" />
-                                </HorizontalStackLayout>
+                            <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="10" Padding="0,6"
+                                                   HorizontalOptions="Start">
+                                <CheckBox x:Name="SugarFreeCheckBox" Color="#FF4FA3" />
+                                <Label Text="Sugar free"
+                                       VerticalOptions="Center"
+                                       TextColor="#FFD3E6" />
+                            </HorizontalStackLayout>
 
-                                <!-- Alcohol % input-->
-                                <VerticalStackLayout x:Name="AlcoholInputContainer"
-                                                     Grid.Row="2"
-                                                     Grid.Column="0"
-                                                     Grid.ColumnSpan="2"
-                                                     Spacing="6"
-                                                     IsVisible="False">
-                                    <Label Text="Alcohol %"
-                                           FontAttributes="Bold"
-                                           TextColor="#FFD3E6"
-                                           FontSize="14" />
-                                    <Border Stroke="#B84A84"
-                                            StrokeThickness="1"
-                                            StrokeShape="RoundRectangle 8"
-                                            BackgroundColor="#111114"
-                                            Padding="12,4">
-                                        <Entry x:Name="AlcoholPercentageEntry"
-                                               Placeholder="Enter alcohol percentage"
-                                               Keyboard="Numeric"
-                                               BackgroundColor="Transparent"
-                                               TextColor="#F7F2F5"
-                                               PlaceholderColor="#C98AA8" />
-                                    </Border>
-                                </VerticalStackLayout>
+                            <!-- Alcohol % input-->
+                            <VerticalStackLayout x:Name="AlcoholInputContainer"
+                                                 Grid.Row="2"
+                                                 Grid.Column="0"
+                                                 Grid.ColumnSpan="2"
+                                                 Spacing="6"
+                                                 IsVisible="False">
+                                <Label Text="Alcohol %"
+                                       FontAttributes="Bold"
+                                       TextColor="#FFD3E6"
+                                       FontSize="14" />
+                                <Border Stroke="#B84A84"
+                                        StrokeThickness="1"
+                                        StrokeShape="RoundRectangle 8"
+                                        BackgroundColor="#111114"
+                                        Padding="12,4">
+                                    <Entry x:Name="AlcoholPercentageEntry"
+                                           Placeholder="Enter alcohol percentage"
+                                           Keyboard="Numeric"
+                                           BackgroundColor="Transparent"
+                                           TextColor="#F7F2F5"
+                                           PlaceholderColor="#C98AA8" />
+                                </Border>
+                            </VerticalStackLayout>
 
-                            </Grid>
-                        </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
 
-                        <VerticalStackLayout x:Name="ConsumableFieldsContainer"
-                                             Spacing="6"
-                                             IsVisible="False">
-                            <Label Text="Description"
-                                   FontAttributes="Bold"
-                                   TextColor="#FFD3E6"
-                                   FontSize="14" />
-                            <Border Stroke="#B84A84"
-                                    StrokeThickness="1"
-                                    StrokeShape="RoundRectangle 8"
-                                    BackgroundColor="#111114"
-                                    Padding="12,4">
-                                <Entry x:Name="DescriptionEntry"
-                                       Placeholder="Enter description"
-                                       BackgroundColor="Transparent"
-                                       TextColor="#F7F2F5"
-                                       PlaceholderColor="#C98AA8" />
-                            </Border>
-                        </VerticalStackLayout>
-
-                        <Button x:Name="CreateButton"
-                                Text="Create snack"
-                                Clicked="OnCreateProduct_Clicked"
-                                BackgroundColor="#FF4FA3"
-                                TextColor="White"
-                                FontAttributes="Bold"
-                                CornerRadius="10"
-                                HeightRequest="54"
-                                BorderColor="#FF79C6"
-                                BorderWidth="1"
-                                Margin="0,12,0,0" />
-
-                        <Label x:Name="ResultLabel"
+                    <VerticalStackLayout x:Name="ConsumableFieldsContainer"
+                                         Spacing="6"
+                                         IsVisible="False">
+                        <Label Text="Description"
+                               FontAttributes="Bold"
                                TextColor="#FFD3E6"
                                FontSize="14" />
+                        <Border Stroke="#B84A84"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 8"
+                                BackgroundColor="#111114"
+                                Padding="12,4">
+                            <Entry x:Name="DescriptionEntry"
+                                   Placeholder="Enter description"
+                                   BackgroundColor="Transparent"
+                                   TextColor="#F7F2F5"
+                                   PlaceholderColor="#C98AA8" />
+                        </Border>
                     </VerticalStackLayout>
+
+                    <Button x:Name="CreateButton"
+                            Text="Create snack"
+                            Clicked="OnCreateProduct_Clicked"
+                            BackgroundColor="#FF4FA3"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="54"
+                            BorderColor="#FF79C6"
+                            BorderWidth="1"
+                            Margin="0,12,0,0" />
+
+                    <Label x:Name="ResultLabel"
+                           TextColor="#FFD3E6"
+                           FontSize="14" />
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>
