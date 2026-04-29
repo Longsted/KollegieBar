@@ -10,9 +10,9 @@
     FlyoutIcon="{Null}">
     
     <Shell.FlyoutHeader>
-        <Grid HeightRequest="100" BackgroundColor="White">
+        <Grid HeightRequest="100" BackgroundColor="Black">
             <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                <Image Source="dambaren.png" HeightRequest="100" Aspect="AspectFit"/>
+                <Image Source="dambaren_blacked.png" HeightRequest="100" Aspect="AspectFit"/>
             </VerticalStackLayout>
         </Grid>
     </Shell.FlyoutHeader>

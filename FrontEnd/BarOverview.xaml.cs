@@ -210,12 +210,19 @@ public partial class BarOverview : ContentPage
         
     }
 
-    private async void ShowBot(object sender, EventArgs e)
+    private async void ShowBottles(object sender, EventArgs e)
     {
-        var bottlesOnly = _allProducts
-            .Where(p => p is DataTransferObject.Model.LiquidDataTransferObject)
-            .ToList();
-
+        List<LiquidDataTransferObject> bottlesOnly = new List<LiquidDataTransferObject>();
+        foreach (var p in  _allProducts)
+        {
+            if (p is LiquidDataTransferObject liquid)
+            {
+                if (liquid.AlcoholPercentage < 15.9 && liquid.VolumeCl < 49 && liquid.Name != "Tonic Water")
+                {
+                    bottlesOnly.Add(liquid);
+                }
+            }
+        }
         ProductCollectionView.ItemsSource = bottlesOnly;
     }
     private async void ShowDrinks(object sender, EventArgs e)
@@ -234,6 +241,25 @@ public partial class BarOverview : ContentPage
 
         ProductCollectionView.ItemsSource = drnkOnly;
     }
+
+    private async void ShowSpiritusNMixer(object sender, EventArgs e)
+    {
+
+        List<ProductDataTransferObject> spritiusNMixers = new List<ProductDataTransferObject>();
+        foreach (var p in _allProducts)
+        {
+            if (p is LiquidDataTransferObject liquid)
+            {
+                if (liquid.AlcoholPercentage > 15.9 || !liquid.HasPant || liquid.Name == "Tonic Water")
+                {
+                    spritiusNMixers.Add(liquid);
+                }
+                
+            }
+        }
+        ProductCollectionView.ItemsSource = spritiusNMixers;
+    }
+    
     private async void ShowAll(object sender, EventArgs e)
     {
         ProductCollectionView.ItemsSource = EverythingThatsOnTheMenu;
@@ -246,7 +272,6 @@ public partial class BarOverview : ContentPage
     private async void HelperMethodsToClearCartAndTotal()
     {
         CurrentOrder.Clear();
-        TotalSumLabel.Text = "";
     }
 
 }
