@@ -38,6 +38,7 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="20">
 
+            <!-- FIXED: Only two rows: scroll area + buttons -->
             <Grid RowDefinitions="*,Auto" RowSpacing="15">
 
                 <!-- Scrollable product list -->
@@ -66,29 +67,41 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- Bottom buttons -->
+                <!-- Bottom buttons (fixed, no re-measure) -->
                 <HorizontalStackLayout Grid.Row="1"
                                        Spacing="10"
                                        HorizontalOptions="EndAndExpand">
 
-                    <Button Text="Ryd valg" BackgroundColor="#444"
-                            TextColor="White" WidthRequest="150"
-                            HeightRequest="50" CornerRadius="10"
+                    <Button Text="Ryd valg"
+                            BackgroundColor="#444"
+                            TextColor="White"
+                            WidthRequest="150"
+                            HeightRequest="50"
+                            CornerRadius="10"
                             Clicked="ClearCart"/>
 
-                    <Button Text="Modify" BackgroundColor="#B84A84"
-                            TextColor="White" FontAttributes="Bold"
-                            HeightRequest="60" WidthRequest="150"
+                    <Button Text="Modify"
+                            BackgroundColor="#B84A84"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="60"
+                            WidthRequest="150"
                             CornerRadius="12"/>
 
-                    <Button Text="Add Drink" BackgroundColor="#B84A84"
-                            TextColor="White" FontAttributes="Bold"
-                            HeightRequest="60" WidthRequest="150"
+                    <Button Text="Add Drink"
+                            BackgroundColor="#B84A84"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="60"
+                            WidthRequest="150"
                             CornerRadius="12"/>
 
-                    <Button Text="Waste" BackgroundColor="#B84A84"
-                            TextColor="White" FontAttributes="Bold"
-                            HeightRequest="60" WidthRequest="150"
+                    <Button Text="Waste"
+                            BackgroundColor="#B84A84"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            HeightRequest="60"
+                            WidthRequest="150"
                             CornerRadius="12"
                             Clicked="Waste"/>
                 </HorizontalStackLayout>
@@ -104,6 +117,7 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="20">
 
+            <!-- FIXED: Scroll area isolated in its own row -->
             <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" RowSpacing="15">
 
                 <Label Grid.Row="0"
@@ -123,7 +137,8 @@
                         <DataTemplate>
                             <Grid ColumnDefinitions="*,Auto" Padding="0,5">
                                 <Label Text="{Binding Name}" TextColor="White" FontSize="16"/>
-                                <Label Grid.Column="1" TextColor="#FF79C6"
+                                <Label Grid.Column="1"
+                                       TextColor="#FF79C6"
                                        FontAttributes="Bold"/>
                             </Grid>
                         </DataTemplate>
@@ -131,8 +146,11 @@
                 </CollectionView>
 
                 <Grid Grid.Row="3" ColumnDefinitions="*,Auto">
-                    <Label Text="TOTAL" TextColor="White"
-                           FontSize="18" FontAttributes="Bold"/>
+                    <Label Text="TOTAL"
+                           TextColor="White"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+
                     <Label x:Name="TotalSumLabel"
                            Grid.Column="1"
                            Text="0,00 kr."
@@ -155,3 +173,5 @@
 
     </Grid>
 </ContentPage>
+
+
