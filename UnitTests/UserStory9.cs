@@ -41,7 +41,6 @@ namespace UnitTests
                 Id = 1,
                 Name = "Special Drink",
                 CostPrice = 35,
-                Ingredients = new List<DrinkIngredientDataTransferObject>()
             };
 
             _mockDrinkRepository
@@ -103,13 +102,6 @@ namespace UnitTests
                 Id = 1,
                 Name = "Special Drink",
                 CostPrice = 35,
-                Ingredients = new List<DrinkIngredientDataTransferObject>
-                {
-                    new DrinkIngredientDataTransferObject
-                    {
-                        LiquidProductId = 2
-                    }
-                }
             };
 
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
