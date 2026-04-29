@@ -38,36 +38,36 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="20">
 
-            <!-- FIXED: Only two rows: scroll area + buttons -->
             <Grid RowDefinitions="*,Auto" RowSpacing="15">
 
-                <!-- Scrollable product list -->
+                <!-- BIGGER BOXES -->
                 <CollectionView x:Name="ProductCollectionView"
                                 Grid.Row="0"
                                 ItemsUpdatingScrollMode="KeepScrollOffset">
                     <CollectionView.ItemsLayout>
-                        <GridItemsLayout Orientation="Vertical" Span="5"
-                                         HorizontalItemSpacing="15"
-                                         VerticalItemSpacing="15" />
+                        <GridItemsLayout Orientation="Vertical" Span="4"
+                                         HorizontalItemSpacing="20"
+                                         VerticalItemSpacing="20" />
                     </CollectionView.ItemsLayout>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Button Text="{Binding Name}"
-                                    FontSize="18"
+                                    FontSize="24"
                                     FontAttributes="Bold"
-                                    HeightRequest="120"
+                                    HeightRequest="180"
+                                    Padding="20"
                                     BackgroundColor="#111114"
                                     TextColor="White"
                                     BorderColor="#FF79C6"
-                                    CornerRadius="12"
-                                    BorderWidth="1"
+                                    CornerRadius="20"
+                                    BorderWidth="2"
                                     Clicked="OnProductClicked"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- Bottom buttons (fixed, no re-measure) -->
+                <!-- Bottom buttons -->
                 <HorizontalStackLayout Grid.Row="1"
                                        Spacing="10"
                                        HorizontalOptions="EndAndExpand">
@@ -109,7 +109,7 @@
             </Grid>
         </Border>
 
-        <!-- RIGHT COLUMN -->
+        <!-- RIGHT COLUMN (unchanged) -->
         <Border Grid.Column="2"
                 Stroke="#B84A84"
                 StrokeThickness="1"
@@ -117,7 +117,6 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="20">
 
-            <!-- FIXED: Scroll area isolated in its own row -->
             <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" RowSpacing="15">
 
                 <Label Grid.Row="0"
@@ -127,7 +126,6 @@
                        FontAttributes="Bold"
                        HorizontalOptions="Center"/>
 
-                <!-- Scrollable receipt -->
                 <CollectionView x:Name="ReceiptCollectionView"
                                 Grid.Row="1"
                                 SelectionMode="Single"
@@ -173,5 +171,3 @@
 
     </Grid>
 </ContentPage>
-
-
