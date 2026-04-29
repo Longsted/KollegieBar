@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model;
 
-public class DrinkDataTransferObject
+public class DrinkDataTransferObject : ICartItem
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -10,7 +10,7 @@ public class DrinkDataTransferObject
 
     public bool IsAlcoholic { get; set; }
 
-    public List<DrinkIngredientDataTransferObject> Ingredients { get; set; } = new();
+    public List<LiquidDataTransferObject> Ingredients { get; set; } = new();
 
     public DrinkDataTransferObject() { }
 
