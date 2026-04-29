@@ -17,12 +17,7 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
 
     public async Task DeleteDrinkAsync(int id)
     {
-        if (id <= 0)
-            throw new ArgumentException("Invalid id");
-
-        var drink = await _unitOfWork.Drinks.GetByIdAsync(id);
-        if (drink == null)
-            throw new InvalidOperationException($"There is no drink with id: {id}");
+        var drink = await GetDrinkOrThrow(id);
 
         await _unitOfWork.Drinks.DeleteAsync(drink);
         await _unitOfWork.SaveChangesAsync();
@@ -30,13 +25,8 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
 
     public async Task<DrinkDataTransferObject?> GetDrinkAsync(int id)
     {
-        if (id <= 0)
-            throw new ArgumentException("Invalid id");
-
-        var drink = await _unitOfWork.Drinks.GetByIdAsync(id);
-        if (drink == null)
-            throw new InvalidOperationException($"There is no drink with id: {id}");
-
+        var drink = await GetDrinkOrThrow(id);
+        
         return DrinkMapper.Map(drink);
     }
 
@@ -51,15 +41,15 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
         ValidateDrink(drink);
 
         // Extract unique liquid IDs
-        var liquidIds = drink.Ingredients.Select(i => i.Id).Distinct().ToList();
+        var liquidIds = drink.Ingredients.Select(index => index.Id).Distinct().ToList();
 
         // Fetch all required liquids
-        var liquids = await _unitOfWork.Products.GetWhereAsync(p => liquidIds.Contains(p.Id));
+        var liquids = await _unitOfWork.Products.GetWhereAsync(product => liquidIds.Contains(product.Id));
 
         if (liquids.Count != liquidIds.Count)
             throw new InvalidOperationException("One or more ingredients do not exist");
 
-        if (liquids.Any(p => p is not Liquid))
+        if (liquids.Any(product => product is not Liquid))
             throw new InvalidOperationException("All ingredients must be liquids");
 
         var drinkEntity = DrinkMapper.Map(drink);
@@ -94,8 +84,8 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
         var drink = await GetDrinkOrThrow(drinkId);
         var liquid = await GetLiquidOrThrow(liquidId);
 
-        if (drink.Ingredients.Any(l => l.Id == liquidId))
-            throw new InvalidOperationException("Ingredient already exists");
+        if (drink.Ingredients.Any(l => liquid.Id == liquidId))
+            throw new InvalidOperationException("Ingredient already in drink");
 
         drink.Ingredients.Add(liquid);
 
@@ -119,7 +109,7 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
     }
 
     // ------------------------------------------------------------
-    // HELPERS
+    // -------------------HELPER METHODS---------------------------
     // ------------------------------------------------------------
 
     private async Task<Drink> GetDrinkOrThrow(int drinkId)
@@ -179,8 +169,8 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
         }
 
         bool duplicates = drink.Ingredients
-            .GroupBy(i => i.Id)
-            .Any(g => g.Count() > 1);
+            .GroupBy(index => index.Id)
+            .Any(group => group.Count() > 1);
 
         if (duplicates)
             throw new ArgumentException("The same liquid cannot be added twice");
