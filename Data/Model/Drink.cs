@@ -11,7 +11,7 @@ public class Drink
 
     public bool IsAlcoholic { get; set; }
 
-    public List<DrinkIngredient> Ingredients { get; set; } = new();
+    public List<Liquid> Ingredients { get; set; } = new();
 
     public Drink() { }
 

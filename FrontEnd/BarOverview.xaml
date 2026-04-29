@@ -20,7 +20,15 @@
                 BorderColor="#B84A84" 
                 BorderWidth="1"
                 TextColor="White"
-                    Clicked="ShowDrinks"/>
+                Clicked="ShowDrinks"/>
+            
+            <Button Text="Mocktail" 
+               HeightRequest="80" 
+               BackgroundColor="#18181C" 
+               BorderColor="#B84A84" 
+               BorderWidth="1"
+               TextColor="White"
+               Clicked="ShowMockTails"/>
 
             <Button Text="Snacks" 
                 HeightRequest="80" 

@@ -17,8 +17,7 @@ public class DrinkRepository : IDrinkRepository
     public async Task<List<Drink>> GetAllAsync()
     {
         return await _context.Drinks
-            .Include(d => d.Ingredients)
-                .ThenInclude(i => i.Liquid) 
+            .Include(d => d.Ingredients) // Many-to-many: Drink <-> Liquid
             .ToListAsync();
     }
 
@@ -32,14 +31,12 @@ public class DrinkRepository : IDrinkRepository
 
     public async Task AddAsync(Drink drink)
     {
-        
         await _context.Drinks.AddAsync(drink);
     }
 
     public Task DeleteAsync(Drink drink)
     {
         _context.Drinks.Remove(drink);
-
         return Task.CompletedTask;
     }
 
@@ -49,12 +46,10 @@ public class DrinkRepository : IDrinkRepository
         return Task.CompletedTask;
     }
 
-
     public async Task<List<Drink>> GetDrinksWithIngredientsAsync(List<int> drinkIds)
     {
         return await _context.Drinks
             .Include(d => d.Ingredients)
-                .ThenInclude(i => i.Liquid)
             .Where(d => drinkIds.Contains(d.Id))
             .ToListAsync();
     }

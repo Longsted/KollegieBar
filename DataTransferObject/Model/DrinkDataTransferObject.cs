@@ -10,7 +10,7 @@ public class DrinkDataTransferObject : ICartItem
 
     public bool IsAlcoholic { get; set; }
 
-    public List<DrinkIngredientDataTransferObject> Ingredients { get; set; } = new();
+    public List<LiquidDataTransferObject> Ingredients { get; set; } = new();
 
     public DrinkDataTransferObject() { }
 

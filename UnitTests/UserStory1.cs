@@ -49,8 +49,8 @@ namespace UnitTests
                 Id = 10,
                 Name = "Gin & Tonic",
                 CostPrice = 50,
-                Ingredients = new List<DrinkIngredient> {
-                    new DrinkIngredient { Liquid = tonic, LiquidProductId = 4 }
+                Ingredients = new List<Liquid> {
+                    new Liquid { Id = tonic.Id, Name = tonic.Name, StockQuantity = tonic.StockQuantity, Pant = tonic.Pant }
                 }
             };
 
