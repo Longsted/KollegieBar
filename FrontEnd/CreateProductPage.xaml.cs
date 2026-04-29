@@ -1,7 +1,6 @@
-using BusinessLogic.BusinessLogicLayer;
+using System.Collections.ObjectModel;
 using BusinessLogic.InterfaceBusiness;
 using DataTransferObject.Model;
-using System.Linq;
 
 namespace FrontEnd;
 
@@ -9,18 +8,21 @@ public partial class CreateProductPage : ContentPage
 {
     private string _selectedTab = "Snack";
     private readonly IProductBusinessLogicLayer _iProductBusinessLogicLayer;
+    
+    public ObservableCollection<LiquidDataTransferObject> AvailableIngredients { get; set; } = new();
+    public ObservableCollection<LiquidDataTransferObject> PickedIngredients { get; set; } = new();
 
     public CreateProductPage(IProductBusinessLogicLayer iProductBusinessLogicLayer)
     {
         InitializeComponent();
         _iProductBusinessLogicLayer = iProductBusinessLogicLayer;
     }
-    
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        // Sets the pant enum options from DTO onto the drop down menu
+        // Sets the pant enum options from DTO onto the dropdown menu
         PantPicker.ItemsSource = Enum.GetValues(typeof(PantDataTransferObject)).Cast<PantDataTransferObject>().ToList();
 
         UpdateUI();
@@ -44,8 +46,30 @@ public partial class CreateProductPage : ContentPage
         UpdateUI();
     }
 
+    private async void OnDrinkSelected(object sender, EventArgs e)
+    {
+        _selectedTab = "Drink";
+        UpdateUI();
+        
+        // Get all liquids from data
+        var allProducts = await _iProductBusinessLogicLayer.GetAllProductsAsync();
+        var liquids = allProducts.OfType<LiquidDataTransferObject>().ToList();
+        
+        AvailableIngredients.Clear();
+        foreach (var l in liquids) AvailableIngredients.Add(l);
+
+        // Adding the different list to CollectionViews
+        IngredientsCollectionView.ItemsSource = AvailableIngredients;
+        PickedIngredientsCollectionView.ItemsSource = PickedIngredients;
+    }
+
     private void UpdateUI()
     {
+        bool isDrink = _selectedTab == "Drink";
+
+        StandardProductFields.IsVisible = !isDrink;
+        DrinkFieldsContainer.IsVisible = isDrink;
+
         SnackFieldsContainer.IsVisible = _selectedTab == "Snack";
         LiquidFieldsContainer.IsVisible = _selectedTab == "Liquid";
         ConsumableFieldsContainer.IsVisible = _selectedTab == "Consumable";
@@ -61,6 +85,7 @@ public partial class CreateProductPage : ContentPage
         ResetButton(SnackTabButton);
         ResetButton(LiquidTabButton);
         ResetButton(ConsumableTabButton);
+        ResetButton(DrinkTabButton);
 
         if (_selectedTab == "Snack")
             SetActive(SnackTabButton);
@@ -68,6 +93,8 @@ public partial class CreateProductPage : ContentPage
             SetActive(LiquidTabButton);
         else if (_selectedTab == "Consumable")
             SetActive(ConsumableTabButton);
+        else if (_selectedTab == "Drink")
+            SetActive(DrinkTabButton);
     }
 
     private void ResetButton(Button button)
@@ -99,14 +126,18 @@ public partial class CreateProductPage : ContentPage
         SugarFreeCheckBox.IsChecked = false;
         PantPicker.SelectedItem = null;
         ResultLabel.Text = string.Empty;
+        
+        IsAlcoholicFreeCheckBox.IsChecked = false;
+        DrinkDescriptionEntry.Text = string.Empty;
+        PickedIngredients.Clear();
+        PickedIngredientsCollectionView.SelectedItem = null;
+        IngredientsCollectionView.SelectedItem = null;
     }
-    
+
     private void OnIsAlcoholicChanged(object sender, CheckedChangedEventArgs e)
     {
-        // Shows/hides the entire alcohol input section
         AlcoholInputContainer.IsVisible = e.Value;
-
-        // Optional: Clear the text if user unchecks it
+        
         if (!e.Value)
         {
             AlcoholPercentageEntry.Text = string.Empty;
@@ -118,32 +149,48 @@ public partial class CreateProductPage : ContentPage
         try
         {
             string? name = NameEntry.Text;
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 ResultLabel.Text = "Name must be filled.";
                 return;
             }
+            
+            decimal costPrice = 0;
+            int stockQuantity = 0;
 
-            if (!decimal.TryParse(CostPriceEntry.Text, out decimal costPrice))
+            if (_selectedTab != "Drink")
             {
-                ResultLabel.Text = "Cost price must be a valid number.";
-                return;
+                if (!decimal.TryParse(CostPriceEntry.Text, out costPrice))
+                {
+                    ResultLabel.Text = "Cost price must be a valid number.";
+                    return;
+                }
+
+                if (!int.TryParse(StockQuantityEntry.Text, out stockQuantity))
+                {
+                    ResultLabel.Text = "Stock quantity must be a valid whole number.";
+                    return;
+                }
             }
-
-            if (!int.TryParse(StockQuantityEntry.Text, out int stockQuantity))
+            
+            if (_selectedTab == "Drink")
             {
-                ResultLabel.Text = "Stock quantity must be a valid whole number.";
-                return;
+                if (PickedIngredients.Count == 0)
+                {
+                    ResultLabel.Text = "Please pick at least one ingredient.";
+                    return;
+                }
+                
+                // DrinkDataTransferObject drink = new DrinkDataTransferObject(name, PickedIngredients.ToList() , IsAlcoholicFreeCheckBox.IsChecked);
+                // await _iProductBusinessLogicLayer.CreateProductAsync(drink);
+                ResultLabel.Text = $"Drink created: {name}";
             }
 
             if (_selectedTab == "Snack")
             {
-                SnackDataTransferObject snackDataTransferObject =
-                    new SnackDataTransferObject(name, costPrice, stockQuantity);
+                SnackDataTransferObject snackDataTransferObject = new SnackDataTransferObject(name, costPrice, stockQuantity);
 
                 await _iProductBusinessLogicLayer.CreateProductAsync(snackDataTransferObject);
-                ClearFields();
                 ResultLabel.Text = $"Snack created: {snackDataTransferObject.Name}";
             }
             else if (_selectedTab == "Liquid")
@@ -189,7 +236,6 @@ public partial class CreateProductPage : ContentPage
                 }
 
                 await _iProductBusinessLogicLayer.CreateProductAsync(liquid);
-                ClearFields();
                 await DisplayAlert("Success", "Liquid product created!", "OK");
             }
             else if (_selectedTab == "Consumable")
@@ -203,15 +249,33 @@ public partial class CreateProductPage : ContentPage
                 };
 
                 await _iProductBusinessLogicLayer.CreateProductAsync(consumableDataTransferObject);
-                ClearFields();
                 ResultLabel.Text = $"Consumable created: {consumableDataTransferObject.Name}";
             }
-
+            
+            ClearFields();
             await DisplayAlert("Success", "Product has been created.", "OK");
         }
         catch (Exception ex)
         {
             ResultLabel.Text = $"Error: {ex.Message}";
+        }
+    }
+
+    private void AddIngredient_OnClicked(object? sender, EventArgs e)
+    {
+        if (IngredientsCollectionView.SelectedItem is LiquidDataTransferObject selected)
+        {
+            PickedIngredients.Add(selected);
+            IngredientsCollectionView.SelectedItem = null;
+        }
+    }
+
+    private void RemoveIngredient_OnClicked(object? sender, EventArgs e)
+    {
+        if (PickedIngredientsCollectionView.SelectedItem is LiquidDataTransferObject selected)
+        {
+            PickedIngredients.Remove(selected);
+            PickedIngredientsCollectionView.SelectedItem = null;
         }
     }
 }
