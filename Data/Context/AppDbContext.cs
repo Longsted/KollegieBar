@@ -1,4 +1,5 @@
 ﻿using Data.Model;
+using DataTransferObject.Model;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -61,7 +62,13 @@ public class AppDbContext : DbContext
         new Liquid("Peach Schnapps", 120.00m, 5, 70, 18.0) { Id = 27 },
         new Liquid("Appelsinjuice", 15.00m, 20, 100, false) { Id = 25 },
         new Liquid("Tranebærjuice", 18.00m, 20, 100, false) { Id = 26 }
+
     );
+        modelBuilder.Entity<Liquid>().HasData(
+    new Liquid("Grenadine", 40.00m, 15, 50, 0.0) { Id = 80 },
+    new Liquid("Saftevand (Rød)", 15.00m, 50, 100, 0.0) { Id = 81 },
+    new Liquid("Ananasjuice", 18.00m, 20, 100, 0.0) { Id = 82 }
+);
         modelBuilder.Entity<Liquid>().HasData(
     // Spiritus & Likør
     new Liquid("Råstoff Strawberry/Rhubarb", 130.00m, 10, 70, 16.4) { Id = 41 },
@@ -103,6 +110,13 @@ public class AppDbContext : DbContext
     new { Id = 69, Name = "Skumbanan", CostPrice = 20.0, IsAlcoholic = true },
     new { Id = 70, Name = "Southern & Sprite", CostPrice = 20.0, IsAlcoholic = true }
 
+);
+        modelBuilder.Entity<Drink>().HasData(
+    new { Id = 90, Name = "Børnebrandbil", CostPrice = 20.0, IsAlcoholic = false },
+    new { Id = 91, Name = "Børnechampagnebrus", CostPrice = 20.0, IsAlcoholic = false },
+    new { Id = 92, Name = "Børnefilur", CostPrice = 20.0, IsAlcoholic = false },
+    new { Id = 93, Name = "Børneastronaut", CostPrice = 20.0, IsAlcoholic = false },
+    new { Id = 94, Name = "Safe Sex On The Beach", CostPrice = 20.0, IsAlcoholic = false }
 );
 
 
@@ -160,6 +174,29 @@ public class AppDbContext : DbContext
     // Southern & Sprite: Southern Comfort (46), Faxe Kondi (39)
     new { Id = 56, DrinkId = 70, LiquidProductId = 46, LiquidId = 46 },
     new { Id = 57, DrinkId = 70, LiquidProductId = 39, LiquidId = 39 }
+);
+        modelBuilder.Entity<DrinkIngredient>().HasData(
+    // Børnebrandbil: Saftevand (81), Red Soda (48)
+    new { Id = 100, DrinkId = 90, LiquidProductId = 81, LiquidId = 81 },
+    new { Id = 101, DrinkId = 90, LiquidProductId = 48, LiquidId = 48 },
+
+    // Børnechampagnebrus: Saftevand (81), Green Soda (49)
+    new { Id = 102, DrinkId = 91, LiquidProductId = 81, LiquidId = 81 },
+    new { Id = 103, DrinkId = 91, LiquidProductId = 49, LiquidId = 49 },
+
+    // Børnefilur: Appelsinjuice (25), Red Soda (48)
+    new { Id = 104, DrinkId = 92, LiquidProductId = 25, LiquidId = 25 },
+    new { Id = 105, DrinkId = 92, LiquidProductId = 48, LiquidId = 48 },
+
+    // Børneastronaut: Saftevand (81), Lemon Soda (38)
+    new { Id = 106, DrinkId = 93, LiquidProductId = 81, LiquidId = 81 },
+    new { Id = 107, DrinkId = 93, LiquidProductId = 38, LiquidId = 38 },
+
+    // Safe Sex On The Beach: Appelsinjuice (25), Tranebærjuice (26), Ananasjuice (82), Grenadine (80)
+    new { Id = 108, DrinkId = 94, LiquidProductId = 25, LiquidId = 25 },
+    new { Id = 109, DrinkId = 94, LiquidProductId = 26, LiquidId = 26 },
+    new { Id = 110, DrinkId = 94, LiquidProductId = 82, LiquidId = 82 },
+    new { Id = 111, DrinkId = 94, LiquidProductId = 80, LiquidId = 80 }
 );
 
         base.OnModelCreating(modelBuilder);

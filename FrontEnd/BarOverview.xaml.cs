@@ -1,5 +1,6 @@
 using BusinessLogic.BusinessLogicLayer;
 using BusinessLogic.InterfaceBusiness;
+using Data.Model;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -221,6 +222,14 @@ public partial class BarOverview : ContentPage
     {
         var drnkOnly = _allDrinks
             .Where(p => p is DataTransferObject.Model.DrinkDataTransferObject)
+            .ToList();
+
+        ProductCollectionView.ItemsSource = drnkOnly;
+    }
+    private async void ShowMockTails(object sender, EventArgs e)
+    {
+        var drnkOnly = _allDrinks
+            .Where(p => p is DataTransferObject.Model.DrinkDataTransferObject && !p.IsAlcoholic)
             .ToList();
 
         ProductCollectionView.ItemsSource = drnkOnly;
