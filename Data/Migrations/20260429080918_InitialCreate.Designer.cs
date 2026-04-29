@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260428192308_AddMocktails")]
-    partial class AddMocktails
+    [Migration("20260429080918_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.6")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -176,342 +176,6 @@ namespace Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DrinkId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("LiquidId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("LiquidProductId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DrinkId");
-
-                    b.HasIndex("LiquidId");
-
-                    b.ToTable("DrinkIngredients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DrinkId = 10,
-                            LiquidId = 20,
-                            LiquidProductId = 20
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DrinkId = 10,
-                            LiquidId = 27,
-                            LiquidProductId = 27
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DrinkId = 10,
-                            LiquidId = 25,
-                            LiquidProductId = 25
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DrinkId = 10,
-                            LiquidId = 26,
-                            LiquidProductId = 26
-                        },
-                        new
-                        {
-                            Id = 30,
-                            DrinkId = 60,
-                            LiquidId = 41,
-                            LiquidProductId = 41
-                        },
-                        new
-                        {
-                            Id = 31,
-                            DrinkId = 60,
-                            LiquidId = 38,
-                            LiquidProductId = 38
-                        },
-                        new
-                        {
-                            Id = 32,
-                            DrinkId = 61,
-                            LiquidId = 31,
-                            LiquidProductId = 31
-                        },
-                        new
-                        {
-                            Id = 33,
-                            DrinkId = 61,
-                            LiquidId = 57,
-                            LiquidProductId = 57
-                        },
-                        new
-                        {
-                            Id = 34,
-                            DrinkId = 61,
-                            LiquidId = 38,
-                            LiquidProductId = 38
-                        },
-                        new
-                        {
-                            Id = 35,
-                            DrinkId = 61,
-                            LiquidId = 26,
-                            LiquidProductId = 26
-                        },
-                        new
-                        {
-                            Id = 36,
-                            DrinkId = 62,
-                            LiquidId = 42,
-                            LiquidProductId = 42
-                        },
-                        new
-                        {
-                            Id = 37,
-                            DrinkId = 62,
-                            LiquidId = 48,
-                            LiquidProductId = 48
-                        },
-                        new
-                        {
-                            Id = 38,
-                            DrinkId = 63,
-                            LiquidId = 43,
-                            LiquidProductId = 43
-                        },
-                        new
-                        {
-                            Id = 39,
-                            DrinkId = 63,
-                            LiquidId = 49,
-                            LiquidProductId = 49
-                        },
-                        new
-                        {
-                            Id = 40,
-                            DrinkId = 64,
-                            LiquidId = 44,
-                            LiquidProductId = 44
-                        },
-                        new
-                        {
-                            Id = 41,
-                            DrinkId = 64,
-                            LiquidId = 39,
-                            LiquidProductId = 39
-                        },
-                        new
-                        {
-                            Id = 42,
-                            DrinkId = 64,
-                            LiquidId = 57,
-                            LiquidProductId = 57
-                        },
-                        new
-                        {
-                            Id = 43,
-                            DrinkId = 65,
-                            LiquidId = 43,
-                            LiquidProductId = 43
-                        },
-                        new
-                        {
-                            Id = 44,
-                            DrinkId = 65,
-                            LiquidId = 56,
-                            LiquidProductId = 56
-                        },
-                        new
-                        {
-                            Id = 45,
-                            DrinkId = 66,
-                            LiquidId = 20,
-                            LiquidProductId = 20
-                        },
-                        new
-                        {
-                            Id = 46,
-                            DrinkId = 66,
-                            LiquidId = 48,
-                            LiquidProductId = 48
-                        },
-                        new
-                        {
-                            Id = 47,
-                            DrinkId = 66,
-                            LiquidId = 25,
-                            LiquidProductId = 25
-                        },
-                        new
-                        {
-                            Id = 48,
-                            DrinkId = 67,
-                            LiquidId = 45,
-                            LiquidProductId = 45
-                        },
-                        new
-                        {
-                            Id = 49,
-                            DrinkId = 67,
-                            LiquidId = 41,
-                            LiquidProductId = 41
-                        },
-                        new
-                        {
-                            Id = 50,
-                            DrinkId = 67,
-                            LiquidId = 55,
-                            LiquidProductId = 55
-                        },
-                        new
-                        {
-                            Id = 51,
-                            DrinkId = 68,
-                            LiquidId = 30,
-                            LiquidProductId = 30
-                        },
-                        new
-                        {
-                            Id = 52,
-                            DrinkId = 68,
-                            LiquidId = 36,
-                            LiquidProductId = 36
-                        },
-                        new
-                        {
-                            Id = 53,
-                            DrinkId = 68,
-                            LiquidId = 38,
-                            LiquidProductId = 38
-                        },
-                        new
-                        {
-                            Id = 54,
-                            DrinkId = 69,
-                            LiquidId = 47,
-                            LiquidProductId = 47
-                        },
-                        new
-                        {
-                            Id = 55,
-                            DrinkId = 69,
-                            LiquidId = 56,
-                            LiquidProductId = 56
-                        },
-                        new
-                        {
-                            Id = 56,
-                            DrinkId = 70,
-                            LiquidId = 46,
-                            LiquidProductId = 46
-                        },
-                        new
-                        {
-                            Id = 57,
-                            DrinkId = 70,
-                            LiquidId = 39,
-                            LiquidProductId = 39
-                        },
-                        new
-                        {
-                            Id = 100,
-                            DrinkId = 90,
-                            LiquidId = 81,
-                            LiquidProductId = 81
-                        },
-                        new
-                        {
-                            Id = 101,
-                            DrinkId = 90,
-                            LiquidId = 48,
-                            LiquidProductId = 48
-                        },
-                        new
-                        {
-                            Id = 102,
-                            DrinkId = 91,
-                            LiquidId = 81,
-                            LiquidProductId = 81
-                        },
-                        new
-                        {
-                            Id = 103,
-                            DrinkId = 91,
-                            LiquidId = 49,
-                            LiquidProductId = 49
-                        },
-                        new
-                        {
-                            Id = 104,
-                            DrinkId = 92,
-                            LiquidId = 25,
-                            LiquidProductId = 25
-                        },
-                        new
-                        {
-                            Id = 105,
-                            DrinkId = 92,
-                            LiquidId = 48,
-                            LiquidProductId = 48
-                        },
-                        new
-                        {
-                            Id = 106,
-                            DrinkId = 93,
-                            LiquidId = 81,
-                            LiquidProductId = 81
-                        },
-                        new
-                        {
-                            Id = 107,
-                            DrinkId = 93,
-                            LiquidId = 38,
-                            LiquidProductId = 38
-                        },
-                        new
-                        {
-                            Id = 108,
-                            DrinkId = 94,
-                            LiquidId = 25,
-                            LiquidProductId = 25
-                        },
-                        new
-                        {
-                            Id = 109,
-                            DrinkId = 94,
-                            LiquidId = 26,
-                            LiquidProductId = 26
-                        },
-                        new
-                        {
-                            Id = 110,
-                            DrinkId = 94,
-                            LiquidId = 82,
-                            LiquidProductId = 82
-                        },
-                        new
-                        {
-                            Id = 111,
-                            DrinkId = 94,
-                            LiquidId = 80,
-                            LiquidProductId = 80
-                        });
-                });
-
             modelBuilder.Entity("Data.Model.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -620,6 +284,21 @@ namespace Data.Migrations
                             Role = 0,
                             UserName = "bar"
                         });
+                });
+
+            modelBuilder.Entity("DrinkLiquid", b =>
+                {
+                    b.Property<int>("DrinkId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IngredientsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DrinkId", "IngredientsId");
+
+                    b.HasIndex("IngredientsId");
+
+                    b.ToTable("DrinkLiquid", (string)null);
                 });
 
             modelBuilder.Entity("Data.Model.Consumables", b =>
@@ -1044,25 +723,6 @@ namespace Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Data.Model.DrinkIngredient", b =>
-                {
-                    b.HasOne("Data.Model.Drink", "Drink")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("DrinkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Model.Liquid", "Liquid")
-                        .WithMany()
-                        .HasForeignKey("LiquidId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Drink");
-
-                    b.Navigation("Liquid");
-                });
-
             modelBuilder.Entity("Data.Model.Sale", b =>
                 {
                     b.HasOne("Data.Model.Drink", "Drink")
@@ -1078,9 +738,19 @@ namespace Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Data.Model.Drink", b =>
+            modelBuilder.Entity("DrinkLiquid", b =>
                 {
-                    b.Navigation("Ingredients");
+                    b.HasOne("Data.Model.Drink", null)
+                        .WithMany()
+                        .HasForeignKey("DrinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Model.Liquid", null)
+                        .WithMany()
+                        .HasForeignKey("IngredientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
