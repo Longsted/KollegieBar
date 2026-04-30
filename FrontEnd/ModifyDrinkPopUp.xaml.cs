@@ -56,6 +56,11 @@ public partial class ModifyDrinkPopUp : CommunityToolkit.Maui.Views.Popup
 
     private async void OnSaveButtonClicked(object sender, EventArgs e)
     {
+        if (PickedLiquids.Count == 0)
+        {
+            await Shell.Current.DisplayAlertAsync("Error", "You must pick at least one ingredient.", "OK");
+            return;
+        }
         var newDrink = new DrinkDataTransferObject
         {
             Name = _drink.Name,
@@ -77,7 +82,7 @@ public partial class ModifyDrinkPopUp : CommunityToolkit.Maui.Views.Popup
 
     private void OnAddIngredientClicked(object sender, EventArgs e)
     {
-        if (SelectedAvailableLiquid != null)
+        if (SelectedAvailableLiquid != null && !PickedLiquids.Contains(SelectedAvailableLiquid))
         {
             PickedLiquids.Add(SelectedAvailableLiquid);
             AvailableLiquids.Remove(SelectedAvailableLiquid);

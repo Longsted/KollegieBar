@@ -294,6 +294,10 @@ public partial class BarOverview : ContentPage
             CurrentOrder.Add(modifyDrinkPopUp.NewDrink);
             await DisplayAlert("Success", "Drink modified successfully", "OK");
         }
+        else
+        {
+            CurrentOrder.RemoveAt(CurrentOrder.Count - 1);
+        }
 
         _selectedDrink = null;
     }
