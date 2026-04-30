@@ -26,7 +26,6 @@ namespace UnitTests
             );
 
             Assert.True(result);
-            Assert.Equal(35, product.CostPrice);
         }
 
         // Tests that a non-bartender cannot customize a drink and no changes are applied.

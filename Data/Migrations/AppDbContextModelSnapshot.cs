@@ -30,8 +30,9 @@ namespace Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("CostPrice")
-                        .HasColumnType("double precision");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsAlcoholic")
                         .HasColumnType("boolean");
@@ -47,129 +48,234 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 10,
-                            CostPrice = 85.0,
-                            IsAlcoholic = true,
-                            Name = "Sex on the beach"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CostPrice = 95.0,
-                            IsAlcoholic = true,
-                            Name = "Long Island Iced Tea"
-                        },
-                        new
-                        {
                             Id = 60,
-                            CostPrice = 20.0,
+                            Description = "Råstoff Strawberry/Rhubarb, Lemon Soda",
                             IsAlcoholic = true,
                             Name = "Astronaut"
                         },
                         new
                         {
                             Id = 61,
-                            CostPrice = 20.0,
+                            Description = "Pink Gin, Lime Juice, Lemon Soda, Cranberry Juice",
                             IsAlcoholic = true,
                             Name = "Basic Bitch"
                         },
                         new
                         {
                             Id = 62,
-                            CostPrice = 20.0,
+                            Description = "Jägermeister, Red Soda",
                             IsAlcoholic = true,
                             Name = "Brandbil"
                         },
                         new
                         {
                             Id = 63,
-                            CostPrice = 20.0,
+                            Description = "Cuba Caramel, Green Soda",
                             IsAlcoholic = true,
                             Name = "Champagnebrus"
                         },
                         new
                         {
                             Id = 64,
-                            CostPrice = 20.0,
+                            Description = "Cuba Kurant, Faxe Kondi, Lime Juice",
                             IsAlcoholic = true,
                             Name = "Purple Rain"
                         },
                         new
                         {
                             Id = 65,
-                            CostPrice = 20.0,
+                            Description = "Cuba Caramel, Chocolate Milk",
                             IsAlcoholic = true,
                             Name = "Dumle"
                         },
                         new
                         {
                             Id = 66,
-                            CostPrice = 20.0,
+                            Description = "Vodka, Red Soda, Orange Juice",
                             IsAlcoholic = true,
                             Name = "Filur"
                         },
                         new
                         {
                             Id = 67,
-                            CostPrice = 20.0,
+                            Description = "Råstoff Liquorice, Råstoff Strawberry/Rhubarb, Orange Soda",
                             IsAlcoholic = true,
                             Name = "Flagermus"
                         },
                         new
                         {
                             Id = 68,
-                            CostPrice = 20.0,
+                            Description = "Gin, Mango Syrup, Lemon Soda",
                             IsAlcoholic = true,
                             Name = "Gin Hass"
                         },
                         new
                         {
                             Id = 69,
-                            CostPrice = 20.0,
+                            Description = "Gin/Pink Gin, Tonic Water/Lemon Soda",
+                            IsAlcoholic = true,
+                            Name = "Gin & Tonic/Lemon"
+                        },
+                        new
+                        {
+                            Id = 70,
+                            Description = "Vodka, Blue Curacao, Faxe Kondi",
+                            IsAlcoholic = true,
+                            Name = "Isbjørn"
+                        },
+                        new
+                        {
+                            Id = 71,
+                            Description = "Vodka, Mango Syrup, Cranberry Juice, Orange Juice",
+                            IsAlcoholic = true,
+                            Name = "Sex On The Beach"
+                        },
+                        new
+                        {
+                            Id = 72,
+                            Description = "Pisang Ambon, Chocolate Milk",
                             IsAlcoholic = true,
                             Name = "Skumbanan"
                         },
                         new
                         {
-                            Id = 70,
-                            CostPrice = 20.0,
+                            Id = 73,
+                            Description = "Southern Comfort, Lime Syrup, Faxe Kondi",
                             IsAlcoholic = true,
                             Name = "Southern & Sprite"
                         },
                         new
                         {
+                            Id = 74,
+                            Description = "Rum, Pepsi/Max",
+                            IsAlcoholic = true,
+                            Name = "Rum & Coke"
+                        },
+                        new
+                        {
+                            Id = 75,
+                            Description = "Tequila, Grenadine, Orange Juice",
+                            IsAlcoholic = true,
+                            Name = "Tequila Sunrise"
+                        },
+                        new
+                        {
+                            Id = 76,
+                            Description = "Kahlua, Vodka, Milk/Chocolate Milk",
+                            IsAlcoholic = true,
+                            Name = "White Russian"
+                        },
+                        new
+                        {
+                            Id = 77,
+                            Description = "Bailey, Chocolate Milk",
+                            IsAlcoholic = true,
+                            Name = "Chocolate & Bailey"
+                        },
+                        new
+                        {
+                            Id = 78,
+                            Description = "Pisang Ambon, Orange Juice",
+                            IsAlcoholic = true,
+                            Name = "Green Goblin"
+                        },
+                        new
+                        {
+                            Id = 79,
+                            Description = "Cointreau, Vodka, Cranberry Juice, Lime Juice",
+                            IsAlcoholic = true,
+                            Name = "Cosmopolitan"
+                        },
+                        new
+                        {
+                            Id = 80,
+                            Description = "Jägermeister, Shaker",
+                            IsAlcoholic = true,
+                            Name = "Shaker Jäger"
+                        },
+                        new
+                        {
+                            Id = 81,
+                            Description = "Vodka, Energy Drink",
+                            IsAlcoholic = true,
+                            Name = "Vodka Energy"
+                        },
+                        new
+                        {
+                            Id = 82,
+                            Description = "Southern Comfort, Vodka, Lemon, Passion Syrup, Faxe Kondi",
+                            IsAlcoholic = true,
+                            Name = "3-Meter-Vippen"
+                        },
+                        new
+                        {
+                            Id = 83,
+                            Description = "Cointreau, Vodka, Passion, Mango Syrup, Grenadine, Faxe Kondi",
+                            IsAlcoholic = true,
+                            Name = "Exotic"
+                        },
+                        new
+                        {
+                            Id = 84,
+                            Description = "Cointreau, Gin, Rum, Tequila, Vodka, Lemon Juice, Pepsi/Max",
+                            IsAlcoholic = true,
+                            Name = "Long Island Iced Tea"
+                        },
+                        new
+                        {
+                            Id = 85,
+                            Description = "Gin, Pisang Ambon, Rum, Vodka, Lemon Juice, Lemon Syrup, Faxe Kondi",
+                            IsAlcoholic = true,
+                            Name = "Lille Fugl Fald Død Om"
+                        },
+                        new
+                        {
                             Id = 90,
-                            CostPrice = 20.0,
+                            Description = "Non-Alcoholic Gin, Lemon Soda, Cranberry Juice, Lime Juice",
                             IsAlcoholic = false,
-                            Name = "Børnebrandbil"
+                            Name = "Boring Bitch"
                         },
                         new
                         {
                             Id = 91,
-                            CostPrice = 20.0,
+                            Description = "Non-Alcoholic Gin, Red Soda, Orange Juice",
                             IsAlcoholic = false,
-                            Name = "Børnechampagnebrus"
+                            Name = "Filur Free"
                         },
                         new
                         {
                             Id = 92,
-                            CostPrice = 20.0,
+                            Description = "Non-Alcoholic Gin, Mango Syrup, Lemon Soda",
                             IsAlcoholic = false,
-                            Name = "Børnefilur"
+                            Name = "Gin Love"
                         },
                         new
                         {
                             Id = 93,
-                            CostPrice = 20.0,
+                            Description = "Non-Alcoholic Gin, Blue Curacao, Faxe Kondi/Free",
                             IsAlcoholic = false,
-                            Name = "Børneastronaut"
+                            Name = "Panda"
                         },
                         new
                         {
                             Id = 94,
-                            CostPrice = 20.0,
+                            Description = "Non-Alcoholic Gin, Blue Curacao, Faxe Kondi/Free (+ Grenadine)",
                             IsAlcoholic = false,
-                            Name = "Safe Sex On The Beach"
+                            Name = "(Levende) Panda"
+                        },
+                        new
+                        {
+                            Id = 95,
+                            Description = "Non-Alcoholic Gin, Mango Syrup, Cranberry Juice, Orange Juice",
+                            IsAlcoholic = false,
+                            Name = "Virgin Sex"
+                        },
+                        new
+                        {
+                            Id = 96,
+                            Description = "Non-Alcoholic Gin, Grenadine, Orange Juice",
+                            IsAlcoholic = false,
+                            Name = "Gin Sunset"
                         });
                 });
 
@@ -221,9 +327,6 @@ namespace Data.Migrations
 
                     b.Property<int?>("DrinkId")
                         .HasColumnType("integer");
-
-                    b.Property<decimal>("PriceAtSale")
-                        .HasColumnType("numeric");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("integer");
@@ -296,6 +399,448 @@ namespace Data.Migrations
                     b.HasIndex("IngredientsId");
 
                     b.ToTable("DrinkLiquid", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            DrinkId = 60,
+                            IngredientsId = 41
+                        },
+                        new
+                        {
+                            DrinkId = 60,
+                            IngredientsId = 38
+                        },
+                        new
+                        {
+                            DrinkId = 61,
+                            IngredientsId = 31
+                        },
+                        new
+                        {
+                            DrinkId = 61,
+                            IngredientsId = 59
+                        },
+                        new
+                        {
+                            DrinkId = 61,
+                            IngredientsId = 38
+                        },
+                        new
+                        {
+                            DrinkId = 61,
+                            IngredientsId = 26
+                        },
+                        new
+                        {
+                            DrinkId = 62,
+                            IngredientsId = 42
+                        },
+                        new
+                        {
+                            DrinkId = 62,
+                            IngredientsId = 52
+                        },
+                        new
+                        {
+                            DrinkId = 63,
+                            IngredientsId = 43
+                        },
+                        new
+                        {
+                            DrinkId = 63,
+                            IngredientsId = 53
+                        },
+                        new
+                        {
+                            DrinkId = 64,
+                            IngredientsId = 44
+                        },
+                        new
+                        {
+                            DrinkId = 64,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 64,
+                            IngredientsId = 59
+                        },
+                        new
+                        {
+                            DrinkId = 65,
+                            IngredientsId = 43
+                        },
+                        new
+                        {
+                            DrinkId = 65,
+                            IngredientsId = 56
+                        },
+                        new
+                        {
+                            DrinkId = 66,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 66,
+                            IngredientsId = 52
+                        },
+                        new
+                        {
+                            DrinkId = 66,
+                            IngredientsId = 25
+                        },
+                        new
+                        {
+                            DrinkId = 67,
+                            IngredientsId = 45
+                        },
+                        new
+                        {
+                            DrinkId = 67,
+                            IngredientsId = 41
+                        },
+                        new
+                        {
+                            DrinkId = 67,
+                            IngredientsId = 54
+                        },
+                        new
+                        {
+                            DrinkId = 68,
+                            IngredientsId = 30
+                        },
+                        new
+                        {
+                            DrinkId = 68,
+                            IngredientsId = 57
+                        },
+                        new
+                        {
+                            DrinkId = 68,
+                            IngredientsId = 38
+                        },
+                        new
+                        {
+                            DrinkId = 72,
+                            IngredientsId = 47
+                        },
+                        new
+                        {
+                            DrinkId = 72,
+                            IngredientsId = 56
+                        },
+                        new
+                        {
+                            DrinkId = 70,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 70,
+                            IngredientsId = 75
+                        },
+                        new
+                        {
+                            DrinkId = 70,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 69,
+                            IngredientsId = 30
+                        },
+                        new
+                        {
+                            DrinkId = 69,
+                            IngredientsId = 76
+                        },
+                        new
+                        {
+                            DrinkId = 74,
+                            IngredientsId = 32
+                        },
+                        new
+                        {
+                            DrinkId = 74,
+                            IngredientsId = 50
+                        },
+                        new
+                        {
+                            DrinkId = 80,
+                            IngredientsId = 42
+                        },
+                        new
+                        {
+                            DrinkId = 80,
+                            IngredientsId = 55
+                        },
+                        new
+                        {
+                            DrinkId = 81,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 81,
+                            IngredientsId = 6
+                        },
+                        new
+                        {
+                            DrinkId = 73,
+                            IngredientsId = 46
+                        },
+                        new
+                        {
+                            DrinkId = 73,
+                            IngredientsId = 81
+                        },
+                        new
+                        {
+                            DrinkId = 73,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 82,
+                            IngredientsId = 46
+                        },
+                        new
+                        {
+                            DrinkId = 82,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 82,
+                            IngredientsId = 81
+                        },
+                        new
+                        {
+                            DrinkId = 82,
+                            IngredientsId = 58
+                        },
+                        new
+                        {
+                            DrinkId = 82,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 83,
+                            IngredientsId = 34
+                        },
+                        new
+                        {
+                            DrinkId = 83,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 83,
+                            IngredientsId = 58
+                        },
+                        new
+                        {
+                            DrinkId = 83,
+                            IngredientsId = 57
+                        },
+                        new
+                        {
+                            DrinkId = 83,
+                            IngredientsId = 80
+                        },
+                        new
+                        {
+                            DrinkId = 83,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 34
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 30
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 32
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 33
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 50
+                        },
+                        new
+                        {
+                            DrinkId = 84,
+                            IngredientsId = 59
+                        },
+                        new
+                        {
+                            DrinkId = 85,
+                            IngredientsId = 30
+                        },
+                        new
+                        {
+                            DrinkId = 85,
+                            IngredientsId = 47
+                        },
+                        new
+                        {
+                            DrinkId = 85,
+                            IngredientsId = 32
+                        },
+                        new
+                        {
+                            DrinkId = 85,
+                            IngredientsId = 20
+                        },
+                        new
+                        {
+                            DrinkId = 85,
+                            IngredientsId = 59
+                        },
+                        new
+                        {
+                            DrinkId = 85,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 90,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 90,
+                            IngredientsId = 38
+                        },
+                        new
+                        {
+                            DrinkId = 90,
+                            IngredientsId = 26
+                        },
+                        new
+                        {
+                            DrinkId = 90,
+                            IngredientsId = 59
+                        },
+                        new
+                        {
+                            DrinkId = 91,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 91,
+                            IngredientsId = 52
+                        },
+                        new
+                        {
+                            DrinkId = 91,
+                            IngredientsId = 25
+                        },
+                        new
+                        {
+                            DrinkId = 92,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 92,
+                            IngredientsId = 57
+                        },
+                        new
+                        {
+                            DrinkId = 92,
+                            IngredientsId = 38
+                        },
+                        new
+                        {
+                            DrinkId = 93,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 93,
+                            IngredientsId = 75
+                        },
+                        new
+                        {
+                            DrinkId = 93,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 94,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 94,
+                            IngredientsId = 75
+                        },
+                        new
+                        {
+                            DrinkId = 94,
+                            IngredientsId = 39
+                        },
+                        new
+                        {
+                            DrinkId = 94,
+                            IngredientsId = 80
+                        },
+                        new
+                        {
+                            DrinkId = 95,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 95,
+                            IngredientsId = 57
+                        },
+                        new
+                        {
+                            DrinkId = 95,
+                            IngredientsId = 26
+                        },
+                        new
+                        {
+                            DrinkId = 95,
+                            IngredientsId = 25
+                        },
+                        new
+                        {
+                            DrinkId = 96,
+                            IngredientsId = 100
+                        },
+                        new
+                        {
+                            DrinkId = 96,
+                            IngredientsId = 80
+                        },
+                        new
+                        {
+                            DrinkId = 96,
+                            IngredientsId = 25
+                        });
                 });
 
             modelBuilder.Entity("Data.Model.Consumables", b =>
@@ -330,7 +875,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 3,
-                            CostPrice = 5.50m,
+                            CostPrice = 7.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Ceres Top",
@@ -343,11 +888,11 @@ namespace Data.Migrations
                         new
                         {
                             Id = 4,
-                            CostPrice = 6.00m,
+                            CostPrice = 7.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Albani øl",
-                            StockQuantity = 150,
+                            Name = "Albani Odense Classic",
+                            StockQuantity = 100,
                             AlcoholPercentage = 4.5999999999999996,
                             Pant = 0,
                             SugarFree = false,
@@ -356,11 +901,24 @@ namespace Data.Migrations
                         new
                         {
                             Id = 5,
-                            CostPrice = 12.00m,
+                            CostPrice = 7.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Shaker Sport",
-                            StockQuantity = 80,
+                            Name = "Royal Pilsner (0%)",
+                            StockQuantity = 10,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Shaker",
+                            StockQuantity = 10,
                             AlcoholPercentage = 4.5,
                             Pant = 0,
                             SugarFree = false,
@@ -369,7 +927,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 20,
-                            CostPrice = 150.00m,
+                            CostPrice = 90.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Vodka",
@@ -381,91 +939,39 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 27,
-                            CostPrice = 120.00m,
+                            Id = 30,
+                            CostPrice = 110.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Peach Schnapps",
-                            StockQuantity = 5,
-                            AlcoholPercentage = 18.0,
+                            Name = "Gin",
+                            StockQuantity = 8,
+                            AlcoholPercentage = 37.5,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 70
                         },
                         new
                         {
-                            Id = 25,
-                            CostPrice = 15.00m,
+                            Id = 48,
+                            CostPrice = 120.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Appelsinjuice",
-                            StockQuantity = 20,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 26,
-                            CostPrice = 18.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Tranebærjuice",
-                            StockQuantity = 20,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 80,
-                            CostPrice = 40.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Grenadine",
-                            StockQuantity = 15,
-                            AlcoholPercentage = 0.0,
+                            Name = "Licor 43",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 31.0,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 50
                         },
                         new
                         {
-                            Id = 81,
-                            CostPrice = 15.00m,
+                            Id = 35,
+                            CostPrice = 110.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Saftevand (Rød)",
-                            StockQuantity = 50,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 82,
-                            CostPrice = 18.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Ananasjuice",
-                            StockQuantity = 20,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 41,
-                            CostPrice = 130.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Råstoff Strawberry/Rhubarb",
-                            StockQuantity = 10,
-                            AlcoholPercentage = 16.399999999999999,
+                            Name = "Kahlua",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 20.0,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 70
@@ -486,7 +992,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 43,
-                            CostPrice = 125.00m,
+                            CostPrice = 90.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Cuba Caramel",
@@ -499,7 +1005,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 44,
-                            CostPrice = 125.00m,
+                            CostPrice = 90.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Cuba Kurant",
@@ -511,26 +1017,39 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 45,
-                            CostPrice = 130.00m,
+                            Id = 32,
+                            CostPrice = 150.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Råstoff Liquorice",
+                            Name = "Rum",
                             StockQuantity = 10,
-                            AlcoholPercentage = 16.399999999999999,
+                            AlcoholPercentage = 37.5,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 70
                         },
                         new
                         {
-                            Id = 46,
-                            CostPrice = 165.00m,
+                            Id = 33,
+                            CostPrice = 160.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Southern Comfort",
-                            StockQuantity = 4,
-                            AlcoholPercentage = 35.0,
+                            Name = "Tequila",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 38.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CostPrice = 180.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Cointreau",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 40.0,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 70
@@ -550,78 +1069,52 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 48,
-                            CostPrice = 10.00m,
+                            Id = 46,
+                            CostPrice = 165.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Red Soda",
-                            StockQuantity = 100,
-                            AlcoholPercentage = 0.0,
+                            Name = "Southern Comfort",
+                            StockQuantity = 4,
+                            AlcoholPercentage = 35.0,
                             Pant = 0,
                             SugarFree = false,
-                            VolumeCl = 33
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 41,
+                            CostPrice = 130.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Råstoff Strawberry/Rhubarb",
+                            StockQuantity = 10,
+                            AlcoholPercentage = 16.399999999999999,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 45,
+                            CostPrice = 130.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Råstoff Liquorice",
+                            StockQuantity = 10,
+                            AlcoholPercentage = 16.399999999999999,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
                         },
                         new
                         {
                             Id = 49,
-                            CostPrice = 10.00m,
+                            CostPrice = 130.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Green Soda",
-                            StockQuantity = 100,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 33
-                        },
-                        new
-                        {
-                            Id = 55,
-                            CostPrice = 10.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Orange Soda",
-                            StockQuantity = 100,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 33
-                        },
-                        new
-                        {
-                            Id = 56,
-                            CostPrice = 12.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Chocolate Milk",
-                            StockQuantity = 40,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 100
-                        },
-                        new
-                        {
-                            Id = 57,
-                            CostPrice = 25.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Lime Juice",
-                            StockQuantity = 15,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 50
-                        },
-                        new
-                        {
-                            Id = 30,
-                            CostPrice = 140.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Gin",
-                            StockQuantity = 8,
-                            AlcoholPercentage = 37.5,
+                            Name = "Råstoff Pineapple/Vanilla",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 16.399999999999999,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 70
@@ -629,7 +1122,7 @@ namespace Data.Migrations
                         new
                         {
                             Id = 31,
-                            CostPrice = 145.00m,
+                            CostPrice = 110.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Pink Gin",
@@ -641,29 +1134,16 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = 36,
-                            CostPrice = 45.00m,
+                            Id = 100,
+                            CostPrice = 120.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Mango Syrup",
-                            StockQuantity = 10,
+                            Name = "Non-Alcoholic Gin",
+                            StockQuantity = 5,
                             AlcoholPercentage = 0.0,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 70
-                        },
-                        new
-                        {
-                            Id = 38,
-                            CostPrice = 10.00m,
-                            MaxStockQuantity = 0,
-                            MinStockQuantity = 0,
-                            Name = "Lemon Soda",
-                            StockQuantity = 100,
-                            AlcoholPercentage = 0.0,
-                            Pant = 0,
-                            SugarFree = false,
-                            VolumeCl = 33
                         },
                         new
                         {
@@ -684,12 +1164,246 @@ namespace Data.Migrations
                             CostPrice = 10.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
-                            Name = "Tonic Water",
+                            Name = "Faxe Kondi Free",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = true,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 50,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Pepsi",
                             StockQuantity = 100,
                             AlcoholPercentage = 0.0,
                             Pant = 0,
                             SugarFree = false,
                             VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 51,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Pepsi Max",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = true,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 38,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Lemon Soda",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 52,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Red Soda",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 53,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Green Soda",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 54,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Orange Soda",
+                            StockQuantity = 100,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 55,
+                            CostPrice = 12.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Energy Drink",
+                            StockQuantity = 20,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = true,
+                            VolumeCl = 50
+                        },
+                        new
+                        {
+                            Id = 76,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Tonic Water",
+                            StockQuantity = 10,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 33
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Orange Juice",
+                            StockQuantity = 6,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 100
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Cranberry Juice",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 100
+                        },
+                        new
+                        {
+                            Id = 56,
+                            CostPrice = 10.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Chocolate Milk",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 100
+                        },
+                        new
+                        {
+                            Id = 59,
+                            CostPrice = 6.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Lime Juice",
+                            StockQuantity = 7,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 50
+                        },
+                        new
+                        {
+                            Id = 83,
+                            CostPrice = 6.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Lemon Juice",
+                            StockQuantity = 2,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 50
+                        },
+                        new
+                        {
+                            Id = 57,
+                            CostPrice = 45.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Mango Syrup",
+                            StockQuantity = 1,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 58,
+                            CostPrice = 45.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Passion Syrup",
+                            StockQuantity = 1,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CostPrice = 40.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Grenadine",
+                            StockQuantity = 1,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CostPrice = 30.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Lemon Syrup",
+                            StockQuantity = 1,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
+                        },
+                        new
+                        {
+                            Id = 75,
+                            CostPrice = 120.00m,
+                            MaxStockQuantity = 0,
+                            MinStockQuantity = 0,
+                            Name = "Blue Curacao",
+                            StockQuantity = 5,
+                            AlcoholPercentage = 0.0,
+                            Pant = 0,
+                            SugarFree = false,
+                            VolumeCl = 70
                         });
                 });
 
@@ -702,21 +1416,21 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 6,
-                            CostPrice = 10.00m,
+                            Id = 1,
+                            CostPrice = 7.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Popcorn",
-                            StockQuantity = 50
+                            StockQuantity = 4
                         },
                         new
                         {
-                            Id = 7,
-                            CostPrice = 15.00m,
+                            Id = 2,
+                            CostPrice = 10.00m,
                             MaxStockQuantity = 0,
                             MinStockQuantity = 0,
                             Name = "Chips",
-                            StockQuantity = 40
+                            StockQuantity = 4
                         });
                 });
 
