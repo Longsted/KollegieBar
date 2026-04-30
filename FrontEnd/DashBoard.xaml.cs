@@ -26,6 +26,9 @@ public class DashboardViewModel : INotifyPropertyChanged
 
     public ObservableCollection<ProductDataTransferObject> Products { get; set; }
 
+    public ObservableCollection<ProductDataTransferObject> LowStockProducts { get; set; } =
+        new ObservableCollection<ProductDataTransferObject>();
+
     // Filter / sort collections for the Pickers
     public ObservableCollection<string> Categories { get; } = new ObservableCollection<string>();
     public ObservableCollection<string> SortOptions { get; } = new ObservableCollection<string>();
@@ -204,6 +207,14 @@ public class DashboardViewModel : INotifyPropertyChanged
             if (p != null)
                 Products.Add(p);
         }
+        
+        LowStockProducts.Clear();
+
+        foreach (var p in Products.Where(p => p.StockQuantity <= p.MinStockQuantity))
+        {
+            LowStockProducts.Add(p);
+        }
+        
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -227,7 +238,8 @@ public class DashboardViewModel : INotifyPropertyChanged
             await _iProductBusinessLogicLayer.UpdateProductAsync(product);
         }
     });
-
+    
+    
 }
 
 

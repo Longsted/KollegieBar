@@ -1,57 +1,85 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using BusinessLogic.BusinessLogicLayer;
+using BusinessLogic.InterfaceBusiness;
+using Data.Interfaces;
+using Data.UnitOfWork;
 using DataTransferObject.Model;
+using Moq;
 using Xunit;
 
 namespace UnitTests
 {
     public class UserStory5
     {
-        // Tests that a board member receives a list of low inventory items when logged in.
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+        private readonly Mock<IProductRepository> _mockProductRepository;
+        private readonly IProductBusinessLogicLayer _service;
+
+        public UserStory5()
+        {
+            _mockUnitOfWork = new Mock<IUnitOfWork>();
+            _mockProductRepository = new Mock<IProductRepository>();
+            
+            _service = new ProductBusinessLogicLayer(_mockUnitOfWork.Object);
+            
+            _mockUnitOfWork.Setup(u => u.Products).Returns(_mockProductRepository.Object);
+        }
+        
         [Fact]
         public void BoardMember_ShouldReceive_ListOfLowInventoryItems()
         {
-            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember };
-
             var products = new List<ProductDataTransferObject>
             {
-                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 2, CostPrice = 10 },
-                new LiquidDataTransferObject { Name = "Cider", StockQuantity = 10, CostPrice = 12 },
-                new LiquidDataTransferObject { Name = "Soda", StockQuantity = 1, CostPrice = 8 },
-                new SnackDataTransferObject { Name = "Chips", StockQuantity = 20, CostPrice = 50 }
+                new LiquidDataTransferObject { Id = 1, Name = "Beer", StockQuantity = 50, AlcoholPercentage = 5, MinStockQuantity = 30},
+                new SnackDataTransferObject { Id = 3, Name = "Popcorn", StockQuantity = 2, MinStockQuantity = 4},
+                new LiquidDataTransferObject { Id = 1, Name = "Shaker", StockQuantity = 10, AlcoholPercentage = 5, MinStockQuantity = 9},
             };
 
-            const int threshold = 5;
-            var service = new LowInventoryService(products, threshold);
-
-            var lowInventory = service.GetLowInventory(user);
-
+            var lowInventory = _service.GetLowInventoryProducts(products);
+            
             Assert.NotNull(lowInventory);
-            Assert.Equal(2, lowInventory.Count);
+            
+            Assert.Single(lowInventory);
+            
+            Assert.Contains(lowInventory, p => p.Name == "Popcorn");
 
-            Assert.Contains(lowInventory, p => p.Name == "Beer");
-            Assert.Contains(lowInventory, p => p.Name == "Soda");
-
-            Assert.DoesNotContain(lowInventory, p => p.Name == "Cider");
-            Assert.DoesNotContain(lowInventory, p => p.Name == "Chips");
+            Assert.DoesNotContain(lowInventory, p => p.Name == "Beer");
+            Assert.DoesNotContain(lowInventory, p => p.Name == "Shaker");
         }
-
-        // Tests that a non-board member receives an empty list when requesting low inventory items.
+        
         [Fact]
-        public void NonBoardMember_ShouldReceive_EmptyList()
+        public void GetLowInventoryProducts_ShouldReturnEmptyList_WhenInputIsEmpty()
         {
-            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
+            var products = new List<ProductDataTransferObject>();
+            
+            var result = _service.GetLowInventoryProducts(products);
+            
+            Assert.Empty(result);
+        }
+        
+        [Fact]
+        public void GetLowInventoryProducts_ShouldIncludeItem_WhenStockIsExactlyMinStock()
+        {
+            var products = new List<ProductDataTransferObject> 
+            { 
+                new SnackDataTransferObject { Name = "Exact", StockQuantity = 10, MinStockQuantity = 10 } 
+            };
+            
+            var result = _service.GetLowInventoryProducts(products);
+            
+            Assert.Single(result);
+        }
+        
+        [Fact]
+        public void GetLowInventoryProducts_ShouldReturnEmpty_WhenAllStockIsHigh()
+        {
+            var products = new List<ProductDataTransferObject> 
+            { 
+                new SnackDataTransferObject { Name = "Full", StockQuantity = 100, MinStockQuantity = 10 } 
+            };
+            
+            var result = _service.GetLowInventoryProducts(products);
 
-            var products = new List<ProductDataTransferObject>
-                {
-                new LiquidDataTransferObject { Name = "Beer", StockQuantity = 1, CostPrice = 10 }
-                };
-
-            var service = new LowInventoryService(products, 5);
-
-            var result = service.GetLowInventory(user);
-
-            Assert.Empty(result); 
+            Assert.Empty(result);
         }
     }
 }
