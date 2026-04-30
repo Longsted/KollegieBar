@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.InterfaceBusiness;
 using BusinessLogic.Mappers;
+using Data.Model;
 using Data.UnitOfWork;
 using DataTransferObject.Model;
 
@@ -40,7 +41,7 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
 
     private void ValidateProduct(ProductDataTransferObject product)
-    {       
+    {
         if (string.IsNullOrWhiteSpace(product.Name))
             throw new ArgumentException("Name is required");
 
@@ -192,5 +193,13 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
     public async Task CheckForLowInventory(int productId)
     {
 
+    }
+
+    public async Task<List<LiquidDataTransferObject>> GetAllLiquidsAsync()
+    {
+        var products = await _unitOfWork.Products.GetWhereAsync(p => p is Liquid);
+        return products
+        .Select(p => (LiquidDataTransferObject)ProductMapper.Map(p))
+        .ToList();
     }
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+             x:Class="FrontEnd.ModifyDrinkPopUp"
+             BackgroundColor="Black">
+
+    <!--<Border BackgroundColor="#0F0F12"  Padding="0"  WidthRequest="650">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="15" />
+        </Border.StrokeShape>-->
+
+        <VerticalStackLayout Spacing="25">
+
+                <!-- Titel -->
+                <Label x:Name="TitleLabel" 
+                       Text="Modify Drink" 
+                       FontAttributes="Bold" 
+                       FontSize="22" 
+                       TextColor="#FFD3E6" 
+                       HorizontalOptions="Center" />
+
+                 <!-- Sugar free Switch -->
+                <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                    <Label Grid.Column="0" 
+                           Text="Sugar free variant" 
+                           FontAttributes="Bold" 
+                           TextColor="#FFD3E6" 
+                           FontSize="16" 
+                           VerticalOptions="Center" />
+
+                    <Switch Grid.Column="1" 
+                            x:Name="SugarFreeSwitch" 
+                            OnColor="#FF4FA3" 
+                            ThumbColor="#F7F2F5" />
+                </Grid>
+
+                
+                <BoxView HeightRequest="1" Color="#B84A84" Opacity="0.4" />
+        <!-- Ingredienser Dual-List Design -->
+        <Grid ColumnDefinitions="300, Auto, 300" ColumnSpacing="15" HeightRequest="300">
+
+            
+            <Grid Grid.Column="0" RowDefinitions="Auto, *" RowSpacing="5">
+                <Label Grid.Row="0" Text="Ingredients" FontAttributes="Bold" TextColor="#FFD3E6" FontSize="14" />
+
+                <!-- List with all ingredients, user can select from this list and add to the picked ingredients list -->
+                <Border Grid.Row="1" Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#111114" Padding="0">
+                    <CollectionView x:Name="AvailableLiquidsList"
+                            ItemsSource="{Binding AllLiquids}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedAvailableLiquid, Mode=TwoWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding Name}" TextColor="#F7F2F5" Padding="15,10" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Border>
+            </Grid>
+
+            <!-- Buttons to add and remove ingredients from the picked ingredients list -->
+            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="15">
+
+                <Button Text="→" 
+                BackgroundColor="Transparent" 
+                BorderColor="#B84A84" 
+                BorderWidth="1" 
+                TextColor="#F7F2F5" 
+                FontAttributes="Bold"
+                WidthRequest="45" HeightRequest="45"
+                Padding="0"
+                Clicked="OnAddIngredientClicked" />
+
+                <Button Text="←" 
+                BackgroundColor="Transparent" 
+                BorderColor="#B84A84" 
+                BorderWidth="1" 
+                TextColor="#F7F2F5" 
+                FontAttributes="Bold"
+                WidthRequest="45" HeightRequest="45"
+                Padding="0"
+                Clicked="OnRemoveIngredientClicked" />
+
+            </VerticalStackLayout>
+
+            <!-- List with the picked ingredients, user can select from this list and remove from the picked ingredients list -->
+            <Grid Grid.Column="2" RowDefinitions="Auto, *" RowSpacing="5">
+                <Label Grid.Row="0" Text="Picked Ingredients" FontAttributes="Bold" TextColor="#FFD3E6" FontSize="14" />
+
+                <Border Grid.Row="1" Stroke="#B84A84" StrokeThickness="1" StrokeShape="RoundRectangle 8" 
+                        BackgroundColor="#111114" Padding="0">
+                    <CollectionView x:Name="PickedLiquidsList"
+                            ItemsSource="{Binding PickedLiquids}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedPickedLiquid, Mode=TwoWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Label Text="{Binding Name}" TextColor="#F7F2F5" Padding="15,10" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Border>
+            </Grid>
+
+        </Grid>
+
+        <!--Save and cancel buttons-->
+        <Grid ColumnDefinitions="*, *" ColumnSpacing="20" Margin="0,10,0,0">
+            <Button Grid.Column="0" 
+            Text="Cancel" 
+            BackgroundColor="#FF4FA3"
+            BorderColor="#FF79C6"
+            TextColor="White"
+                  Clicked="OnCancelButtonClicked"  />
+
+            <Button Grid.Column="1" 
+            Text="Save drink" 
+            BackgroundColor="#FF4FA3" 
+            BorderColor="#FF79C6"
+            TextColor="White"
+            FontAttributes="Bold"
+            Clicked="OnSaveButtonClicked"/>
+        </Grid>
+
+    </VerticalStackLayout>
+        <!--</Border>-->
+    </toolkit:Popup>

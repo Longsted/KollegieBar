@@ -1,23 +1,20 @@
-using BusinessLogic.BusinessLogicLayer;
 using BusinessLogic.InterfaceBusiness;
-using Data.Model;
+using CommunityToolkit.Maui.Extensions;
 using DataTransferObject.Model;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Windows.ApplicationModel.Chat;
 
 namespace FrontEnd;
 
 public partial class BarOverview : ContentPage
 {
 
-	private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
+    private readonly IProductBusinessLogicLayer _productBusinessLogicLayer;
 
     private readonly ISalesBusinessLayer _salesBusinessLayer;
 
     private readonly IDrinksBusinessLogicLayer _drinksBusinessLogic;
+
+    private DrinkDataTransferObject? _selectedDrink;
 
     public ObservableCollection<ICartItem> CurrentOrder { get; set; } = new();
 
@@ -32,14 +29,14 @@ public partial class BarOverview : ContentPage
 
 
     public BarOverview(IProductBusinessLogicLayer productBusinessLogicLayer, ISalesBusinessLayer SalesBusinessLayer, IDrinksBusinessLogicLayer drinksBusiness)
-	{
+    {
         InitializeComponent();
         ReceiptCollectionView.ItemsSource = CurrentOrder;
 
 
         _productBusinessLogicLayer = productBusinessLogicLayer;
         _salesBusinessLayer = SalesBusinessLayer;
-        _drinksBusinessLogic = drinksBusiness;  
+        _drinksBusinessLogic = drinksBusiness;
         LoadProducts();
 
     }
@@ -67,7 +64,7 @@ public partial class BarOverview : ContentPage
         }
         catch (Exception ex)
         {
-            
+
             await DisplayAlert("Fail", "could not get the products " + ex.Message, "OK");
         }
     }
@@ -81,7 +78,11 @@ public partial class BarOverview : ContentPage
         if (item != null)
         {
             CurrentOrder.Add(item);
-            
+
+            if (item is DrinkDataTransferObject drink)
+            {
+                _selectedDrink = drink;
+            }
         }
     }
 
@@ -97,7 +98,8 @@ public partial class BarOverview : ContentPage
 
         // Opsummeringen
         var opsummering = CurrentOrder.GroupBy(item => new { item.Id, Type = item.GetType() })
-            .Select(g => new {
+            .Select(g => new
+            {
                 Antal = g.Count(),
                 Navn = g.First().Name
             }).ToList();
@@ -108,7 +110,7 @@ public partial class BarOverview : ContentPage
             tekst += $"{linje.Antal} x {linje.Navn}\n";
         }
 
-        
+
         var productIds = CurrentOrder
             .Where(item => item is ProductDataTransferObject)
             .Select(p => p.Id)
@@ -127,7 +129,7 @@ public partial class BarOverview : ContentPage
             {
                 await _salesBusinessLayer.RegisterSaleAsync(productIds, drinkIds);
 
-                
+
                 HelperMethodsToClearCartAndTotal();
                 await DisplayAlert("Success", "Order registered successfully", "OK");
             }
@@ -180,13 +182,13 @@ public partial class BarOverview : ContentPage
     // This method is is so the bartender can remove a item on the currentOrderList 
     private async void OnReceiptSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        
+
         var selectedItem = e.CurrentSelection.FirstOrDefault() as ICartItem;
 
         if (selectedItem == null)
             return;
 
-        
+
         bool answer = await DisplayAlert("Remove Product", $"Remove {selectedItem.Name}?", "No", "Yes");
 
         if (!answer)
@@ -207,13 +209,13 @@ public partial class BarOverview : ContentPage
             .ToList();
 
         ProductCollectionView.ItemsSource = snacksOnly;
-        
+
     }
 
     private async void ShowBottles(object sender, EventArgs e)
     {
         List<LiquidDataTransferObject> bottlesOnly = new List<LiquidDataTransferObject>();
-        foreach (var p in  _allProducts)
+        foreach (var p in _allProducts)
         {
             if (p is LiquidDataTransferObject liquid)
             {
@@ -254,15 +256,36 @@ public partial class BarOverview : ContentPage
                 {
                     spritiusNMixers.Add(liquid);
                 }
-                
+
             }
         }
         ProductCollectionView.ItemsSource = spritiusNMixers;
     }
-    
+
     private async void ShowAll(object sender, EventArgs e)
     {
         ProductCollectionView.ItemsSource = EverythingThatsOnTheMenu;
+    }
+
+    private async void ModifySelectedDrink(object sender, EventArgs e)
+    {
+        if (_selectedDrink == null)
+        {
+            await DisplayAlert("No drink selected", "The last item you added to cart was not a drink", "OK");
+            return;
+        }
+
+        var modifyDrinkPopUp = new ModifyDrinkPopUp(_selectedDrink, _productBusinessLogicLayer, _drinksBusinessLogic);
+        await Shell.Current.CurrentPage.ShowPopupAsync(modifyDrinkPopUp);
+
+        if (modifyDrinkPopUp.IsSaved)
+        {
+            CurrentOrder.Remove(_selectedDrink);
+            CurrentOrder.Add(modifyDrinkPopUp.NewDrink);
+            await DisplayAlert("Success", "Drink modified successfully", "OK");
+        }
+
+        _selectedDrink = null;
     }
 
 

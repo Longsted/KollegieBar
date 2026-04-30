@@ -220,7 +220,7 @@ public class DashboardViewModel : INotifyPropertyChanged
 
         var product = SelectedProduct;
         var popup = new EditProductPopup(product);
-        var result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+        await Shell.Current.CurrentPage.ShowPopupAsync(popup);
 
         if (popup.IsSaved)
         {
