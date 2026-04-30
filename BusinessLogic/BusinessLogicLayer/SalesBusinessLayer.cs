@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.InterfaceBusiness;
 using Data.Model;
 using Data.UnitOfWork;
+using DataTransferObject.Model;
+using System.Diagnostics;
 using Sale = Data.Model.Sale;
 
 namespace BusinessLogic.BusinessLogicLayer;
@@ -35,7 +37,10 @@ public class SalesBusinessLayer : ISalesBusinessLayer
                 int qty = productGroups[product.Id];
 
                 if (product is Liquid liquid)
+                {
                     HandleLiquidSale(liquid, qty);
+                    RegistrerPantFraSalg(liquid, qty);
+                }
                 else if (product is Snack snack)
                     HandleSnackSale(snack, qty);
                 else
@@ -62,15 +67,18 @@ public class SalesBusinessLayer : ISalesBusinessLayer
                     if (liquid.StockQuantity < drinkQty)
                         throw new InvalidOperationException($"Not enough stock for ingredient {liquid.Name}");
 
-                    liquid.StockQuantity -= drinkQty;
+                    RegistrerPantFraSalg(liquid, drinkQty);
+                    {
+                        liquid.StockQuantity -= drinkQty;
+                    }
+
+                    allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
                 }
-
-                allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
             }
-        }
 
-        await _unitOfWork.Sales.AddRangeAsync(allSales);
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.Sales.AddRangeAsync(allSales);
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 
     private void HandleSnackSale(Snack snack, int quantity)
@@ -182,5 +190,39 @@ public class SalesBusinessLayer : ISalesBusinessLayer
             throw new InvalidOperationException("Product is not a liquid");
 
         return liquid;
+    }
+
+
+    private void RegistrerPantFraSalg(Liquid liquid, int antal)
+    {
+        
+        var pantType = (PantDataTransferObject)liquid.Pant;
+
+        if (pantType == PantDataTransferObject.None) return;
+
+        var kasseØlSøgeord = new List<string> { "Ceres Top", "Albani øl", "Classic", "Royal" };
+
+        bool erKasseØl = kasseØlSøgeord.Any(ord =>
+            liquid.Name.Contains(ord, StringComparison.OrdinalIgnoreCase));
+
+        if (erKasseØl)
+        {
+            
+            PantOptæller.Instance.TilføjØlMedKasseLogik(pantType, antal);
+            Debug.WriteLine("Det øl " + PantOptæller.Instance.HentTotalPantVærdi());
+        }
+        else
+        {
+            PantOptæller.Instance.TilføjPant(pantType, antal);
+            Debug.WriteLine("Det alt andet " + PantOptæller.Instance.HentTotalPantVærdi());
+
+        }
+    }
+
+
+    private decimal getAntalPant()
+    {
+        return PantOptæller.Instance.HentTotalPantVærdi();
+
     }
 }
