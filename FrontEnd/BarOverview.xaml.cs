@@ -158,11 +158,20 @@ public partial class BarOverview : ContentPage
         if (!confirm)
             return;
 
-        var productIds = CurrentOrder.Select(p => p.Id).ToList();
+        // Separate products and drinks
+        var productIds = CurrentOrder
+            .Where(item => item is ProductDataTransferObject)
+            .Select(item => item.Id)
+            .ToList();
+
+        var drinkIds = CurrentOrder
+            .Where(item => item is DrinkDataTransferObject)
+            .Select(item => item.Id)
+            .ToList();
 
         try
         {
-            await _productBusinessLogicLayer.RegisterWaste(productIds);
+            await _productBusinessLogicLayer.RegisterWaste(productIds, drinkIds);
         }
         catch (Exception ex)
         {
@@ -176,6 +185,7 @@ public partial class BarOverview : ContentPage
 
         LoadProducts();
     }
+
 
     // This method is is so the bartender can remove a item on the currentOrderList 
     private async void OnReceiptSelectionChanged(object sender, SelectionChangedEventArgs e)
