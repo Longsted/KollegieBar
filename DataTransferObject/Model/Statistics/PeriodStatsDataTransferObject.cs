@@ -2,9 +2,9 @@
 
 public class PeriodStatsDataTransferObject
 {
-    public TopItemDataTransferObject? MostSoldItem { get; set; }
+    public ItemStatsDataTransferObject? MostSoldItem { get; set; }
     public int TotalSales { get; set; }
-    DateTime StartDate { get; set; }
-    DateTime EndDate { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
 
 }

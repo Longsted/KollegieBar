@@ -9,4 +9,6 @@ public interface ISalesRepository
     Task<Sale?> GetAsync(int id);
     
     Task<List<Sale>> GetAllWithRelationsAsync();
+
+    Task<List<Sale>> GetSalesByDateRange(DateTime startDate, DateTime endDate);
 }

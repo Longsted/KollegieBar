@@ -1,6 +1,6 @@
 ﻿namespace DataTransferObject.Model.Statistics;
 
-public class TopItemDataTransferObject
+public class ItemStatsDataTransferObject
 {
     public string Name { get; set; } = string.Empty;
     public int Count { get; set; }
