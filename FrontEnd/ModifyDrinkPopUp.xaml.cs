@@ -18,7 +18,7 @@ public partial class ModifyDrinkPopUp : CommunityToolkit.Maui.Views.Popup
     public ObservableCollection<LiquidDataTransferObject> AllLiquids { get; set; } = new();
     public ObservableCollection<LiquidDataTransferObject> PickedLiquids { get; set; } = new();
 
-    // Egenskaber til at huske, hvad brugeren har klikket på i listerne
+    //Used for the add/remove buttons to know which liquid to move between lists
     public LiquidDataTransferObject? SelectedAvailableLiquid { get; set; }
     public LiquidDataTransferObject? SelectedPickedLiquid { get; set; }
 
