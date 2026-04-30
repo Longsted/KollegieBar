@@ -3,7 +3,7 @@ using Data.Model;
 using Microsoft.EntityFrameworkCore;
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
-    .UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=1234;Database=  ")
+    .UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=1234;Database=appdb")
     .Options;
 
 using var context = new AppDbContext(options);
