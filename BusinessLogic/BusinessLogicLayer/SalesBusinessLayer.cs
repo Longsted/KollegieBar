@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.InterfaceBusiness;
 using Data.Model;
 using Data.UnitOfWork;
+using BusinessLogic.Mappers;
+using DataTransferObject.Model;
 using Sale = Data.Model.Sale;
 
 namespace BusinessLogic.BusinessLogicLayer;
@@ -109,7 +111,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         var sales = new List<Sale>();
 
         for (int i = 0; i < quantity; i++)
-            sales.Add(new Sale(product.CostPrice, now, transactionId, product));
+            sales.Add(new Sale(now, transactionId, product));
 
         return sales;
     }
@@ -119,9 +121,15 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         var sales = new List<Sale>();
 
         for (int i = 0; i < quantity; i++)
-            sales.Add(new Sale((decimal)drink.CostPrice, now, transactionId, drink));
+            sales.Add(new Sale(now, transactionId, drink));
 
         return sales;
+    }
+
+    public async Task<List<SaleDataTransferObject>> GetAllSalesAsync()
+    {
+        var sales = await _unitOfWork.Sales.GetAllWithRelationsAsync();
+        return sales.Select(SaleMapper.Map).ToList();
     }
 
     // ---------------------------------------------------------

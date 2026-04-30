@@ -20,28 +20,6 @@ namespace UnitTests
         }
     }
 
-    public class LowInventoryService
-    {
-        private readonly List<ProductDataTransferObject> _products;
-        private readonly int _threshold;
-
-        public LowInventoryService(List<ProductDataTransferObject> products, int threshold)
-        {
-            _products = products;
-            _threshold = threshold;
-        }
-
-        public List<ProductDataTransferObject> GetLowInventory(UserDataTransferObject userDataTransferObject)
-        {
-            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
-                return new List<ProductDataTransferObject>();
-
-            return _products
-                .Where(p => p.StockQuantity <= _threshold)
-                .ToList();
-        }
-    }
-
     public class ProductEditingService
     {
         public bool EditProduct(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, string newName, int newStock,
