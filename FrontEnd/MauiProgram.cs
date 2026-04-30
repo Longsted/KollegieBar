@@ -39,7 +39,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IUserBusinessLogicLayer, UserBusinessLogicLayer>();
         builder.Services.AddScoped<IProductBusinessLogicLayer, ProductBusinessLogicLayer>();
         builder.Services.AddScoped<ISalesBusinessLayer, SalesBusinessLayer>();
-
+        builder.Services.AddSingleton<IStatisticsLogicLayer, StatisticsLogicLayer>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<CreateProductPage>();

@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FrontEnd.StatisticsPage"
+             Title="↑ Menu - Statistics"
+             BackgroundColor="#0F0F12"
+             Shell.NavBarIsVisible="True">
+
+    <ScrollView>
+        <Grid Padding="40">
+
+            <Border Stroke="#B84A84"
+                    StrokeThickness="1"
+                    BackgroundColor="#18181C"
+                    StrokeShape="RoundRectangle 16"
+                    Padding="30">
+
+                <VerticalStackLayout Spacing="25">
+
+                    <!-- MODE PICKER -->
+                    <Picker ItemsSource="{Binding Modes}"
+                            SelectedItem="{Binding SelectedMode}"
+                            Title="Select statistics"
+                            TextColor="#FFD3E6" />
+
+                    <!-- DATE PICKERS -->
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12"
+                          IsVisible="{Binding IsPeriodMode}">
+
+                        <DatePicker Date="{Binding StartDate}"
+                                    TextColor="#FFD3E6" />
+
+                        <DatePicker Grid.Column="1"
+                                    Date="{Binding EndDate}"
+                                    TextColor="#FFD3E6" />
+                    </Grid>
+
+                    <!-- LOAD BUTTON -->
+                    <Button Text="Load statistics"
+                            Command="{Binding LoadPeriodStatisticsCommand}"
+                            BackgroundColor="#FF4FA3"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="50" />
+
+                    <!-- TITLE -->
+                    <Label Text="Statistics"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="#FFD3E6" />
+
+                    <!-- TOTAL SALES -->
+                    <Border Stroke="#B84A84"
+                            StrokeThickness="1"
+                            BackgroundColor="#111114"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12">
+
+                        <VerticalStackLayout>
+                            <Label Text="Total sales"
+                                   TextColor="#FFD3E6" />
+                            <Label Text="{Binding TotalSales}"
+                                   FontSize="20"
+                                   TextColor="#F7F2F5" />
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                    <!-- MOST SOLD -->
+                    <Border Stroke="#B84A84"
+                            StrokeThickness="1"
+                            BackgroundColor="#111114"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12">
+
+                        <VerticalStackLayout>
+                            <Label Text="Most sold item"
+                                   TextColor="#FFD3E6" />
+                            <Label Text="{Binding MostSoldName}"
+                                   FontSize="18"
+                                   TextColor="#F7F2F5" />
+                            <Label Text="{Binding MostSoldCount}"
+                                   FontSize="14"
+                                   TextColor="#C98AA8" />
+                        </VerticalStackLayout>
+
+                    </Border>
+
+                    <!-- ITEMS -->
+                    <Label Text="Items sold in period"
+                           FontSize="18"
+                           TextColor="#FFD3E6"
+                           IsVisible="{Binding IsPeriodMode}" />
+
+                    <Border Stroke="#B84A84"
+                            StrokeThickness="1"
+                            BackgroundColor="#111114"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="10"
+                            IsVisible="{Binding IsPeriodMode}">
+
+                        <CollectionView ItemsSource="{Binding Items}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="10" ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="16"
+                                               TextColor="#FFD3E6" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Count}"
+                                               FontSize="14"
+                                               TextColor="#C98AA8"
+                                               HorizontalOptions="End" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </Border>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>
