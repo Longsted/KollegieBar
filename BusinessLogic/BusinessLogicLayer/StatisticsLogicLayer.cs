@@ -47,7 +47,7 @@ public class StatisticsLogicLayer : IStatisticsLogicLayer
         };
     }
 
-    public async Task<PeriodStatsDataTransferObject> SimpleperiodStatisticsAsync(DateTime start, DateTime end)
+    public async Task<PeriodStatsDataTransferObject> SimplePeriodStatisticsAsync(DateTime start, DateTime end)
     {
         var salesPeriod = await _unitOfWork.Sales.GetSalesByDateRange(start, end);
 
