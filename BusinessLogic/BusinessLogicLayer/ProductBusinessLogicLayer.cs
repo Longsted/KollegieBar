@@ -106,34 +106,63 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
 
     //This method is used to register waste of a products, it reduces the stock by 1 for each product id in the list.
     //Could save the changes to a waste log if needed, but for now it just updates the stock quantity.
-    public async Task RegisterWaste(List<int> productIds)
+    public async Task RegisterWaste(List<int> productIds, List<int> drinkIds)
     {
-        var uniqueIds = productIds.Distinct().ToList();
-        var products = await _unitOfWork.Products.GetWhereAsync(p => uniqueIds.Contains(p.Id));
+        // -------------------------
+        // GROUP COUNTS
+        // -------------------------
+        var productGroups = productIds
+            .GroupBy(id => id)
+            .ToDictionary(g => g.Key, g => g.Count());
 
+        var drinkGroups = drinkIds
+            .GroupBy(id => id)
+            .ToDictionary(g => g.Key, g => g.Count());
 
-        if (products.Count != uniqueIds.Count)
+        // -------------------------
+        // HANDLE PRODUCT WASTE
+        // -------------------------
+        if (productGroups.Any())
         {
-            throw new InvalidOperationException("One or more products were not found.");
-        }
+            var products = await _unitOfWork.Products.GetWhereAsync(p => productGroups.Keys.Contains(p.Id));
 
-        var wasteCounts = productIds.GroupBy(id => id)
-                                    .ToDictionary(g => g.Key, g => g.Count());
+            if (products.Count != productGroups.Count)
+                throw new InvalidOperationException("One or more products were not found.");
 
-        foreach (var product in products)
-        {
-            int amountToRemove = wasteCounts[product.Id];
-
-            if (product.StockQuantity < amountToRemove)
+            foreach (var product in products)
             {
-                throw new InvalidOperationException($"Not enough stock for product {product.Id}");
-            }
+                int qty = productGroups[product.Id];
 
-            product.StockQuantity -= amountToRemove;
+                if (product.StockQuantity < qty)
+                    throw new InvalidOperationException($"Not enough stock for product {product.Id}");
+
+                product.StockQuantity -= qty;
+            }
         }
+
+        // -------------------------
+        // HANDLE DRINK WASTE
+        // -------------------------
+        if (drinkGroups.Any())
+        {
+            var drinks = await _unitOfWork.Drinks.GetDrinksWithIngredientsAsync(drinkGroups.Keys.ToList());
+
+            foreach (var drink in drinks)
+            {
+                int wasteQty = drinkGroups[drink.Id];
+
+                foreach (var liquid in drink.Ingredients)
+                {
+                    if (liquid.StockQuantity < wasteQty)
+                        throw new InvalidOperationException($"Not enough stock for ingredient {liquid.Name}");
+
+                    liquid.StockQuantity -= wasteQty;
+                }
+            }
+        }
+
         await _unitOfWork.SaveChangesAsync();
     }
-
 
 
     public async Task UpdateMaxStockAsync(int productId, int newMaxStock)
@@ -173,6 +202,12 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
+    public List<ProductDataTransferObject> GetLowInventoryProducts(List<ProductDataTransferObject> allProducts)
+    {
+        return allProducts
+            .Where(p => p.StockQuantity <= p.MinStockQuantity)
+            .ToList();
+    }
 
 
 

@@ -28,5 +28,8 @@
     <FlyoutItem Title="Bar Overview" Route="BarOverview">
         <ShellContent ContentTemplate="{DataTemplate local:BarOverview}" />
     </FlyoutItem>
+    <FlyoutItem Title="Statistics">
+        <ShellContent ContentTemplate="{DataTemplate local:StatisticsPage}" />
+    </FlyoutItem>
 
 </Shell>

@@ -1,4 +1,6 @@
-﻿namespace BusinessLogic.InterfaceBusiness;
+﻿using Data.Model;
+
+namespace BusinessLogic.InterfaceBusiness;
 
 using DataTransferObject.Model;
 
@@ -18,11 +20,13 @@ public interface IProductBusinessLogicLayer
 
     Task RegisterIncomingStockAsync(int productId, int quantity);
 
-    Task RegisterWaste(List<int> productIds);
+    Task RegisterWaste(List<int> productIds, List<int> DrinkID);
 
     Task UpdateMaxStockAsync(int productId, int newMaxStock);
 
     Task UpdateMinStock(int productId, int newMinStock);
+    
+    List<ProductDataTransferObject> GetLowInventoryProducts(List<ProductDataTransferObject> allProducts);
 
 
 }

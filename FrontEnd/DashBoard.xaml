@@ -6,7 +6,7 @@
              BackgroundColor="#0F0F12"
              Shell.NavBarIsVisible="True">
 
-    <Grid ColumnDefinitions="300,*" Padding="40" ColumnSpacing="40">
+    <Grid ColumnDefinitions="280,380,*" Padding="40" ColumnSpacing="40">
 
         <!-- LEFT SIDE -->
         <Border Grid.Column="0"
@@ -72,96 +72,196 @@
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-
                 </CollectionView>
 
             </Grid>
         </Border>
+        
+        
+      <Border Grid.Column="1"
+            Stroke="#B84A84"
+            StrokeThickness="1"
+            BackgroundColor="#18181C"
+            StrokeShape="RoundRectangle 16"
+            Padding="25">
 
-        <!-- RIGHT SIDE (unchanged) -->
-        <Border Grid.Column="1"
+        <Grid RowDefinitions="Auto,Auto,*" RowSpacing="18">
+
+            <Label Text="Low stock list"
+                   TextColor="#FFD3E6"
+                   FontSize="24"
+                   FontAttributes="Bold"/>
+
+            <Label Grid.Row="1"
+                   Text="Products below minimum stock level"
+                   TextColor="#C98AA8"
+                   FontSize="14"/>
+
+            <CollectionView Grid.Row="2"
+                            ItemsSource="{Binding LowStockProducts}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedProduct, Mode=TwoWay}">
+
+                <CollectionView.EmptyView>
+                    <Label Text="No products are low in stock"
+                           TextColor="#C98AA8"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="#3A3A40"
+                                StrokeThickness="1"
+                                BackgroundColor="#111114"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="12"
+                                Margin="0,0,0,10">
+
+                            <Grid ColumnDefinitions="Auto,*,Auto"
+                                  ColumnSpacing="12">
+
+                                <Label Text="⚠"
+                                       TextColor="#FF4FA3"
+                                       FontSize="22"
+                                       VerticalOptions="Center"/>
+
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Spacing="2">
+                                    <Label Text="{Binding Name}"
+                                           TextColor="#FFD3E6"
+                                           FontSize="15"
+                                           FontAttributes="Bold"/>
+
+                                    <Label Text="Low inventory"
+                                           TextColor="#C98AA8"
+                                           FontSize="12"/>
+                                </VerticalStackLayout>
+
+                                <Label Grid.Column="2"
+                                       Text="{Binding StockQuantity}"
+                                       TextColor="#FF9ACB"
+                                       FontSize="15"
+                                       VerticalOptions="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+                
+            
+            </Grid>
+        </Border>
+            
+        
+        <Border Grid.Column="2"
                 Stroke="#B84A84"
                 StrokeThickness="1"
                 BackgroundColor="#18181C"
                 StrokeShape="RoundRectangle 16"
                 Padding="30">
 
-            <Grid RowDefinitions="Auto,Auto,Auto"
-                  ColumnDefinitions="200,*"
-                  RowSpacing="25"
-                  ColumnSpacing="20">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto"
+      RowSpacing="12">
 
-                <Label Grid.Row="0" Grid.Column="0"
-                       Text="Selected product:"
-                       TextColor="#FFD3E6"
-                       FontSize="16"/>
+    <Label Grid.Row="0"
+           Text="Selected product:"
+           TextColor="#FFD3E6"
+           FontSize="16"/>
 
-                <Border Grid.Row="0" Grid.Column="1"
-                        Stroke="#B84A84"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 8"
-                        BackgroundColor="#111114"
-                        Padding="10,4">
+    <Border Grid.Row="1"
+            Stroke="#B84A84"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 8"
+            BackgroundColor="#111114"
+            Padding="10,4">
 
-                    <Entry Text="{Binding SelectedProduct.Name}"
-                           IsReadOnly="True"
-                           BackgroundColor="Transparent"
-                           TextColor="#F7F2F5"
-                           FontSize="16"/>
-                </Border>
+        <Entry Text="{Binding SelectedProduct.Name}"
+               IsReadOnly="True"
+               BackgroundColor="Transparent"
+               TextColor="#F7F2F5"
+               FontSize="16"/>
+    </Border>
 
-                <Label Grid.Row="1" Grid.Column="0"
-                       Text="Quantity:"
-                       TextColor="#FFD3E6"
-                       FontSize="16"/>
+    <Label Grid.Row="2"
+           Text="Quantity:"
+           TextColor="#FFD3E6"
+           FontSize="16"
+           Margin="0,15,0,0"/>
 
-                <Border Grid.Row="1" Grid.Column="1"
-                        Stroke="#B84A84"
-                        StrokeThickness="1"
-                        StrokeShape="RoundRectangle 8"
-                        BackgroundColor="#111114"
-                        Padding="10,4">
+    <Border Grid.Row="3"
+            Stroke="#B84A84"
+            StrokeThickness="1"
+            StrokeShape="RoundRectangle 8"
+            BackgroundColor="#111114"
+            Padding="10,4">
 
-                    <Entry Placeholder="Enter amount..."
-                           PlaceholderColor="#C98AA8"
-                           Keyboard="Numeric"
-                           Text="{Binding Quantity, TargetNullValue=''}"
-                           BackgroundColor="Transparent"
-                           TextColor="#F7F2F5"
-                           FontSize="16"/>
-                </Border>
+        <Entry Placeholder="Enter amount..."
+               PlaceholderColor="#C98AA8"
+               Keyboard="Numeric"
+               Text="{Binding Quantity, TargetNullValue=''}"
+               BackgroundColor="Transparent"
+               TextColor="#F7F2F5"
+               FontSize="16"/>
+    </Border>
 
-                <!-- Button -->
-                <HorizontalStackLayout Grid.Row="2" Grid.Column="1"
-                                     Spacing="15"
-                                     VerticalOptions="Start">
+    <HorizontalStackLayout Grid.Row="4"
+                           Spacing="15"
+                           Margin="0,20,0,0"
+                           HorizontalOptions="End">
 
-                    <Button Grid.Row="2" Grid.Column="1"
-                        Text="Add quantity"
-                        BackgroundColor="#FF4FA3"
-                        TextColor="White"
-                        CornerRadius="10"
-                        HeightRequest="55"
-                        WidthRequest="200"
-                        HorizontalOptions="Start"
-                        BorderColor="#FF79C6"
-                        BorderWidth="1.5"
-                        FontAttributes="Bold"
-                        Command="{Binding AddQuantityCommand}"/>
+        <Button Text="Add quantity"
+                BackgroundColor="#FF4FA3"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="55"
+                WidthRequest="180"
+                BorderColor="#FF79C6"
+                BorderWidth="1.5"
+                FontAttributes="Bold"
+                Command="{Binding AddQuantityCommand}"/>
 
-                    <Button Grid.Row="2" Grid.Column="2"
-                        Text="Edit Product"
-                        BackgroundColor="#FF4FA3"
-                        TextColor="White"
-                        CornerRadius="10"
-                        HeightRequest="55"
-                        WidthRequest="200"
-                        HorizontalOptions="Start"
-                        BorderColor="#FF79C6"
-                        BorderWidth="1.5"
-                        FontAttributes="Bold"
-                        Command="{Binding EditProductCommand}"/>
+        <Button Text="Edit Product"
+                BackgroundColor="#FF4FA3"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="55"
+                WidthRequest="180"
+                BorderColor="#FF79C6"
+                BorderWidth="1.5"
+                FontAttributes="Bold"
+                Command="{Binding EditProductCommand}"/>
+        
+        
                 </HorizontalStackLayout>
+                <Border Grid.Row="6"
+        HorizontalOptions="End"
+        VerticalOptions="End"
+        BackgroundColor="#FF4FA3"
+        StrokeShape="RoundRectangle 10"
+        Padding="15,10">
+                    <!-- Lidt ekstra padding i siderne -->
+
+                    <HorizontalStackLayout Spacing="20" 
+                          VerticalOptions="Center">
+
+                        <Label Text="{Binding PantKlarTilVisning, StringFormat='Pant på lager: {0}'}"
+               TextColor="White"
+               VerticalTextAlignment="Center"
+               FontAttributes="Bold"/>
+
+                        <Button Text="Reset Pant" 
+                BackgroundColor="White"  
+                TextColor="#FF4FA3" 
+                CornerRadius="10" 
+                HeightRequest="40" 
+                Padding="15,0"
+                FontAttributes="Bold"
+                Command="{Binding ResetPantCommand}"/>
+                        <!-- Husk din command her -->
+
+                    </HorizontalStackLayout>
+                </Border>
 
             </Grid>
         </Border>

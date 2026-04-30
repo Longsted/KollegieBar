@@ -109,4 +109,10 @@
       <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="StatisticsViewModel.cs">
+        <DependentUpon>StatisticsPage.xaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
