@@ -101,13 +101,14 @@
                     CornerRadius="10"
                     HorizontalOptions="Start"
                     Clicked="ClearCart"/>
-                    <Button Text="Modify" 
+                    <Button Text="Modify drink" 
                     BackgroundColor="#B84A84" 
                     TextColor="White" 
                     FontAttributes="Bold" 
                     HeightRequest="60"
                     WidthRequest="150"
-                    CornerRadius="12"/>
+                    CornerRadius="12"
+                    Clicked="ModifySelectedDrink"/>
                     <Button Text="Add Drink" 
                     BackgroundColor="#B84A84" 
                     TextColor="White" 

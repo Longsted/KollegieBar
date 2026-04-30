@@ -10,6 +10,8 @@ public interface IProductBusinessLogicLayer
 
     Task<List<ProductDataTransferObject>> GetAllProductsAsync();
 
+    Task<List<LiquidDataTransferObject>> GetAllLiquidsAsync();
+
     Task CreateProductAsync(ProductDataTransferObject product);
 
     Task UpdateProductAsync(ProductDataTransferObject product);
