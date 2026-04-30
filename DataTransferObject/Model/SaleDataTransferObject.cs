@@ -2,7 +2,7 @@
 {
     public class SaleDataTransferObject
     {
-        publgit ic int SaleId { get; set; }
+        public int SaleId { get; set; }
         public DateTime SaleDate { get; set; }
         public Guid TransactionId { get; set; }
 

@@ -10,7 +10,6 @@ public class SaleMapper
     {
         return new DataTransfer.SaleDataTransferObject
         {
-            PriceAtSale = sale.PriceAtSale,
             SaleDate = sale.SaleDate,
             TransactionId = sale.TransactionId,
             ProductId = sale.ProductId,
