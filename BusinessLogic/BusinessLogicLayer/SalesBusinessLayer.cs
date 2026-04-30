@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.InterfaceBusiness;
 using Data.Model;
 using Data.UnitOfWork;
+using BusinessLogic.Mappers;
+using DataTransferObject.Model;
 using Sale = Data.Model.Sale;
 
 namespace BusinessLogic.BusinessLogicLayer;
@@ -122,6 +124,12 @@ public class SalesBusinessLayer : ISalesBusinessLayer
             sales.Add(new Sale(now, transactionId, drink));
 
         return sales;
+    }
+
+    public async Task<List<SaleDataTransferObject>> GetAllSalesAsync()
+    {
+        var sales = await _unitOfWork.Sales.GetAllWithRelationsAsync();
+        return sales.Select(SaleMapper.Map).ToList();
     }
 
     // ---------------------------------------------------------
