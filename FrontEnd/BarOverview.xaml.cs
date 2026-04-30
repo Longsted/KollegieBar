@@ -250,7 +250,7 @@ public partial class BarOverview : ContentPage
         {
             if (p is LiquidDataTransferObject liquid)
             {
-                if (liquid.AlcoholPercentage > 15.9 || !liquid.HasPant || liquid.Name == "Tonic Water" || liquid.Name == "Mango Syrup")
+                if (liquid.AlcoholPercentage > 15.9 || !liquid.HasPant || liquid.Name == "Tonic Water" || liquid.Name.Contains("Syrup"))
                 {
                     spritiusNMixers.Add(liquid);
                 }
