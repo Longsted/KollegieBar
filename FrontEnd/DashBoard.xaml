@@ -161,7 +161,7 @@
                 StrokeShape="RoundRectangle 16"
                 Padding="30">
 
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto"
       RowSpacing="12">
 
     <Label Grid.Row="0"
@@ -231,9 +231,39 @@
                 BorderWidth="1.5"
                 FontAttributes="Bold"
                 Command="{Binding EditProductCommand}"/>
-    </HorizontalStackLayout>
+        
+        
+                </HorizontalStackLayout>
+                <Border Grid.Row="6"
+        HorizontalOptions="End"
+        VerticalOptions="End"
+        BackgroundColor="#FF4FA3"
+        StrokeShape="RoundRectangle 10"
+        Padding="15,10">
+                    <!-- Lidt ekstra padding i siderne -->
 
-</Grid>
+                    <HorizontalStackLayout Spacing="20" 
+                          VerticalOptions="Center">
+
+                        <Label Text="{Binding PantKlarTilVisning, StringFormat='Pant på lager: {0}'}"
+               TextColor="White"
+               VerticalTextAlignment="Center"
+               FontAttributes="Bold"/>
+
+                        <Button Text="Reset Pant" 
+                BackgroundColor="White"  
+                TextColor="#FF4FA3" 
+                CornerRadius="10" 
+                HeightRequest="40" 
+                Padding="15,0"
+                FontAttributes="Bold"
+                Command="{Binding ResetPantCommand}"/>
+                        <!-- Husk din command her -->
+
+                    </HorizontalStackLayout>
+                </Border>
+
+            </Grid>
         </Border>
 
     </Grid>
