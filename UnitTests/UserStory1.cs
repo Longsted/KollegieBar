@@ -48,7 +48,6 @@ namespace UnitTests
             {
                 Id = 10,
                 Name = "Gin & Tonic",
-                CostPrice = 50,
                 Ingredients = new List<Liquid> {
                     tonic
                 }

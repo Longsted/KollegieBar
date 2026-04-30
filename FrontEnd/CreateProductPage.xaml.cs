@@ -8,14 +8,16 @@ public partial class CreateProductPage : ContentPage
 {
     private string _selectedTab = "Snack";
     private readonly IProductBusinessLogicLayer _iProductBusinessLogicLayer;
+    private readonly IDrinksBusinessLogicLayer _iDrinksBusinessLogicLayer;
     
-    public ObservableCollection<LiquidDataTransferObject> AvailableIngredients { get; set; } = new();
-    public ObservableCollection<LiquidDataTransferObject> PickedIngredients { get; set; } = new();
+    private ObservableCollection<LiquidDataTransferObject> AvailableIngredients { get; set; } = new();
+    private ObservableCollection<LiquidDataTransferObject> PickedIngredients { get; set; } = new();
 
-    public CreateProductPage(IProductBusinessLogicLayer iProductBusinessLogicLayer)
+    public CreateProductPage(IProductBusinessLogicLayer iProductBusinessLogicLayer, IDrinksBusinessLogicLayer iDrinksBusinessLogicLayer)
     {
         InitializeComponent();
         _iProductBusinessLogicLayer = iProductBusinessLogicLayer;
+        _iDrinksBusinessLogicLayer = iDrinksBusinessLogicLayer;
     }
 
     protected override void OnAppearing()
@@ -180,9 +182,15 @@ public partial class CreateProductPage : ContentPage
                     ResultLabel.Text = "Please pick at least one ingredient.";
                     return;
                 }
+
+                if (string.IsNullOrWhiteSpace(DescriptionEntry.Text))
+                {
+                    ResultLabel.Text = "Description cannot be empty.";
+                    return;
+                }
                 
-                // DrinkDataTransferObject drink = new DrinkDataTransferObject(name, PickedIngredients.ToList() , IsAlcoholicFreeCheckBox.IsChecked);
-                // await _iProductBusinessLogicLayer.CreateProductAsync(drink);
+                DrinkDataTransferObject drink = new DrinkDataTransferObject(name, IsAlcoholicFreeCheckBox.IsChecked, PickedIngredients.ToList(), DescriptionEntry.Text);
+                await _iDrinksBusinessLogicLayer.CreateDrinkAsync(drink);
                 ResultLabel.Text = $"Drink created: {name}";
             }
 

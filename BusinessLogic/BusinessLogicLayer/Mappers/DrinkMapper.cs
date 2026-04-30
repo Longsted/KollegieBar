@@ -11,11 +11,11 @@ namespace BusinessLogic.Mappers
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                CostPrice = entity.CostPrice,
                 IsAlcoholic = entity.IsAlcoholic,
                 Ingredients = entity.Ingredients
                     .Select(LiquidMapper.Map)
-                    .ToList()
+                    .ToList(),
+                Description = entity.Description
             };
         }
 
@@ -25,20 +25,20 @@ namespace BusinessLogic.Mappers
             {
                 Id = dto.Id,
                 Name = dto.Name,
-                CostPrice = dto.CostPrice,
                 IsAlcoholic = dto.IsAlcoholic,
                 Ingredients = dto.Ingredients
                     .Select(LiquidMapper.Map)
-                    .ToList()
+                    .ToList(),
+                Description = dto.Description
             };
         }
 
         public static void MapToEntity(DataTransfer.DrinkDataTransferObject dto, DataEntity.Drink entity)
         {
             entity.Name = dto.Name;
-            entity.CostPrice = dto.CostPrice;
             entity.IsAlcoholic = dto.IsAlcoholic;
             // Ingredients handled separately
+            entity.Description = dto.Description;
         }
     }
 }

@@ -133,8 +133,6 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
-
-
     public async Task UpdateMaxStockAsync(int productId, int newMaxStock)
     {
         if (newMaxStock < 0)

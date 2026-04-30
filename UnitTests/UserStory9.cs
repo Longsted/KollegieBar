@@ -32,15 +32,13 @@ namespace UnitTests
             var existingDrink = new Drink
             {
                 Id = 1,
-                Name = "Old Drink",
-                CostPrice = 25
+                Name = "Old Drink"
             };
 
             var updatedDrink = new DrinkDataTransferObject
             {
                 Id = 1,
-                Name = "Special Drink",
-                CostPrice = 35,
+                Name = "Special Drink"
             };
 
             _mockDrinkRepository
@@ -50,10 +48,8 @@ namespace UnitTests
             await _drinksService.UpdateDrinkAsync(updatedDrink);
 
             Assert.Equal("Special Drink", existingDrink.Name);
-            Assert.Equal(35, existingDrink.CostPrice);
 
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
-
         }
 
         [Fact]
@@ -62,8 +58,7 @@ namespace UnitTests
             var drink = new DrinkDataTransferObject
             {
                 Id = 0,
-                Name = "Special Drink",
-                CostPrice = 35
+                Name = "Special Drink"
             };
 
             await Assert.ThrowsAsync<ArgumentException>(() => _drinksService.UpdateDrinkAsync(drink));
@@ -78,8 +73,7 @@ namespace UnitTests
             var drink = new DrinkDataTransferObject()
             {
                 Id = 1,
-                Name = "Special Drink",
-                CostPrice = 35
+                Name = "Special Drink"
             };
 
             _mockDrinkRepository
@@ -100,8 +94,7 @@ namespace UnitTests
             var drink = new DrinkDataTransferObject
             {
                 Id = 1,
-                Name = "Special Drink",
-                CostPrice = 35,
+                Name = "Special Drink"
             };
 
             await Assert.ThrowsAsync<InvalidOperationException>(() =>

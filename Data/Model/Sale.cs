@@ -3,7 +3,6 @@
     public class Sale
     {
         public int SaleId { get; private set; }
-        public decimal PriceAtSale { get; set; }
         public DateTime SaleDate { get; set; }
         public Guid TransactionId { get; set; }
 
@@ -16,9 +15,8 @@
         public Drink? Drink { get; set; }
 
         // Constructor for Product sale
-        public Sale(decimal priceAtSale, DateTime saleDate, Guid transactionId, Product product)
+        public Sale(DateTime saleDate, Guid transactionId, Product product)
         {
-            PriceAtSale = priceAtSale;
             SaleDate = saleDate;
             TransactionId = transactionId;
 
@@ -27,9 +25,8 @@
         }
 
         // Constructor for Drink sale
-        public Sale(decimal priceAtSale, DateTime saleDate, Guid transactionId, Drink drink)
+        public Sale(DateTime saleDate, Guid transactionId, Drink drink)
         {
-            PriceAtSale = priceAtSale;
             SaleDate = saleDate;
             TransactionId = transactionId;
 
