@@ -2,6 +2,24 @@
 
 namespace UnitTests
 {
+    public class SalesStatisticsService
+    {
+        private readonly List<ProductDataTransferObject> _salesData;
+
+        public SalesStatisticsService(List<ProductDataTransferObject> salesData)
+        {
+            _salesData = salesData;
+        }
+
+        public List<ProductDataTransferObject> GetStatistics(UserDataTransferObject userDataTransferObject)
+        {
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
+                return new List<ProductDataTransferObject>();
+
+            return _salesData;
+        }
+    }
+
     public class LowInventoryService
     {
         private readonly List<ProductDataTransferObject> _products;
@@ -61,6 +79,65 @@ namespace UnitTests
             return products
                 .GroupBy(p => p.GetType().Name) // Her får vi "Snack", "LiquidWithAlcohol" osv.
                 .ToDictionary(g => g.Key, g => g.ToList());
+        }
+    }
+
+    public class WasteRegistrationService
+    {
+        public bool RegisterWaste(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int amountLost)
+        {
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.Bartender)
+                return false;
+
+            if (amountLost <= 0)
+                return false;
+
+            productDataTransferObject.StockQuantity -= amountLost;
+
+            if (productDataTransferObject.StockQuantity < 0)
+                productDataTransferObject.StockQuantity = 0;
+
+            return true;
+        }
+    }
+
+    public class StockLimitService
+    {
+        public int MaxStockQuantity { get; private set; }
+        public int MinStockQuantity { get; private set; }
+
+        public StockLimitService(int initialLimit)
+        {
+            MaxStockQuantity = initialLimit;
+            MinStockQuantity = initialLimit;
+        }
+
+        public bool UpdateMaxStock(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int newMaxStock)
+        {
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
+                return false;
+
+            MaxStockQuantity = newMaxStock;
+            
+            // Adjust product stock if above new max
+            if (productDataTransferObject.StockQuantity > MaxStockQuantity)
+                productDataTransferObject.StockQuantity = MaxStockQuantity;
+
+            return true;
+        }
+
+        public bool UpdateMinStock(UserDataTransferObject userDataTransferObject, ProductDataTransferObject productDataTransferObject, int newMinStock)
+        {
+            if (userDataTransferObject?.RoleDataTransferObject != UserRoleDataTransferObject.BoardMember)
+                return false;
+
+            MinStockQuantity = newMinStock;
+
+            // Adjust product stock if below new min
+            if (productDataTransferObject.StockQuantity < MinStockQuantity)
+                productDataTransferObject.StockQuantity = MinStockQuantity;
+
+            return true;
         }
     }
 
