@@ -29,6 +29,7 @@ public class DashboardViewModel : INotifyPropertyChanged
     public ObservableCollection<ProductDataTransferObject> LowStockProducts { get; set; } =
         new ObservableCollection<ProductDataTransferObject>();
 
+
     // Filter / sort collections for the Pickers
     public ObservableCollection<string> Categories { get; } = new ObservableCollection<string>();
     public ObservableCollection<string> SortOptions { get; } = new ObservableCollection<string>();
@@ -37,6 +38,8 @@ public class DashboardViewModel : INotifyPropertyChanged
     {
         _iProductBusinessLogicLayer = logic;
         Products = new ObservableCollection<ProductDataTransferObject>();
+
+
 
         // Setup categories (based on DTO classes)
         Categories.Add("All");
@@ -63,6 +66,7 @@ public class DashboardViewModel : INotifyPropertyChanged
         _allProducts = products.Cast<object>().ToList();
 
         ApplyFilterAndSort();
+        OpdaterPantVisning();
     }
 
     private ProductDataTransferObject _selectedProduct;
@@ -216,6 +220,22 @@ public class DashboardViewModel : INotifyPropertyChanged
         }
         
     }
+
+    
+    public ICommand ResetPantCommand => new Command(() =>
+    {
+        PantOptæller.Instance.Nulstil();
+
+        OpdaterPantVisning();
+    });
+    public string PantKlarTilVisning => $"{PantOptæller.Instance.HentTotalPantVærdi():C2}";
+    public void OpdaterPantVisning()
+    {
+        OnPropertyChanged(nameof(PantKlarTilVisning));
+    }
+
+
+
 
     public event PropertyChangedEventHandler PropertyChanged;
     protected void OnPropertyChanged([CallerMemberName] string name = null)
