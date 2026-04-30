@@ -37,6 +37,6 @@
             DrinkId = drink.Id;
         }
 
-        private Sale() { }
+        public Sale() { }
     }
 }

@@ -7,4 +7,6 @@ public interface ISalesRepository
     Task AddRangeAsync(List<Sale> sales);
     
     Task<Sale?> GetAsync(int id);
+    
+    Task<List<Sale>> GetAllWithRelationsAsync();
 }
