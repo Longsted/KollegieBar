@@ -1,7 +1,7 @@
 ﻿using BusinessLogic.InterfaceBusiness;
+using BusinessLogic.Mappers;
 using Data.Model;
 using Data.UnitOfWork;
-using BusinessLogic.Mappers;
 using DataTransferObject.Model;
 using System.Diagnostics;
 using Sale = Data.Model.Sale;
@@ -65,7 +65,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
                 // Reduce stock for each liquid ingredient
                 foreach (var liquid in drink.Ingredients)
                 {
-                    
+
                     if (liquid.StockQuantity < drinkQty)
                         throw new InvalidOperationException($"Not enough stock for ingredient {liquid.Name}");
 
@@ -74,10 +74,13 @@ public class SalesBusinessLayer : ISalesBusinessLayer
                         liquid.StockQuantity -= drinkQty;
                     }
 
-                    allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
                 }
+                allSales.AddRange(CreateSalesForDrink(drink, drinkQty, transactionId, now));
             }
 
+        }
+        if (allSales.Any())
+        {
             await _unitOfWork.Sales.AddRangeAsync(allSales);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -203,7 +206,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
 
     private void RegistrerPantFraSalg(Liquid liquid, int antal)
     {
-        
+
         var pantType = (PantDataTransferObject)liquid.Pant;
 
         if (pantType == PantDataTransferObject.None) return;
@@ -215,7 +218,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
 
         if (erKasseØl)
         {
-            
+
             PantOptæller.Instance.TilføjØlMedKasseLogik(pantType, antal);
             Debug.WriteLine("Det øl " + PantOptæller.Instance.HentTotalPantVærdi());
         }
