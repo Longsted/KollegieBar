@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.InterfaceBusiness;
 using BusinessLogic.Mappers;
+using Data.Model;
 using Data.UnitOfWork;
 using DataTransferObject.Model;
 
@@ -170,6 +171,12 @@ public class ProductBusinessLogicLayer : IProductBusinessLogicLayer
         await _unitOfWork.SaveChangesAsync();
     }
 
+    public List<ProductDataTransferObject> GetLowInventoryProducts(List<ProductDataTransferObject> allProducts)
+    {
+        return allProducts
+            .Where(p => p.StockQuantity <= p.MinStockQuantity)
+            .ToList();
+    }
 
 
 
