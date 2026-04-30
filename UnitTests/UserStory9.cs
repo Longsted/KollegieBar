@@ -1,4 +1,9 @@
-﻿using DataTransferObject.Model;
+﻿using BusinessLogic.BusinessLogicLayer;
+using Data.Interfaces;
+using Data.Model;
+using Data.UnitOfWork;
+using DataTransferObject.Model;
+using Moq;
 using Xunit;
 
 namespace UnitTests
@@ -6,48 +11,103 @@ namespace UnitTests
 
     public class UserStory9
     {
-        // Tests that a bartender can customize a drink before selling it.
-        [Fact]
-        public void Bartender_ShouldBeAbleTo_CustomizeDrink()
+
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+        private readonly Mock<IDrinkRepository> _mockDrinkRepository;
+        private readonly DrinksBusinessLayer _drinksService;
+
+        public UserStory9()
         {
-            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.Bartender };
+            _mockUnitOfWork = new Mock<IUnitOfWork>();
+            _mockDrinkRepository = new Mock<IDrinkRepository>();
 
-            var product = new DrinkDataTransferObject()
-            {
-                Name = "Special Drink"
-            };
+            _mockUnitOfWork.Setup(u => u.Drinks).Returns(_mockDrinkRepository.Object);
 
-            var service = new DrinkCustomizationService();
-
-            var result = service.CustomizeDrink(
-                user,
-                product,
-                newPrice: 35
-            );
-
-            Assert.True(result);
+            _drinksService = new DrinksBusinessLayer(_mockUnitOfWork.Object);
         }
 
-        // Tests that a non-bartender cannot customize a drink and no changes are applied.
         [Fact]
-        public void NonBartender_ShouldNotBeAbleTo_CustomizeDrink()
+        public async Task UpdateDrinkAsync_ValidDrink_UpdatesDrink()
         {
-            var user = new UserDataTransferObject { RoleDataTransferObject = UserRoleDataTransferObject.BoardMember }; 
-
-            var product = new DrinkDataTransferObject
+            var existingDrink = new Drink
             {
-                Name = "Special Drink"
+                Id = 1,
+                Name = "Old Drink",
+                CostPrice = 25
             };
 
-            var service = new DrinkCustomizationService();
+            var updatedDrink = new DrinkDataTransferObject
+            {
+                Id = 1,
+                Name = "Special Drink",
+                CostPrice = 35,
+            };
 
-            var result = service.CustomizeDrink(
-                user,
-                product,
-                newPrice: 35
-            );
+            _mockDrinkRepository
+                .Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync(existingDrink);
 
-            Assert.False(result);
+            await _drinksService.UpdateDrinkAsync(updatedDrink);
+
+            Assert.Equal("Special Drink", existingDrink.Name);
+            Assert.Equal(35, existingDrink.CostPrice);
+
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
+
+        }
+
+        [Fact]
+        public async Task UpdateDrinkAsync_InvalidId_ThrowsArgumentException()
+        {
+            var drink = new DrinkDataTransferObject
+            {
+                Id = 0,
+                Name = "Special Drink",
+                CostPrice = 35
+            };
+
+            await Assert.ThrowsAsync<ArgumentException>(() => _drinksService.UpdateDrinkAsync(drink));
+
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
+
+        }
+
+        [Fact]
+        public async Task UpdateDrinkAsync_DrinkDoesNotExist_ThrowsInvalidOperationException()
+        {
+            var drink = new DrinkDataTransferObject()
+            {
+                Id = 1,
+                Name = "Special Drink",
+                CostPrice = 35
+            };
+
+            _mockDrinkRepository
+                .Setup(r => r.GetByIdAsync(1))
+                .ReturnsAsync((Drink?)null);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                _drinksService.UpdateDrinkAsync(drink));
+
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
+        }
+
+
+        [Fact]
+        public async Task UpdateDrinkAsync_WithIngredients_ThrowsInvalidOperationException()
+        {
+            var drink = new DrinkDataTransferObject
+            {
+                Id = 1,
+                Name = "Special Drink",
+                CostPrice = 35,
+            };
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() =>
+                _drinksService.UpdateDrinkAsync(drink));
+
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
         }
     }
 }

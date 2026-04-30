@@ -12,7 +12,7 @@
                 BorderColor="#B84A84" 
                 BorderWidth="1"
                 TextColor="White"
-                    Clicked="ShowBot"/>
+                    Clicked="ShowBottles"/>
 
             <Button Text="Drinks" 
                 HeightRequest="80" 
@@ -37,6 +37,14 @@
                 BorderWidth="1"
                 TextColor="White"
                 Clicked="ShowSnacks"/>
+            
+            <Button Text="Spiritus/Mixer" 
+                    HeightRequest="80" 
+                    BackgroundColor="#18181C" 
+                    BorderColor="#B84A84" 
+                    BorderWidth="1"
+                    TextColor="White"
+                    Clicked="ShowSpiritusNMixer"/>
 
             <Button Text="EVERYTHING" 
              HeightRequest="80" 
@@ -129,7 +137,7 @@
 
             <Grid RowDefinitions="Auto, *, Auto, Auto,Auto">
                 <Label Grid.Row="0" 
-                       Text="AKTIV ORDRE" 
+                       Text="ACTIVE ORDER" 
                        TextColor="#FF79C6" 
                        FontSize="22" 
                        FontAttributes="Bold" 
@@ -154,23 +162,8 @@
                 </CollectionView>
 
                 <BoxView Grid.Row="2" HeightRequest="1" Color="#B84A84" Margin="0,15" />
-
-                <Grid Grid.Row="3" ColumnDefinitions="*, Auto" Margin="0,15,0,5">
-                    <Label Text="TOTAL" 
-                     TextColor="White" 
-                     FontSize="18" 
-                     FontAttributes="Bold" 
-                     VerticalOptions="Center" />
-                    <Label x:Name="TotalSumLabel" 
-                     Grid.Column="1" 
-                     Text="0,00 kr." 
-                     TextColor="#FF79C6" 
-                     FontSize="22" 
-                     FontAttributes="Bold" 
-                     VerticalOptions="Center" />
-                </Grid>
-
-                <Button Grid.Row="4"
+                
+                <Button Grid.Row="3"
                         x:Name="BtnPay"
                         Text="Checkout" 
                         Clicked="OnCheckoutClicked"
