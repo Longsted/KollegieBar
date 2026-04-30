@@ -109,7 +109,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         var sales = new List<Sale>();
 
         for (int i = 0; i < quantity; i++)
-            sales.Add(new Sale(product.CostPrice, now, transactionId, product));
+            sales.Add(new Sale(now, transactionId, product));
 
         return sales;
     }
@@ -119,7 +119,7 @@ public class SalesBusinessLayer : ISalesBusinessLayer
         var sales = new List<Sale>();
 
         for (int i = 0; i < quantity; i++)
-            sales.Add(new Sale((decimal)drink.CostPrice, now, transactionId, drink));
+            sales.Add(new Sale(now, transactionId, drink));
 
         return sales;
     }
