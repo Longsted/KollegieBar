@@ -16,7 +16,7 @@ public class DrinkRepository : IDrinkRepository
 
     public async Task<List<Drink>> GetAllAsync()
     {
-        return await _context.Drinks
+        return await _context.Drinks.Where(d => !d.IsCustom) // Only return predefined drinks
             .Include(d => d.Ingredients) // Many-to-many: Drink <-> Liquid
             .ToListAsync();
     }

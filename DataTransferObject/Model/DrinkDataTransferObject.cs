@@ -7,6 +7,7 @@ public class DrinkDataTransferObject : ICartItem
     public bool IsAlcoholic { get; set; }
     public List<LiquidDataTransferObject> Ingredients { get; set; } = new();
     public string Description { get; set; } = string.Empty;
+    public bool IsCustom { get; set; }
 
     public DrinkDataTransferObject() { }
 
@@ -15,6 +16,12 @@ public class DrinkDataTransferObject : ICartItem
         Name = name;
         IsAlcoholic = isAlcoholic;
         Ingredients = ingredients;
-        Description  = description;
+        Description = description;
+    }
+
+    public DrinkDataTransferObject(string name, bool isAlcoholic, List<LiquidDataTransferObject> ingredients, string description, bool isCustom)
+        : this(name, isAlcoholic, ingredients, description)
+    {
+        IsCustom = isCustom;
     }
 }

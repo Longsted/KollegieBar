@@ -1,5 +1,4 @@
 ﻿using Data.Model;
-using DataTransferObject.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Context;
@@ -95,11 +94,11 @@ public class AppDbContext : DbContext
         // Mixer and Juice
         modelBuilder.Entity<Liquid>().HasData(
             new Liquid("Orange Juice", 10.00m, 6, 100, false) { Id = 25 },
-            new Liquid("Cranberry Juice", 10.00m, 5, 100, false) { Id = 26 }, 
+            new Liquid("Cranberry Juice", 10.00m, 5, 100, false) { Id = 26 },
             new Liquid("Chocolate Milk", 10.00m, 5, 100, false) { Id = 56 },
             new Liquid("Lime Juice", 6.00m, 7, 50, false) { Id = 59 },
             new Liquid("Lemon Juice", 6.00m, 2, 50, false) { Id = 83 },
-            
+
             new Liquid("Mango Syrup", 45.00m, 1, 70, false) { Id = 57 },
             new Liquid("Passion Syrup", 45.00m, 1, 70, false) { Id = 58 },
             new Liquid("Grenadine", 40.00m, 1, 70, false) { Id = 80 },
@@ -112,45 +111,45 @@ public class AppDbContext : DbContext
         // -----------------------------
         modelBuilder.Entity<Drink>().HasData(
             // 20-25 kr. Cocktails
-            new { Id = 60, Name = "Astronaut", IsAlcoholic = true, Description = "Råstoff Strawberry/Rhubarb, Lemon Soda" },
-            new { Id = 61, Name = "Basic Bitch", IsAlcoholic = true, Description = "Pink Gin, Lime Juice, Lemon Soda, Cranberry Juice" },
-            new { Id = 62, Name = "Brandbil", IsAlcoholic = true, Description = "Jägermeister, Red Soda" },
-            new { Id = 63, Name = "Champagnebrus", IsAlcoholic = true, Description = "Cuba Caramel, Green Soda" },
-            new { Id = 64, Name = "Purple Rain", IsAlcoholic = true, Description = "Cuba Kurant, Faxe Kondi, Lime Juice" },
-            new { Id = 65, Name = "Dumle", IsAlcoholic = true, Description = "Cuba Caramel, Chocolate Milk" },
-            new { Id = 66, Name = "Filur", IsAlcoholic = true, Description = "Vodka, Red Soda, Orange Juice" },
-            new { Id = 67, Name = "Flagermus", IsAlcoholic = true, Description = "Råstoff Liquorice, Råstoff Strawberry/Rhubarb, Orange Soda" },
-            new { Id = 68, Name = "Gin Hass", IsAlcoholic = true, Description = "Gin, Mango Syrup, Lemon Soda" },
-            new { Id = 69, Name = "Gin & Tonic/Lemon", IsAlcoholic = true, Description = "Gin/Pink Gin, Tonic Water/Lemon Soda" },
-            new { Id = 70, Name = "Isbjørn", IsAlcoholic = true, Description = "Vodka, Blue Curacao, Faxe Kondi" },
-            new { Id = 71, Name = "Sex On The Beach", IsAlcoholic = true, Description = "Vodka, Mango Syrup, Cranberry Juice, Orange Juice" },
-            new { Id = 72, Name = "Skumbanan", IsAlcoholic = true, Description = "Pisang Ambon, Chocolate Milk" },
-            new { Id = 73, Name = "Southern & Sprite", IsAlcoholic = true, Description = "Southern Comfort, Lime Syrup, Faxe Kondi" },
-            new { Id = 74, Name = "Rum & Coke", IsAlcoholic = true, Description = "Rum, Pepsi/Max" },
-            new { Id = 75, Name = "Tequila Sunrise", IsAlcoholic = true, Description = "Tequila, Grenadine, Orange Juice" },
-            new { Id = 76, Name = "White Russian", IsAlcoholic = true, Description = "Kahlua, Vodka, Milk/Chocolate Milk" },
-            new { Id = 77, Name = "Chocolate & Bailey", IsAlcoholic = true, Description = "Bailey, Chocolate Milk" },
-            new { Id = 78, Name = "Green Goblin", IsAlcoholic = true, Description = "Pisang Ambon, Orange Juice" },
-            new { Id = 79, Name = "Cosmopolitan", IsAlcoholic = true, Description = "Cointreau, Vodka, Cranberry Juice, Lime Juice" },
-            new {Id = 80, Name = "Shaker Jäger", IsAlcoholic = true, Description = "Jägermeister, Shaker" },
+            new { Id = 60, Name = "Astronaut", IsAlcoholic = true, Description = "Råstoff Strawberry/Rhubarb, Lemon Soda", IsCustom = false },
+            new { Id = 61, Name = "Basic Bitch", IsAlcoholic = true, Description = "Pink Gin, Lime Juice, Lemon Soda, Cranberry Juice", IsCustom = false },
+            new { Id = 62, Name = "Brandbil", IsAlcoholic = true, Description = "Jägermeister, Red Soda", IsCustom = false },
+            new { Id = 63, Name = "Champagnebrus", IsAlcoholic = true, Description = "Cuba Caramel, Green Soda", IsCustom = false },
+            new { Id = 64, Name = "Purple Rain", IsAlcoholic = true, Description = "Cuba Kurant, Faxe Kondi, Lime Juice", IsCustom = false },
+            new { Id = 65, Name = "Dumle", IsAlcoholic = true, Description = "Cuba Caramel, Chocolate Milk", IsCustom = false },
+            new { Id = 66, Name = "Filur", IsAlcoholic = true, Description = "Vodka, Red Soda, Orange Juice", IsCustom = false },
+            new { Id = 67, Name = "Flagermus", IsAlcoholic = true, Description = "Råstoff Liquorice, Råstoff Strawberry/Rhubarb, Orange Soda", IsCustom = false },
+            new { Id = 68, Name = "Gin Hass", IsAlcoholic = true, Description = "Gin, Mango Syrup, Lemon Soda", IsCustom = false },
+            new { Id = 69, Name = "Gin & Tonic/Lemon", IsAlcoholic = true, Description = "Gin/Pink Gin, Tonic Water/Lemon Soda", IsCustom = false },
+            new { Id = 70, Name = "Isbjørn", IsAlcoholic = true, Description = "Vodka, Blue Curacao, Faxe Kondi", IsCustom = false },
+            new { Id = 71, Name = "Sex On The Beach", IsAlcoholic = true, Description = "Vodka, Mango Syrup, Cranberry Juice, Orange Juice", IsCustom = false },
+            new { Id = 72, Name = "Skumbanan", IsAlcoholic = true, Description = "Pisang Ambon, Chocolate Milk", IsCustom = false },
+            new { Id = 73, Name = "Southern & Sprite", IsAlcoholic = true, Description = "Southern Comfort, Lime Syrup, Faxe Kondi", IsCustom = false },
+            new { Id = 74, Name = "Rum & Coke", IsAlcoholic = true, Description = "Rum, Pepsi/Max", IsCustom = false },
+            new { Id = 75, Name = "Tequila Sunrise", IsAlcoholic = true, Description = "Tequila, Grenadine, Orange Juice", IsCustom = false },
+            new { Id = 76, Name = "White Russian", IsAlcoholic = true, Description = "Kahlua, Vodka, Milk/Chocolate Milk", IsCustom = false },
+            new { Id = 77, Name = "Chocolate & Bailey", IsAlcoholic = true, Description = "Bailey, Chocolate Milk", IsCustom = false },
+            new { Id = 78, Name = "Green Goblin", IsAlcoholic = true, Description = "Pisang Ambon, Orange Juice", IsCustom = false },
+            new { Id = 79, Name = "Cosmopolitan", IsAlcoholic = true, Description = "Cointreau, Vodka, Cranberry Juice, Lime Juice", IsCustom = false },
+            new { Id = 80, Name = "Shaker Jäger", IsAlcoholic = true, Description = "Jägermeister, Shaker", IsCustom = false },
 
             // 30 kr. Drinks
-            new { Id = 81, Name = "Vodka Energy", IsAlcoholic = true, Description = "Vodka, Energy Drink" },
-            new { Id = 82, Name = "3-Meter-Vippen", IsAlcoholic = true, Description = "Southern Comfort, Vodka, Lemon, Passion Syrup, Faxe Kondi" },
-            new { Id = 83, Name = "Exotic", IsAlcoholic = true, Description = "Cointreau, Vodka, Passion, Mango Syrup, Grenadine, Faxe Kondi" },
-            new { Id = 84, Name = "Long Island Iced Tea", IsAlcoholic = true, Description = "Cointreau, Gin, Rum, Tequila, Vodka, Lemon Juice, Pepsi/Max" },
-            new { Id = 85, Name = "Lille Fugl Fald Død Om", IsAlcoholic = true, Description = "Gin, Pisang Ambon, Rum, Vodka, Lemon Juice, Lemon Syrup, Faxe Kondi" }
+            new { Id = 81, Name = "Vodka Energy", IsAlcoholic = true, Description = "Vodka, Energy Drink", IsCustom = false },
+            new { Id = 82, Name = "3-Meter-Vippen", IsAlcoholic = true, Description = "Southern Comfort, Vodka, Lemon, Passion Syrup, Faxe Kondi", IsCustom = false },
+            new { Id = 83, Name = "Exotic", IsAlcoholic = true, Description = "Cointreau, Vodka, Passion, Mango Syrup, Grenadine, Faxe Kondi", IsCustom = false },
+            new { Id = 84, Name = "Long Island Iced Tea", IsAlcoholic = true, Description = "Cointreau, Gin, Rum, Tequila, Vodka, Lemon Juice, Pepsi/Max", IsCustom = false },
+            new { Id = 85, Name = "Lille Fugl Fald Død Om", IsAlcoholic = true, Description = "Gin, Pisang Ambon, Rum, Vodka, Lemon Juice, Lemon Syrup, Faxe Kondi", IsCustom = false }
         );
 
         // Mocktails
         modelBuilder.Entity<Drink>().HasData(
-            new { Id = 90, Name = "Boring Bitch", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Lemon Soda, Cranberry Juice, Lime Juice" },
-            new { Id = 91, Name = "Filur Free", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Red Soda, Orange Juice" },
-            new { Id = 92, Name = "Gin Love", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Mango Syrup, Lemon Soda" },
-            new { Id = 93, Name = "Panda", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Blue Curacao, Faxe Kondi/Free" },
-            new { Id = 94, Name = "(Levende) Panda", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Blue Curacao, Faxe Kondi/Free (+ Grenadine)" },
-            new { Id = 95, Name = "Virgin Sex", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Mango Syrup, Cranberry Juice, Orange Juice" },
-            new { Id = 96, Name = "Gin Sunset", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Grenadine, Orange Juice" }
+            new { Id = 90, Name = "Boring Bitch", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Lemon Soda, Cranberry Juice, Lime Juice", IsCustom = false },
+            new { Id = 91, Name = "Filur Free", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Red Soda, Orange Juice", IsCustom = false },
+            new { Id = 92, Name = "Gin Love", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Mango Syrup, Lemon Soda", IsCustom = false },
+            new { Id = 93, Name = "Panda", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Blue Curacao, Faxe Kondi/Free", IsCustom = false },
+            new { Id = 94, Name = "(Levende) Panda", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Blue Curacao, Faxe Kondi/Free (+ Grenadine)", IsCustom = false },
+            new { Id = 95, Name = "Virgin Sex", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Mango Syrup, Cranberry Juice, Orange Juice", IsCustom = false },
+            new { Id = 96, Name = "Gin Sunset", IsAlcoholic = false, Description = "Non-Alcoholic Gin, Grenadine, Orange Juice", IsCustom = false }
         );
 
         modelBuilder.Entity("DrinkLiquid").HasData(
@@ -163,7 +162,7 @@ public class AppDbContext : DbContext
             new { DrinkId = 61, IngredientsId = 59 },
             new { DrinkId = 61, IngredientsId = 38 },
             new { DrinkId = 61, IngredientsId = 26 },
-            
+
             // Brandbil: Jägermeister (42), Red Soda (52)
             new { DrinkId = 62, IngredientsId = 42 },
             new { DrinkId = 62, IngredientsId = 52 },
@@ -204,28 +203,28 @@ public class AppDbContext : DbContext
             new { DrinkId = 70, IngredientsId = 20 },
             new { DrinkId = 70, IngredientsId = 75 },
             new { DrinkId = 70, IngredientsId = 39 },
-            
+
             // Gin & Tonic: Gin (30), Tonic Water (76)
-            new { DrinkId = 69, IngredientsId = 30 }, 
+            new { DrinkId = 69, IngredientsId = 30 },
             new { DrinkId = 69, IngredientsId = 76 },
-    
+
             // Rum & Coke: Rum (32), Pepsi (50)
-            new { DrinkId = 74, IngredientsId = 32 }, 
+            new { DrinkId = 74, IngredientsId = 32 },
             new { DrinkId = 74, IngredientsId = 50 },
-    
+
             // Shaker Jäger: Jägermeister (42), Shaker (6)
-            new { DrinkId = 80, IngredientsId = 42 }, 
+            new { DrinkId = 80, IngredientsId = 42 },
             new { DrinkId = 80, IngredientsId = 55 },
-    
+
             // Vodka Energy: Vodka (20), Shaker (6)
-            new { DrinkId = 81, IngredientsId = 20 }, 
+            new { DrinkId = 81, IngredientsId = 20 },
             new { DrinkId = 81, IngredientsId = 6 },
-            
+
             // Southern & Sprite: Southern Comfort (46), Lemon Syrup (81), Faxe Kondi (39)
             new { DrinkId = 73, IngredientsId = 46 },
-            new { DrinkId = 73, IngredientsId = 81 }, 
+            new { DrinkId = 73, IngredientsId = 81 },
             new { DrinkId = 73, IngredientsId = 39 },
-            
+
             // 3-Meter-Vippen: Southern Comfort (46), Vodka (20), Lemon Syrup (81), Passion Syrup (58), Faxe Kondi (39)
             new { DrinkId = 82, IngredientsId = 46 },
             new { DrinkId = 82, IngredientsId = 20 },
@@ -258,7 +257,7 @@ public class AppDbContext : DbContext
             new { DrinkId = 85, IngredientsId = 20 },
             new { DrinkId = 85, IngredientsId = 59 },
             new { DrinkId = 85, IngredientsId = 39 },
-            
+
             // --- MOCKTAILS ---
             // Boring Bitch: Non-Alcoholic Gin (100), Lemon Soda (38), Cranberry Juice (26), Lime Juice (59)
             new { DrinkId = 90, IngredientsId = 100 },
@@ -280,22 +279,22 @@ public class AppDbContext : DbContext
             new { DrinkId = 93, IngredientsId = 100 },
             new { DrinkId = 93, IngredientsId = 75 },
             new { DrinkId = 93, IngredientsId = 39 },
-            
+
             // (Levende) Panda: Non-Alcoholic Gin (100), Blue Curacao (75), Faxe Kondi (39), Grenadine (80)
             new { DrinkId = 94, IngredientsId = 100 },
             new { DrinkId = 94, IngredientsId = 75 },
             new { DrinkId = 94, IngredientsId = 39 },
             new { DrinkId = 94, IngredientsId = 80 },
-            
+
             // Virgin Sex: Non-Alc Gin (100), Mango Syrup (57), Cranberry Juice (26), Orange Juice (25)
-            new { DrinkId = 95, IngredientsId = 100 }, 
-            new { DrinkId = 95, IngredientsId = 57 }, 
-            new { DrinkId = 95, IngredientsId = 26 }, 
+            new { DrinkId = 95, IngredientsId = 100 },
+            new { DrinkId = 95, IngredientsId = 57 },
+            new { DrinkId = 95, IngredientsId = 26 },
             new { DrinkId = 95, IngredientsId = 25 },
-            
+
             // Gin Sunset: Non-Alc Gin (100), Grenadine (80), Orange Juice (25)
-            new { DrinkId = 96, IngredientsId = 100 }, 
-            new { DrinkId = 96, IngredientsId = 80 }, 
+            new { DrinkId = 96, IngredientsId = 100 },
+            new { DrinkId = 96, IngredientsId = 80 },
             new { DrinkId = 96, IngredientsId = 25 }
         );
 

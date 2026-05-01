@@ -1,17 +1,17 @@
-﻿using System.Linq.Expressions;
-using BusinessLogic.BusinessLogicLayer;
+﻿using BusinessLogic.BusinessLogicLayer;
 using Data.Interfaces;
 using Data.Model;
 using Data.UnitOfWork;
 using Moq;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace UnitTests
 {
-  
+
     public class UserStory10
     {
-        
+
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly ProductBusinessLogicLayer _productService;
@@ -21,12 +21,12 @@ namespace UnitTests
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockProductRepository = new Mock<IProductRepository>();
-            
+
             _mockUnitOfWork.Setup(u => u.Products).Returns(_mockProductRepository.Object);
-            
+
             _productService = new ProductBusinessLogicLayer(_mockUnitOfWork.Object);
         }
-        
+
         [Fact]
         public async Task RegisterWaste_ValidProducts_ReducesStockCorrectly()
         {
@@ -47,17 +47,17 @@ namespace UnitTests
             _mockProductRepository.Setup(r => r
                 .GetWhereAsync(It.IsAny<Expression<Func<Product, bool>>>()))
                 .ReturnsAsync(new List<Product> { beer, chips });
-            
+
             var productIds = new List<int> { 1, 1, 2 };
 
             await _productService.RegisterWaste(productIds);
-            
+
             Assert.Equal(8, beer.StockQuantity);
             Assert.Equal(4, chips.StockQuantity);
-            
+
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
         }
-        
+
         [Fact]
         public async Task RegisterWaste_ProductNotFound_ThrowsInvalidOperationException()
         {
@@ -76,11 +76,11 @@ namespace UnitTests
 
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _productService.RegisterWaste(productIds));
-            
+
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
         }
-        
-        
+
+
         [Fact]
         public async Task RegisterWaste_InsufficientStock_ThrowsInvalidOperationException()
         {
@@ -90,20 +90,20 @@ namespace UnitTests
                 Name = "Beer  Bottle",
                 StockQuantity = 1
             };
-            
+
             _mockProductRepository
                 .Setup(r => r.GetWhereAsync(It.IsAny<Expression<Func<Product, bool>>>()))
                 .ReturnsAsync(new List<Product> { beer });
 
-            var productIds = new List<int> { 1, 1};
-            
+            var productIds = new List<int> { 1, 1 };
+
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 _productService.RegisterWaste(productIds));
-            
+
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
         }
-        
-        
+
+
     }
-    
+
 }
