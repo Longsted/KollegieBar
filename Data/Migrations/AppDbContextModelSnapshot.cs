@@ -43,7 +43,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drinks");
+                    b.ToTable("Drinks", (string)null);
 
                     b.HasData(
                         new
@@ -310,7 +310,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Product");
 
@@ -343,7 +343,7 @@ namespace Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Sales");
+                    b.ToTable("Sales", (string)null);
                 });
 
             modelBuilder.Entity("Data.Model.User", b =>
@@ -367,7 +367,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new

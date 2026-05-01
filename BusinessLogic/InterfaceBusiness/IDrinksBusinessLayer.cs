@@ -5,7 +5,7 @@ namespace BusinessLogic.InterfaceBusiness;
 
 public interface IDrinksBusinessLogicLayer
 {
-    Task CreateDrinkAsync(DrinkDataTransferObject drink);
+    Task<int> CreateDrinkAsync(DrinkDataTransferObject drink);
 
     Task UpdateDrinkAsync(DrinkDataTransferObject drink);
 

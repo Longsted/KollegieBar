@@ -68,7 +68,9 @@ public partial class ModifyDrinkPopUp : CommunityToolkit.Maui.Views.Popup
             Ingredients = PickedLiquids.ToList(),
             Description = _drink.Description
         };
-        await _drinksBusinessLogicLayer.CreateDrinkAsync(newDrink);
+        int generatedId = await _drinksBusinessLogicLayer.CreateDrinkAsync(newDrink);
+        newDrink.Id = generatedId;
+
         NewDrink = newDrink;
 
         IsSaved = true;

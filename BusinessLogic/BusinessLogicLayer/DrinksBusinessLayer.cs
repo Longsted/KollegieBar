@@ -26,17 +26,22 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
     public async Task<DrinkDataTransferObject?> GetDrinkAsync(int id)
     {
         var drink = await GetDrinkOrThrow(id);
-        
+
         return DrinkMapper.Map(drink);
     }
 
+    /// <summary>
+    /// Asynchronously retrieves all predefined drinks, excluding any custom drinks created by users at checkout.Returns all predefined drinks not including custom drinks created by users at checkout
+    /// </summary>
+    /// <returns>A list of <see cref="DrinkDataTransferObject"/> objects representing all predefined drinks. The list will be
+    /// empty if no predefined drinks are available.</returns>
     public async Task<List<DrinkDataTransferObject>> GetAllDrinksAsync()
     {
         var drinks = await _unitOfWork.Drinks.GetAllAsync();
         return drinks.Select(DrinkMapper.Map).ToList();
     }
 
-    public async Task CreateDrinkAsync(DrinkDataTransferObject drink)
+    public async Task<int> CreateDrinkAsync(DrinkDataTransferObject drink)
     {
         ValidateDrink(drink);
 
@@ -59,6 +64,8 @@ public class DrinksBusinessLayer : IDrinksBusinessLogicLayer
 
         await _unitOfWork.Drinks.AddAsync(drinkEntity);
         await _unitOfWork.SaveChangesAsync();
+
+        return drinkEntity.Id;
     }
 
     public async Task UpdateDrinkAsync(DrinkDataTransferObject drink)

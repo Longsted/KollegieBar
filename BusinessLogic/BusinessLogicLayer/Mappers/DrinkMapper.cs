@@ -15,7 +15,8 @@ namespace BusinessLogic.Mappers
                 Ingredients = entity.Ingredients
                     .Select(LiquidMapper.Map)
                     .ToList(),
-                Description = entity.Description
+                Description = entity.Description,
+                IsCustom = entity.IsCustom
             };
         }
 
@@ -29,7 +30,8 @@ namespace BusinessLogic.Mappers
                 Ingredients = dto.Ingredients
                     .Select(LiquidMapper.Map)
                     .ToList(),
-                Description = dto.Description
+                Description = dto.Description,
+                IsCustom = dto.IsCustom
             };
         }
 
